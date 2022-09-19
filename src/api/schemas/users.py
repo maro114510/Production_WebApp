@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-from pydantic import BaseModel
+from typing import Optional
+
+from pydantic import BaseModel, Field
 
 class UserBase(BaseModel):
-	user_name:str
-	user_email:str
+	user_name: Optional[ str ] = Field(None, example="user")
+	user_email: Optional[ str ] = Field(None, example="user@gmail.com")
 	user_pw:str
 
 class UserCreate(UserBase):

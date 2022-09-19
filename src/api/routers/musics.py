@@ -1,33 +1,36 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+from typing import List
 from fastapi import APIRouter
+
+import api.schemas.musics as schema
 
 router = APIRouter()
 
-@router.get("/musics/",tags=["Musics"])
+@router.get("/musics/",tags=["Musics"],response_model=List[schema.Musics])
 async def read_musics():
-    pass
+	pass
 #--- EoF ---
 
-@router.get("/musics/{music_id}",tags=["Musics"])
+@router.get("/musics/{music_id}",tags=["Musics"],response_model=schema.Musics)
 async def read_music():
-    pass
+	pass
 #--- EoF ---
 
-@router.post("/musics/",tags=["Musics"])
+@router.post("/musics/",tags=["Musics"],response_model=schema.MusicCreateResponse)
 async def create_music():
-    pass
+	pass
 #--- EoF ---
 
-@router.put("/musics/{music_id}",tags=["Musics"])
+@router.put("/musics/{music_id}",tags=["Musics"],response_model=schema.MusicCreateResponse)
 async def update_music():
-    pass
+	pass
 #--- EoF ---
 
-@router.delete("/musics/{music_id}",tags=["Musics"])
+@router.delete("/musics/{music_id}",tags=["Musics"],response_model=None)
 async def delete_music():
-    pass
+	pass
 #--- EoF ---
 
 
