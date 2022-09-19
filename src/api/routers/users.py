@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 import sys
-from typing import List
+from typing import List, Tuple
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -15,14 +15,18 @@ from api.db import get_db
 router = APIRouter()
 
 @router.get("/users/", tags=["Users"], response_model=List[schema.Users])
-async def read_users(body: schema.UserCreate):
-    return [schema.Users(user_id=1, **body.dict())]
+async def read_users(db: AsyncSession = Depends(get_db)):
+    return await user_crud.get_users(db)
 # --- EoF ---
 
+@router.get("/users/{user_name}", tags=["Users"], response_model=schema.Users)
+async def read_user_by_name(user_name: str,db: AsyncSession = Depends(get_db)):
+    return await user_crud.get_user_by_name(db,user_name)
+# --- EoF ---
 
-@router.get("/users/{user_id}", tags=["Users"], response_model=schema.Users)
-async def read_user(user_id: int, body: schema.UserCreate):
-    return schema.Users(user_id=user_id, **body.dict())
+@router.get("/users/{user_id}", tags=["Users"])
+async def read_user_by_id(user_id: int,db: AsyncSession = Depends(get_db)):
+    return await user_crud.get_user_by_id(db,user_id)
 # --- EoF ---
 
 
@@ -37,17 +41,24 @@ async def create_user(user_in:schema.UserCreate, db: AsyncSession = Depends(get_
 # --- EoF ---
 
 
-@router.put("/users/{user_id}",
-            tags=["Users"],
-            response_model=schema.UserCreateResponse)
-async def update_user(user_id: int, body: schema.UserCreate):
-    return schema.UserCreateResponse(user_id=user_id, **body.dict())
+@router.put("/users/{user_name}",
+            tags=["Users"])
+async def update_user(user_name: str, user_body:schema.UserCreate,db: AsyncSession = Depends(get_db)):
+	user = await user_crud.get_user_by_name(db,user_name=user_name)
+	if user is None:
+		raise HTTPException(status_code=404,detail=f"{user_name} is not found.")
+	return await user_crud.update_user(db,user_body,original=user)
 # --- EoF ---
 
 
-@router.delete("/users/{user_id}", tags=["Users"], response_model=int)
-async def delete_user(user_id: int):
-    return 0
+@router.delete("/users/{user_name}", tags=["Users"])
+async def delete_user(user_name: str,db: AsyncSession = Depends(get_db)):
+	user = await user_crud.get_user_by_name(db,user_name=user_name)
+	if user is None:
+		raise HTTPException(status_code=404,detail=f"{user_name} is not found.")
+	return await user_crud.delete_user(db,original=user)
+
+
 # --- EoF ---
 
 
