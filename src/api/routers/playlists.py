@@ -2,9 +2,11 @@
 # -*- coding: utf8 -*-
 
 from typing import List
-from fastapi import APIRouter
+from fastapi import APIRouter,Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
 import api.schemas.playlists as schema
+
 
 router = APIRouter()
 
@@ -34,7 +36,7 @@ async def update_playlist():
 
 
 @router.delete("/playlists/{playlist_id}",
-               tags=["Playlists"], response_model=int)
+            tags=["Playlists"], response_model=int)
 async def delete_playlist(playlist_id: int):
     return playlist_id
 # --- EoF ---

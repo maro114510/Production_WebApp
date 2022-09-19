@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+import sys
 from typing import List
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from fastapi.exceptions import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 
 import api.schemas.users as schema
+import api.cruds.users as user_crud
+import api.models.db_model as model
+from api.db import get_db
 
 router = APIRouter()
-
 
 @router.get("/users/", tags=["Users"], response_model=List[schema.Users])
 async def read_users(body: schema.UserCreate):
@@ -21,13 +26,14 @@ async def read_user(user_id: int, body: schema.UserCreate):
 # --- EoF ---
 
 
-@router.post("/users/", tags=["Users"],
-             response_model=schema.UserCreateResponse)
-async def create_user(body: schema.UserCreate):
-    return schema.UserCreateResponse(
-        user_id=1,
-        **body.dict()
-    )
+@router.post("/users/", tags=["Users"])
+async def create_user(user_in:schema.UserCreate, db: AsyncSession = Depends(get_db)):
+	try:
+		r = await user_crud.create_user(db,user_in)
+	except Exception as e:
+		raise HTTPException( status_code=404,detail=f"{user_in.user_name}, or {user_in.user_email} is duplicated." )
+	#-- except
+	return r
 # --- EoF ---
 
 
