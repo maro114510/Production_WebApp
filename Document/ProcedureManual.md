@@ -21,3 +21,24 @@ $ docker-compose up
 * GithubActionsによるLinterの導入
 * PR・Issueのテンプレート設定
 	- 自動テストは記入のみ、現時点ではコメントアウト
+
+---
+
+#### Branch dev 主処理
+
+* ルータの設定
+* スキーマの設定
+
+---
+
+#### Branch dev_createSQL MySQLの設定
+
+* MySQLの設定を`docker-compose.yaml`に記述
+* コンパイル
+
+* Pythonサイドとの接続
+	- 接続ライブラリをインポート
+
+```
+$ docker-compose exec main poetry add sqlalchemy aiomysql
+```
