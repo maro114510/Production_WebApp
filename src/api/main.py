@@ -9,7 +9,7 @@ app = FastAPI()
 @app.get("/")
 async def hello():
     return {"message": "hello world!"}
-#--- EoF ---
+# --- EoF ---
 
 
 # End of Script
