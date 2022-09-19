@@ -42,3 +42,7 @@ $ docker-compose up
 ```
 $ docker-compose exec main poetry add sqlalchemy aiomysql
 ```
+
+```
+$ docker-compose exec main poetry run python -m api.create_table
+```
