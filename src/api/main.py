@@ -3,13 +3,20 @@
 
 from fastapi import FastAPI
 
-app = FastAPI()
+from api.routers import musics, playlists, users
 
+app = FastAPI(
+        title="Youtube Diff Checker",
+        description="""
+	バックエンド部分の処理
+	""",
+)
 
-@app.get("/")
-async def hello():
-    return {"message": "hello world!"}
-# --- EoF ---
+# routers
+app.include_router(users.router)
+app.include_router(playlists.router)
+app.include_router(musics.router)
+
 
 
 # End of Script
