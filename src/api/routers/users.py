@@ -19,16 +19,15 @@ async def read_users(db: AsyncSession = Depends(get_db)):
     return await user_crud.get_users(db)
 # --- EoF ---
 
+@router.get("/users/{user_id}", tags=["Users"], response_model=schema.Users)
+async def read_user(user_id:int,db: AsyncSession = Depends(get_db)):
+    return await user_crud.get_user_by_id(db,user_id=user_id)
+# --- EoF ---
+
 @router.get("/users/{user_name}", tags=["Users"], response_model=schema.Users)
 async def read_user_by_name(user_name: str,db: AsyncSession = Depends(get_db)):
     return await user_crud.get_user_by_name(db,user_name)
 # --- EoF ---
-
-@router.get("/users/{user_id}", tags=["Users"])
-async def read_user_by_id(user_id: int,db: AsyncSession = Depends(get_db)):
-    return await user_crud.get_user_by_id(db,user_id)
-# --- EoF ---
-
 
 @router.post("/users/", tags=["Users"])
 async def create_user(user_in:schema.UserCreate, db: AsyncSession = Depends(get_db)):

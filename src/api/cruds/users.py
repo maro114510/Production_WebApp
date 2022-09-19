@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-from operator import mod
 import sys
 from typing import Optional, Tuple
 from sqlalchemy import select
@@ -31,7 +30,7 @@ async def get_user_by_id(db_session: AsyncSession,user_id:int):
 		)
 	)
 	user: Optional[Tuple[model.User]] = result.first()
-	return user[0]
+	return user[0] if user is not None else None
 #--- EoF ---
 
 async def get_user_by_name(db_session: AsyncSession,user_name:str):
