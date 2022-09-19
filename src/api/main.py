@@ -6,9 +6,8 @@ from fastapi import FastAPI
 from api.routers import musics, playlists, users
 
 app = FastAPI(
-	title="Youtube Diff Checker",
-	description=
-	"""
+        title="Youtube Diff Checker",
+        description="""
 	バックエンド部分の処理
 	""",
 )

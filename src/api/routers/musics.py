@@ -8,31 +8,40 @@ import api.schemas.musics as schema
 
 router = APIRouter()
 
-@router.get("/musics/",tags=["Musics"],response_model=List[schema.Musics])
+
+@router.get("/musics/", tags=["Musics"], response_model=List[schema.Musics])
 async def read_musics():
-	pass
-#--- EoF ---
+    pass
+# --- EoF ---
 
-@router.get("/musics/{music_id}",tags=["Musics"],response_model=schema.Musics)
+
+@router.get("/musics/{music_id}",
+            tags=["Musics"],
+            response_model=schema.Musics)
 async def read_music():
-	pass
-#--- EoF ---
+    pass
+# --- EoF ---
 
-@router.post("/musics/",tags=["Musics"],response_model=schema.MusicCreateResponse)
+
+@router.post("/musics/", tags=["Musics"],
+             response_model=schema.MusicCreateResponse)
 async def create_music():
-	pass
-#--- EoF ---
+    pass
+# --- EoF ---
 
-@router.put("/musics/{music_id}",tags=["Musics"],response_model=schema.MusicCreateResponse)
+
+@router.put("/musics/{music_id}",
+            tags=["Musics"],
+            response_model=schema.MusicCreateResponse)
 async def update_music():
-	pass
-#--- EoF ---
+    pass
+# --- EoF ---
 
-@router.delete("/musics/{music_id}",tags=["Musics"],response_model=None)
+
+@router.delete("/musics/{music_id}", tags=["Musics"], response_model=None)
 async def delete_music():
-	pass
-#--- EoF ---
-
+    pass
+# --- EoF ---
 
 
 # End of Script

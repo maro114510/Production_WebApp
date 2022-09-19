@@ -8,31 +8,36 @@ import api.schemas.playlists as schema
 
 router = APIRouter()
 
-@router.get("/playlists/",tags=["Playlists"])
+
+@router.get("/playlists/", tags=["Playlists"])
 async def read_playlists():
-	return []
-#--- EoF ---
+    return []
+# --- EoF ---
 
-@router.get("/playlists/{playlist_id}",tags=["Playlists"])
+
+@router.get("/playlists/{playlist_id}", tags=["Playlists"])
 async def read_playlist():
-	return 0
-#--- EoF ---
+    return 0
+# --- EoF ---
 
-@router.post("/playlists/",tags=["Playlists"])
+
+@router.post("/playlists/", tags=["Playlists"])
 async def create_playlist():
-	return 0
-#--- EoF ---
+    return 0
+# --- EoF ---
 
-@router.put("/playlists/{playlist_id}",tags=["Playlists"])
+
+@router.put("/playlists/{playlist_id}", tags=["Playlists"])
 async def update_playlist():
-	return 0
-#--- EoF ---
+    return 0
+# --- EoF ---
 
-@router.delete("/playlists/{playlist_id}",tags=["Playlists"],response_model=int)
-async def delete_playlist(playlist_id:int):
-	return playlist_id
-#--- EoF ---
 
+@router.delete("/playlists/{playlist_id}",
+               tags=["Playlists"], response_model=int)
+async def delete_playlist(playlist_id: int):
+    return playlist_id
+# --- EoF ---
 
 
 # End of Script
