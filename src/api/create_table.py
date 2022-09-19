@@ -11,17 +11,17 @@ engine = create_engine(DB_URL, echo=True)
 
 
 def main(argc, argv):
-	Base.metadata.drop_all(bind=engine)
-	Base.metadata.create_all(bind=engine)
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
 
-	return 0
-#--- EoF ---
+    return 0
+# --- EoF ---
 
 
 # Entry Point
 
 if __name__ == "__main__":
-	sys.exit(main(len(sys.argv), sys.argv))
-#-- if
+    sys.exit(main(len(sys.argv), sys.argv))
+# -- if
 
 # End of Script
