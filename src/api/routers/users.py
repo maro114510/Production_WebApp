@@ -9,7 +9,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 import api.schemas.users as schema
 import api.cruds.users as user_crud
-import api.models.db_model as model
 from api.db import get_db
 
 router = APIRouter()
