@@ -54,6 +54,7 @@ async def delete_playlist(playlist_original_id:str,db: AsyncSession = Depends(ge
 	if playlist is None:
 		raise HTTPException(status_code=404,detail=f"{playlist_original_id} is not found.")
 	return await playlist_crud.delete_playlist(db,original=playlist)
+
 # --- EoF ---
 
 
