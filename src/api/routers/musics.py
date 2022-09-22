@@ -2,6 +2,7 @@
 # -*- coding: utf8 -*-
 
 from typing import List
+import requests
 from fastapi import APIRouter,Depends
 from fastapi.exceptions import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -25,6 +26,12 @@ async def read_music_by_id(music_id:int,db: AsyncSession = Depends(get_db)):
     return await music_crud.get_music_by_id(db,music_id)
 # --- EoF ---
 
+@router.get("/musics/{music_original_id}",
+            tags=["Musics"])
+async def read_music_by_original_id(music_original_id:str,db: AsyncSession = Depends(get_db)):
+    return await music_crud.get_music_by_original_id(db,music_original_id)
+# --- EoF ---
+
 @router.get("/musics/{music_name}",
             tags=["Musics"])
 async def read_music_by_name(music_name:str,db: AsyncSession = Depends(get_db)):
@@ -45,11 +52,18 @@ async def create_music(music_in:schema.MusicCreate,db: AsyncSession = Depends(ge
 # --- EoF ---
 
 @router.post("/musics-list/", tags=["Musics"])
-async def create_musics(music:list,db: AsyncSession = Depends(get_db)):
-	# r = await music_crud.create_music(db,music_in)
-	r = await music_crud.create_musics(db,[])
+async def create_musics(playlist_original_id:str,db: AsyncSession = Depends(get_db)):
+	headers = {
+		'accept': 'application/json',
+		'content-type': 'application/x-www-form-urlencoded',
+	}
+	playlist_id = playlist_original_id
+	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers).json()
+	music_list = res.get("music_id_list")
+
+	r = await music_crud.create_musics(db,music_list)
 	# try:
-	# 	r = await music_crud.create_musics(db,[])
+	# 	r = await music_crud.create_musics(db,music)
 	# except Exception as e:
 	# 	raise HTTPException(
 	# 		status_code=404)
