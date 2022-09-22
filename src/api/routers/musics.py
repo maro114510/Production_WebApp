@@ -61,13 +61,13 @@ async def create_musics(playlist_original_id:str,db: AsyncSession = Depends(get_
 	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers).json()
 	music_list = res.get("music_id_list")
 
-	r = await music_crud.create_musics(db,music_list)
-	# try:
-	# 	r = await music_crud.create_musics(db,music)
-	# except Exception as e:
-	# 	raise HTTPException(
-	# 		status_code=404)
-	# # -- except
+	# r = await music_crud.create_musics(db,music_list)
+	try:
+		r = await music_crud.create_musics(db,music_list)
+	except Exception as e:
+		raise HTTPException(
+			status_code=404)
+	# -- except
 	return r
 # --- EoF ---
 

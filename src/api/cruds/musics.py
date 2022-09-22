@@ -89,8 +89,6 @@ async def create_music(
 
 async def create_musics(
 		db:AsyncSession, music_list:list):
-	datalist = [{'video_name': '【CoC狂気山脈】狂気！ンゴ灰那山脈！【後編】PL：周央 サンゴ、黛 灰、健屋 花那','video_id': 'oTq9AIzx_wk'},{'video_name': '【クトゥルフ神話TRPG配信】茶瀬木高校オカルト部 その２ #ンゴ灰那部','video_id': '69ynXHdTPWg'},{'video_name': '新約・きさらぎ駅／出演：朝日奈丸佳、森永千才、ベルモンド・バンデラス、周央サンゴ','video_id': 'm2IxsOmtAM4'},{'video_name': '【こひな卓】刹夏【#ンゴ刹那】', 'video_id': '6aD-Sm1TXko'},
-	]
 	box = []
 
 	for i in music_list:
@@ -103,12 +101,15 @@ async def create_musics(
 		r = r.first()
 		if r is None:
 			box.append(i)
+		#-- if
+	#-- for
 
 	if box:
 		musics = [ model.Music( music_name=d["video_name"],music_original_id=d["video_id"] ) for d in box ]
 		db.add_all(musics)
 		await db.commit()
 		# await db.refresh(musics)
+	#-- if
 	return box
 #--- EoF ---
 
