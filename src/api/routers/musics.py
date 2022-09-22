@@ -2,45 +2,70 @@
 # -*- coding: utf8 -*-
 
 from typing import List
-from fastapi import APIRouter
+from fastapi import APIRouter,Depends
+from fastapi.exceptions import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 
 import api.schemas.musics as schema
+import api.cruds.musics as music_crud
+from api.db import get_db
 
 router = APIRouter()
 
 
 @router.get("/musics/", tags=["Musics"], response_model=List[schema.Musics])
-async def read_musics():
-    pass
+async def read_musics(db: AsyncSession = Depends(get_db)):
+    return await music_crud.get_musics(db)
 # --- EoF ---
 
 
 @router.get("/musics/{music_id}",
-            tags=["Musics"],
-            response_model=schema.Musics)
-async def read_music():
-    pass
+            tags=["Musics"])
+async def read_music_by_id(music_id:int,db: AsyncSession = Depends(get_db)):
+    return await music_crud.get_music_by_id(db,music_id)
 # --- EoF ---
 
+@router.get("/musics/{music_name}",
+            tags=["Musics"])
+async def read_music_by_name(music_name:str,db: AsyncSession = Depends(get_db)):
+    return await music_crud.get_music_by_name(db,music_name)
+# --- EoF ---
 
-@router.post("/musics/", tags=["Musics"],
-             response_model=schema.MusicCreateResponse)
-async def create_music():
-    pass
+@router.post("/musics/", tags=["Musics"])
+async def create_music(music_in:schema.MusicCreate,db: AsyncSession = Depends(get_db)):
+	# r = await music_crud.create_music(db,music_in)
+	try:
+		r = await music_crud.create_music(db,music_in)
+	except Exception as e:
+		raise HTTPException(
+			status_code=404,
+			detail=f"{music_in.music_name}, or {music_in.music_original_id} is duplicated.")
+	# -- except
+	return r
 # --- EoF ---
 
 
 @router.put("/musics/{music_id}",
-            tags=["Musics"],
-            response_model=schema.MusicCreateResponse)
-async def update_music():
-    pass
+            tags=["Musics"])
+async def update_music(music_original_id:str,music_body:schema.MusicCreate,db: AsyncSession = Depends(get_db)):
+	music = await music_crud.get_music_by_original_id(db,music_original_id= music_original_id)
+	if music is None:
+		raise HTTPException(
+			status_code=404,
+			detail=f"{music_original_id} is not found.")
+	return await music_crud.update_music(db, music_body, original=music)
 # --- EoF ---
 
 
 @router.delete("/musics/{music_id}", tags=["Musics"], response_model=None)
-async def delete_music():
-    pass
+async def delete_music(music_original_id:str,db: AsyncSession = Depends(get_db)):
+	music = await music_crud.get_music_by_original_id(db,music_original_id=music_original_id)
+	if music is None:
+		raise HTTPException(
+			status_code=404,
+			detail=f"{music_original_id} is not found.")
+	return await music_crud.delete_music(db,original=music)
+
 # --- EoF ---
 
 
