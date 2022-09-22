@@ -44,6 +44,19 @@ async def create_music(music_in:schema.MusicCreate,db: AsyncSession = Depends(ge
 	return r
 # --- EoF ---
 
+@router.post("/musics-list/", tags=["Musics"])
+async def create_musics(music:list,db: AsyncSession = Depends(get_db)):
+	# r = await music_crud.create_music(db,music_in)
+	r = await music_crud.create_musics(db,[])
+	# try:
+	# 	r = await music_crud.create_musics(db,[])
+	# except Exception as e:
+	# 	raise HTTPException(
+	# 		status_code=404)
+	# # -- except
+	return r
+# --- EoF ---
+
 
 @router.put("/musics/{music_id}",
             tags=["Musics"])

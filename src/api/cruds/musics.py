@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 import sys
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -67,6 +67,17 @@ async def create_music(
 	await db.commit()
 	await db.refresh(music)
 	return music
+#--- EoF ---
+
+async def create_musics(
+		db:AsyncSession, music_list:list):
+	datalist = [{'video_name': '【CoC狂気山脈】狂気！ンゴ灰那山脈！【後編】PL：周央 サンゴ、黛 灰、健屋 花那','video_id': 'oTq9AIzx_wk'},{'video_name': '【クトゥルフ神話TRPG配信】茶瀬木高校オカルト部 その２ #ンゴ灰那部','video_id': '69ynXHdTPWg'},{'video_name': '新約・きさらぎ駅／出演：朝日奈丸佳、森永千才、ベルモンド・バンデラス、周央サンゴ','video_id': 'm2IxsOmtAM4'}
+	]
+	musics = [ model.Music( music_name=d["video_name"],music_original_id=d["video_id"] ) for d in datalist ]
+	db.add_all(musics)
+	await db.commit()
+	# await db.refresh(musics)
+	return musics
 #--- EoF ---
 
 
