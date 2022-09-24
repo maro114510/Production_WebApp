@@ -14,26 +14,23 @@ from api.db import get_db
 router = APIRouter()
 
 
-@router.get("/users/", tags=["Users"], response_model=List[schema.Users])
+@router.get("/users/", tags=["Users"])
 async def read_users(db: AsyncSession = Depends(get_db)):
     return await user_crud.get_users(db)
 # --- EoF ---
 
-@router.get("/users/{user_id}", tags=["Users"], response_model=schema.Users)
+@router.get("/users/{user_id}", tags=["Users"])
 async def read_user(user_id:int,db: AsyncSession = Depends(get_db)):
     return await user_crud.get_user_by_id(db,user_id=user_id)
 # --- EoF ---
 
 
-@router.get("/users/{user_name}", tags=["Users"], response_model=schema.Users)
-async def read_user_by_name(user_name: str, db: AsyncSession = Depends(get_db)):
-    return await user_crud.get_user_by_name(db, user_name)
+@router.get("/users/name/", tags=["Users"])
+async def read_by_name(user_name:str,db: AsyncSession = Depends(get_db)):
+    # return await user_crud.get_users(db)
+    return await user_crud.get_user_by_name(db, user_name=user_name)
 # --- EoF ---
 
-@router.get("/users/{user_id}", tags=["Users"])
-async def read_user_by_id(user_id: int, db: AsyncSession = Depends(get_db)):
-    return await user_crud.get_user_by_id(db, user_id)
-# --- EoF ---
 
 @router.post("/users/", tags=["Users"])
 async def create_user(user_in: schema.UserCreate, db: AsyncSession = Depends(get_db)):
@@ -56,21 +53,24 @@ async def update_user(user_name: str, user_body: schema.UserCreate, db: AsyncSes
         raise HTTPException(
             status_code=404,
             detail=f"{user_name} is not found.")
+    # user = await user_crud.get_user_by_name(db, user_name=user_name)
+    # return user.user_name
     return await user_crud.update_user(db, user_body, original=user)
 # --- EoF ---
 
 
-@router.delete("/users/{user_name}", tags=["Users"])
+@router.delete("/users/user/", tags=["Users"])
 async def delete_user(user_name: str, db: AsyncSession = Depends(get_db)):
-    user = await user_crud.get_user_by_name(db, user_name=user_name)
-    if user is None:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{user_name} is not found.")
-    return await user_crud.delete_user(db, original=user)
+	content = await user_crud.get_user_by_name(db, user_name=user_name)
+	if content is None:
+		raise HTTPException(
+			status_code=404,
+			detail=f"{user_name} is not found.")
 
+	# return content
 
-# --- EoF ---
+	return await user_crud.delete_user(db, original=content)
+	# --- EoF ---
 
 
 # End of Script

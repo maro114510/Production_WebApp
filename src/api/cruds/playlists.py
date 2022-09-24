@@ -26,7 +26,13 @@ async def get_playlists(db_session: AsyncSession):
 async def get_playlist_by_id(db_session: AsyncSession,playlist_id:int):
 	result: Result = await (
 		db_session.execute(
-			select(model.Playlist).filter(model.Playlist.playlist_id==playlist_id)
+			select(
+				model.Playlist.playlist_id,
+				model.Playlist.playlist_name,
+				model.Playlist.playlist_original_id,
+			).filter(
+				model.Playlist.playlist_id==playlist_id
+			)
 		)
 	)
 	playlist: Optional[Tuple[model.Playlist]] = result.first()
@@ -36,7 +42,13 @@ async def get_playlist_by_id(db_session: AsyncSession,playlist_id:int):
 async def get_playlist_by_original_id(db_session: AsyncSession,playlist_original_id:str):
 	result: Result = await (
 		db_session.execute(
-			select(model.Playlist).filter(model.Playlist.playlist_original_id==playlist_original_id)
+			select(
+				model.Playlist.playlist_id,
+				model.Playlist.playlist_name,
+				model.Playlist.playlist_original_id,
+			).filter(
+				model.Playlist.playlist_original_id==playlist_original_id
+			)
 		)
 	)
 	playlist: Optional[Tuple[model.Playlist]] = result.first()
