@@ -14,7 +14,7 @@ from api.db import get_db
 router = APIRouter()
 
 
-@router.get("/musics/", tags=["Musics"], response_model=List[schema.Musics])
+@router.get("/musics/", tags=["Musics"])
 async def read_musics(db: AsyncSession = Depends(get_db)):
 	"""_summary_
 

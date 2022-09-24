@@ -26,21 +26,31 @@ async def get_users(db_session: AsyncSession):
 async def get_user_by_id(db_session: AsyncSession,user_id:int):
 	result: Result = await (
 		db_session.execute(
-			select(model.User).filter(model.User.user_id==user_id)
+			select(
+				model.User.user_id,
+				model.User.user_name,
+				model.User.user_email,
+			).filter(
+				model.User.user_id==user_id
+			)
 		)
 	)
-	user: Optional[Tuple[model.User]] = result.first()
-	return user[0] if user is not None else None
+	return result.first()
 #--- EoF ---
 
 async def get_user_by_name(db_session: AsyncSession,user_name:str):
 	result: Result = await (
 		db_session.execute(
-			select(model.User).filter(model.User.user_name==user_name)
+			select(
+				model.User.user_id,
+				model.User.user_name,
+				model.User.user_email,
+			).filter(
+				model.User.user_name==user_name
+			)
 		)
 	)
-	user: Optional[Tuple[model.User]] = result.first()
-	return user[0] if user is not None else None
+	return result.first()
 #--- EoF ---
 
 async def create_user(
@@ -60,19 +70,28 @@ async def create_user(
 async def update_user(
 		db: AsyncSession,user:schema.UserCreate,original:model.User
 	):
-	original.user_name = user.user_name
+	# original.user_name = user.user_name
 	original.user_email = user.user_email
-	original.user_pw = user.user_pw
-	db.add(original)
-	await db.commit()
-	await db.refresh(original)
-	return original
+	# db.add(original)
+	# await db.commit()
+	# await db.refresh(original)
+	return original.user_email
 #--- EoF ---
 
 async def delete_user(
 		db_session: AsyncSession,original:model.User
 	):
-	await db_session.delete(original)
+
+
+	# try:
+	# 	awai
+	# 	await db_session.flush()
+	# 	await db_session.rollback()
+	# except Exception as ex:
+	# 	db_session.rollback()
+	# 	raise
+	sql = "delete from user_playlists where id = %s ;" % original.user_id
+	await db_session.execute(sql)
 	await db_session.commit()
 #--- EoF ---
 
