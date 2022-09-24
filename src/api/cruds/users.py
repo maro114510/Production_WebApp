@@ -26,11 +26,18 @@ async def get_users(db_session: AsyncSession):
 async def get_user_by_id(db_session: AsyncSession,user_id:int):
 	result: Result = await (
 		db_session.execute(
-			select(model.User).filter(model.User.user_id==user_id)
+			select(
+				model.User.user_id,
+				model.User.user_name,
+				model.User.user_email,
+				model.User.user_pw,
+			).filter(
+				model.User.user_id==user_id
+			)
 		)
 	)
-	user: Optional[Tuple[model.User]] = result.first()
-	return user[0] if user is not None else None
+
+	return result.first()
 #--- EoF ---
 
 async def get_user_by_name(db_session: AsyncSession,user_name:str):
