@@ -87,7 +87,9 @@ async def delete_user_playlist(
 			)
 		)
 	)
-	await db_session.delete(result)
+	r = result.mappings()
+	# return r
+	await db_session.delete(r)
 	await db_session.commit()
 #--- EoF ---
 
