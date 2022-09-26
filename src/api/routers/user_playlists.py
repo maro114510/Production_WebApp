@@ -41,13 +41,13 @@ async def create_user_playlists(user_info:u_schema.UserCreate ,playlist_in:p_sch
 
 @router.delete("/user_playlists/playlist", tags=["UserPlaylist"])
 async def delete_user_playlist(user_name: str,playlist:p_schema.PlaylistCreate , db: AsyncSession = Depends(get_db)):
-	user = await cruds.get_user_playlist_by_user_id(db,user_name,playlist.playlist_original_id)
-	if user:
-		await cruds.delete_user_playlist(db,user,playlist.playlist_original_id)
-	else:
-		raise HTTPException(
-			status_code=404)
-	return user
+	# user = await cruds.get_user_playlist_by_user_id(db,user_name,playlist.playlist_original_id)
+	# if user:
+	# 	await cruds.delete_user_playlist(db,user,playlist.playlist_original_id)
+	# else:
+	# 	raise HTTPException(
+	# 		status_code=404)
+	return await cruds.delete_user_playlist(db,user_name,playlist.playlist_original_id)
 # --- EoF ---
 
 

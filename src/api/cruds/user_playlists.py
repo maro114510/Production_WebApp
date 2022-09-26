@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-from operator import mod
+import re
 import sys
 from typing import Optional, Tuple
 from sqlalchemy import select
@@ -22,6 +22,9 @@ async def get_user_playlists(db_session: AsyncSession):
 			)
 		)
 	)
+	# for i in result.all():
+	# 	yield await i
+
 	return result.all()
 #--- EoF ---
 
@@ -72,24 +75,27 @@ async def create_user_playlist(db:AsyncSession,user_info:u_schema.UserCreate ,pl
 async def delete_user_playlist(
 		db_session: AsyncSession,user:str,playlist:str
 	):
-	result: Result = await (
+	result :Result= await (
 		db_session.execute(
 			select(
 				model.UserPlaylist.id,
 				model.UserPlaylist.user_name,
 				model.UserPlaylist.playlist_original_id,
-				model.UserPlaylist.user,
-				model.UserPlaylist.playlist,
 			).filter(
 				model.UserPlaylist.user_name==user
-			).filter(
-				model.UserPlaylist.playlist_original_id==playlist
 			)
 		)
 	)
-	r = result.mappings()
-	# return r
-	await db_session.delete(r)
+
+	r = result.first()
+	
+	# 	id = r.id,
+	# 	user_name = r.user_name,
+	# 	playlist_original_id = r.playlist_original_id
+	# )
+	# r = result.first()
+
+	await db_session.delete(result)
 	await db_session.commit()
 #--- EoF ---
 
