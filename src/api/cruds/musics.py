@@ -89,7 +89,8 @@ async def create_music(
 #--- EoF ---
 
 async def create_musics(
-		db:AsyncSession, music_list:list):
+		db:AsyncSession, music_list:list
+	):
 	box = []
 
 	for i in music_list:

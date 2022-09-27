@@ -2,6 +2,7 @@
 # -*- coding: utf8 -*-
 
 import sys
+import requests
 
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
@@ -48,6 +49,22 @@ async def create_playlist_music(
 		music_d = await musics.create_music(db,music_in)
 		music_r = await cruds.create_playlist_music(db,playlist_info,music_in)
 	return music_r
+# --- EoF ---
+
+@router.post("/n_playlist_musics/",tags=["N_Playlist_Musics"])
+async def create_playlist_musics(
+		playlist_info:p_schema.PlaylistCreate,
+		playlist_original_id:str,
+		db: AsyncSession = Depends(get_db)
+	):
+	headers = {
+		'accept': 'application/json',
+		'content-type': 'application/x-www-form-urlencoded',
+	}
+	playlist_id = playlist_info.playlist_original_id
+	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers).json()
+	music_list = res.get("music_id_list")
+	await cruds.create_playlist_musics(db,music_list,playlist_info)
 # --- EoF ---
 
 

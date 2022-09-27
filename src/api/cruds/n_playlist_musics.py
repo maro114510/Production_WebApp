@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+from statistics import mode
 import sys
 
 from sqlalchemy import select
@@ -10,6 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import api.models.db_model as model
 import api.schemas.playlists as p_schema
 import api.schemas.musics as m_schema
+import api.cruds.musics as music_cruds
 
 async def get_playlist_musics(db:AsyncSession):
 	result: Result = await (
@@ -74,6 +76,25 @@ async def create_playlist_music(
 	await db.commit()
 	await db.refresh(playlist_music)
 	return playlist_music
+#--- EoF ---
+
+async def create_playlist_musics(
+		db:AsyncSession,
+		playlist_contents:list,
+		playlist_info:p_schema.PlaylistCreate
+	):
+	r = await music_cruds(db,playlist_contents)
+	if r:
+		p_musics = [
+			model.NormalPlaylistMusic(
+				playlist_original_id = playlist_info.playlist_original_id,
+				music_original_id=d["video_id"]
+			) for d in r
+		]
+		db.add_all(p_musics)
+		await db.commit()
+	#-- if
+	return r
 #--- EoF ---
 
 async def delete_playlist_music(
