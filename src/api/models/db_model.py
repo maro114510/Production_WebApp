@@ -2,6 +2,8 @@
 # -*- coding: utf8 -*-
 
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, ForeignKey
+from sqlalchemy.dialects.mysql import TIMESTAMP as Timestamp
+from sqlalchemy.sql.expression import text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -15,12 +17,28 @@ class UserPlaylist(Base):
 	__tablename__ = "user_playlists"
 	# __abstract__ = True
 	id = Column(Integer, primary_key=True)
-	user_name = Column(ForeignKey("users.user_name"))
+	user_name = Column(
+		ForeignKey(
+			"users.user_name",
+			ondelete="CASCADE"
+		)
+	)
 	playlist_original_id = Column(
-		ForeignKey("playlists.playlist_original_id"), index=True)
+		ForeignKey(
+			"playlists.playlist_original_id",
+			ondelete="CASCADE"
+		)
+	)
+	created_at=Column(
+		Timestamp,
+		server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+	)
 
 	user = relationship("User", back_populates="playlists")
 	playlist = relationship("Playlist", back_populates="users")
+
+	def __repr__(self) -> str:
+		return "<UserPlaylist %r>" % self.id
 # -- class
 
 
@@ -30,14 +48,27 @@ class NormalPlaylistMusic(Base):
 	# __abstract__ = True
 	id = Column(Integer, primary_key=True)
 	playlist_original_id = Column(
-		ForeignKey("playlists.playlist_original_id"), index=True)
+		ForeignKey(
+			"playlists.playlist_original_id",
+			ondelete="CASCADE"
+		)
+	)
 	music_original_id = Column(
-		ForeignKey("musics.music_original_id"),
-		index=True)
-	date = Column(String(30))
+		ForeignKey(
+			"musics.music_original_id",
+			ondelete="CASCADE"
+		)
+	)
+	created_at=Column(
+		Timestamp,
+		server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+	)
 
 	n_playlist = relationship("Playlist", back_populates="n_musics")
 	n_music = relationship('Music', back_populates="n_playlists")
+
+	def __repr__(self) -> str:
+		return "<NormalPlaylistMusic %r>" % self.id
 # -- class
 
 
@@ -47,14 +78,27 @@ class DeletedPlaylistMusic(Base):
 	# __abstract__ = True
 	id = Column(Integer, primary_key=True)
 	playlist_original_id = Column(
-		ForeignKey("playlists.playlist_original_id"), index=True)
+		ForeignKey(
+			"playlists.playlist_original_id",
+			ondelete="CASCADE"
+		)
+
+	)
 	music_original_id = Column(
-		ForeignKey("musics.music_original_id"),
-		index=True)
-	date = Column(String(30))
+		ForeignKey(
+			"musics.music_original_id",
+			ondelete="CASCADE"
+		)
+	)
+	created_at=Column(
+		Timestamp,
+		server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+	)
 
 	d_music = relationship('Music', back_populates="d_playlists")
 	d_playlist = relationship("Playlist", back_populates="d_musics")
+	def __repr__(self) -> str:
+		return "<DeletedPlaylistMusic %r>" % self.id
 # -- class
 
 
@@ -67,12 +111,19 @@ class User(Base):
 	user_email = Column(String(128), nullable=False, unique=True)
 	user_pw = Column(String(256), nullable=False)
 
-	# def __init__(self, user_name, user_email, user_pw):
-	# 	self.user_name = user_name
-	# 	self.user_email = user_email
-	# 	self.user_pw = hashlib.md5(user_pw.encode()).hexdigest()
+	def __init__(self, user_name, user_email, user_pw):
+		self.user_name = user_name
+		self.user_email = user_email
+		self.user_pw = hashlib.md5(user_pw.encode()).hexdigest()
 
-	playlists = relationship("UserPlaylist", back_populates="user",cascade="all, delete")
+	playlists = relationship(
+		"UserPlaylist",
+		back_populates="user",
+		cascade="all, delete"
+	)
+
+	def __repr__(self) -> str:
+		return "<User %r>" % self.user_id
 # -- class
 
 
@@ -84,14 +135,29 @@ class Playlist(Base):
 	playlist_name = Column(String(126))
 	playlist_original_id = Column(String(126), index=True, unique=True)
 
-	users = relationship("UserPlaylist", back_populates="playlist")
-
-	n_musics = relationship("NormalPlaylistMusic", back_populates="n_playlist",cascade="all, delete")
+	users = relationship(
+		"UserPlaylist",
+		back_populates="playlist",
+		cascade="all, delete"
+	)
+	n_musics = relationship(
+		"NormalPlaylistMusic",
+		back_populates="n_playlist",
+		cascade="all, delete"
+	)
 	d_musics = relationship(
 		"DeletedPlaylistMusic",
-		back_populates="d_playlist",cascade="all, delete")
+		back_populates="d_playlist",
+		cascade="all, delete"
+	)
+	notify = relationship(
+		'PlaylistNotify',
+		back_populates="playlister",
+		cascade="all, delete"
+	)
 
-	notify = relationship('PlaylistNotify', back_populates="playlister",cascade="all, delete")
+	def __repr__(self) -> str:
+		return "<Playlist %r>" % self.playlist_id
 # -- class
 
 
@@ -103,10 +169,19 @@ class Music(Base):
 	music_name = Column(String(126))
 	music_original_id = Column(String(126), index=True, unique=True)
 
-	n_playlists = relationship("NormalPlaylistMusic", back_populates="n_music",cascade="all, delete")
+	n_playlists = relationship(
+		"NormalPlaylistMusic", 
+		back_populates="n_music",
+		cascade="all, delete"
+	)
 	d_playlists = relationship(
 		"DeletedPlaylistMusic",
-		back_populates="d_music",cascade="all, delete")
+		back_populates="d_music",
+		cascade="all, delete"
+	)
+
+	def __repr__(self) -> str:
+		return "<Music %r>" % self.music_id
 # -- class
 
 
@@ -118,7 +193,8 @@ class PlaylistNotify(Base):
 	playlist_original_id = Column(
 		ForeignKey('playlists.playlist_original_id'),
 		primary_key=True,
-		index=True)
+		index=True
+	)
 	notify = Column(Boolean())
 
 	playlister = relationship("Playlist", back_populates="notify")

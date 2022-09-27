@@ -71,12 +71,22 @@ async def create_user(
 async def update_user(
 		db: AsyncSession,user:schema.UserCreate,original:model.User
 	):
+	result = await db.execute(
+		select(
+			model.User
+		).filter(
+			model.User.user_name==original.user_name
+		)
+	)
+	buf = result.first()
+	buf[0].user_name = user.user_name
+	buf[0].user_email = user.user_email
 	# original.user_name = user.user_name
-	original.user_email = user.user_email
-	# db.add(original)
-	# await db.commit()
-	# await db.refresh(original)
-	return original.user_email
+	# original.user_email = user.user_email
+	db.add(buf[0])
+	await db.commit()
+	await db.refresh(buf[0])
+	return buf[0]
 #--- EoF ---
 
 async def delete_user(
