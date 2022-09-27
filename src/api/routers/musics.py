@@ -28,7 +28,7 @@ async def read_musics(db: AsyncSession = Depends(get_db)):
 # --- EoF ---
 
 
-@router.get("/musics/{music_id}",
+@router.get("/music/{music_id}",
             tags=["Musics"])
 async def read_music_by_id(music_id:int,db: AsyncSession = Depends(get_db)):
 	"""_summary_

@@ -3,6 +3,7 @@
 
 import sys
 from typing import Optional, Tuple
+from unittest import result
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -35,8 +36,7 @@ async def get_playlist_by_id(db_session: AsyncSession,playlist_id:int):
 			)
 		)
 	)
-	playlist: Optional[Tuple[model.Playlist]] = result.first()
-	return playlist[0] if playlist is not None else None
+	return result.first()
 #--- EoF ---
 
 async def get_playlist_by_original_id(db_session: AsyncSession,playlist_original_id:str):
@@ -45,14 +45,13 @@ async def get_playlist_by_original_id(db_session: AsyncSession,playlist_original
 			select(
 				model.Playlist.playlist_id,
 				model.Playlist.playlist_name,
-				model.Playlist.playlist_original_id,
+				model.Playlist.playlist_original_id
 			).filter(
 				model.Playlist.playlist_original_id==playlist_original_id
 			)
 		)
 	)
-	playlist: Optional[Tuple[model.Playlist]] = result.first()
-	return playlist[0] if playlist is not None else None
+	return result.first()
 #--- EoF ---
 
 async def create_playlist(
@@ -69,20 +68,28 @@ async def create_playlist(
 #--- EoF ---
 
 async def update_playlist(
-		db: AsyncSession,playlist:schema.PlaylistCreate,original:model.Playlist
+		db: AsyncSession,playlist:str,original:schema.PlaylistCreate
 	):
-	original.playlist_name = playlist.playlist_name
-	original.playlist_original_id = playlist.playlist_original_id
-	db.add(original)
+	result = await db.execute(
+		select(
+			model.Playlist
+		).filter(
+			model.Playlist.playlist_original_id==playlist
+		)
+	)
+	buf = result.first()
+	buf[0].playlist_name = original.playlist_name
+	db.add(buf[0])
 	await db.commit()
-	await db.refresh(original)
-	return original
+	await db.refresh(buf[0])
+	return buf[0]
 #--- EoF ---
 
 async def delete_playlist(
 		db_session: AsyncSession,original:model.Playlist
 	):
-	await db_session.delete(original)
+	sql = "DELETE FROM playlists WHERE playlist_id = %s ;" % original.playlist_id
+	await db_session.execute(sql)
 	await db_session.commit()
 #--- EoF ---
 

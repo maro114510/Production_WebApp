@@ -3,6 +3,7 @@
 
 import sys
 from typing import Optional, Tuple, List
+from unittest import result
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -69,8 +70,8 @@ async def get_music_by_original_id(db_session: AsyncSession,music_original_id:st
 			)
 		)
 	)
-	music: Optional[Tuple[model.Music]] = result.first()
-	return music[0] if music is not None else None
+
+	return result.first()
 #--- EoF ---
 
 
@@ -117,17 +118,26 @@ async def create_musics(
 async def update_music(
 		db: AsyncSession,music:schema.MusicCreate,original:model.Music
 	):
-	original.music_name = music.music_name
-	db.add(original)
+	result = await db.execute(
+		select(
+			model.Music
+		).filter(
+			model.Music.music_original_id==original.music_original_id
+		)
+	)
+	buf = result.first()
+	buf[0].music_name = music.music_name
+	db.add(buf[0])
 	await db.commit()
-	await db.refresh(original)
-	return original
+	await db.refresh(buf[0])
+	return buf[0]
 #--- EoF ---
 
 async def delete_music(
 		db_session: AsyncSession,original:model.Music
 	):
-	await db_session.delete(original)
+	sql = "DELETE FROM musics WHERE music_id = %s ;" % original.music_id
+	await db_session.execute(sql)
 	await db_session.commit()
 #--- EoF ---
 

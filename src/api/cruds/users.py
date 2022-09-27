@@ -15,6 +15,7 @@ async def get_users(db_session: AsyncSession):
 		db_session.execute(
 			select(
 				model.User.user_id,
+				model.User.user_name,
 				model.User.user_email,
 				model.User.user_pw,
 			)
@@ -92,20 +93,12 @@ async def update_user(
 async def delete_user(
 		db_session: AsyncSession,original:model.User
 	):
-
-
-	# try:
-	# 	awai
-	# 	await db_session.flush()
-	# 	await db_session.rollback()
-	# except Exception as ex:
-	# 	db_session.rollback()
-	# 	raise
-	sql = "delete from user_playlists where id = %s ;" % original.user_id
+	sql = "delete from users where user_id = %s ;" % original.user_id
 	await db_session.execute(sql)
+	# await db_session.delete(original)
 	await db_session.commit()
 #--- EoF ---
 
 
 
-# End of Script
+# End of Script……………

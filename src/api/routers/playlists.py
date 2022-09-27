@@ -23,9 +23,9 @@ async def read_playlist_by_id(playlist_id:int,db: AsyncSession = Depends(get_db)
     return await playlist_crud.get_playlist_by_id(db,playlist_id)
 # --- EoF ---
 
-@router.get("/playlists/{playlist_original_id}", tags=["Playlists"])
-async def read_playlist_by_id(playlist_original_id:str,db: AsyncSession = Depends(get_db)):
-	return await playlist_crud.get_playlist_by_id(db,playlist_original_id)
+@router.get("/playlist/original", tags=["Playlists"])
+async def read_playlist_by_original_id(playlist_original_id:str,db: AsyncSession = Depends(get_db)):
+	return await playlist_crud.get_playlist_by_original_id(db,playlist_original_id)
 # --- EoF ---
 
 @router.post("/playlists/", tags=["Playlists"])
@@ -43,7 +43,7 @@ async def update_playlist(playlist_original_id: str, playlist_body:schema.Playli
 	playlist = await playlist_crud.get_playlist_by_original_id(db,playlist_original_id=playlist_original_id)
 	if playlist is None:
 		raise HTTPException(status_code=404,detail=f"{playlist_original_id} is not found.")
-	return await playlist_crud.update_playlist(db,playlist_body,original=playlist)
+	return await playlist_crud.update_playlist(db,playlist_original_id,original=playlist_body)
 # --- EoF ---
 
 
