@@ -9,10 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.db import get_db
 import api.cruds.user_playlists as cruds
-from api.schemas.user_playlists import UserPlaylistSchema
 import api.schemas.users as u_schema
 import api.schemas.playlists as p_schema
-import api.cruds.users as users
 import api.cruds.playlists as playlists
 
 router = APIRouter()
@@ -47,7 +45,7 @@ async def delete_user_playlist(user_name: str,playlist:p_schema.PlaylistCreate ,
 	else:
 		raise HTTPException(
 			status_code=404)
-	return await cruds.delete_user_playlist(db,user_name,playlist.playlist_original_id)
+	return 0
 # --- EoF ---
 
 
