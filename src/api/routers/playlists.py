@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-from typing import List
+import requests
 from fastapi import APIRouter,Depends
 from fastapi.exceptions import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -30,6 +30,10 @@ async def read_playlist_by_original_id(playlist_original_id:str,db: AsyncSession
 
 @router.post("/playlists/", tags=["Playlists"])
 async def create_playlist(playlist_in:schema.PlaylistCreate, db: AsyncSession = Depends(get_db)):
+	headers = {
+		'accept': 'application/json',
+		'content-type': 'application/x-www-form-urlencoded',
+	}
 	try:
 		r = await playlist_crud.create_playlist(db,playlist_in)
 	except Exception as e:
@@ -54,7 +58,6 @@ async def delete_playlist(playlist_original_id:str,db: AsyncSession = Depends(ge
 	if playlist is None:
 		raise HTTPException(status_code=404,detail=f"{playlist_original_id} is not found.")
 	return await playlist_crud.delete_playlist(db,original=playlist)
-
 # --- EoF ---
 
 

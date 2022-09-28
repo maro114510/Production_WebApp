@@ -99,12 +99,12 @@ async def create_music(music_in:schema.MusicCreate,db: AsyncSession = Depends(ge
 # --- EoF ---
 
 @router.post("/musics-list/", tags=["Musics"])
-async def create_musics(playlist_original_id:str,db: AsyncSession = Depends(get_db)):
+async def create_musics(url:str,db: AsyncSession = Depends(get_db)):
 	headers = {
 		'accept': 'application/json',
 		'content-type': 'application/x-www-form-urlencoded',
 	}
-	playlist_id = playlist_original_id
+	playlist_id = ""
 	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers).json()
 	music_list = res.get("music_id_list")
 
