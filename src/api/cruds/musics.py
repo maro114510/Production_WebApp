@@ -110,7 +110,7 @@ async def create_musics(
 		musics = [ model.Music( music_name=d["video_name"],music_original_id=d["video_id"] ) for d in box ]
 		db.add_all(musics)
 		await db.commit()
-		# await db.refresh(musics)
+		await db.refresh(musics)
 	#-- if
 	return box
 #--- EoF ---

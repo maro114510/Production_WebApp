@@ -36,7 +36,10 @@ async def create_playlist(url:str, db: AsyncSession = Depends(get_db)):
 		'content-type': 'application/x-www-form-urlencoded',
 	}
 	playlist_id = generate_playlist_id(url)
-	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers).json()
+	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers)
+	if res.status_code != 200:
+		HTTPException(status_code=500)
+	res = res.json()
 	playlist_name = res.get("playlistname")
 	playlist_in =	{
 		"playlist_name": f"{playlist_name}",

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-from typing import List
 import requests
 from fastapi import APIRouter,Depends
 from fastapi.exceptions import HTTPException

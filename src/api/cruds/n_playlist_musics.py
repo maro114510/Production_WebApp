@@ -83,18 +83,18 @@ async def create_playlist_musics(
 		playlist_contents:list,
 		playlist_info:p_schema.PlaylistCreate
 	):
-	r = await music_cruds(db,playlist_contents)
-	if r:
+	await music_cruds.create_musics(db,playlist_contents)
+	if playlist_contents:
 		p_musics = [
 			model.NormalPlaylistMusic(
 				playlist_original_id = playlist_info.playlist_original_id,
 				music_original_id=d["video_id"]
-			) for d in r
+			) for d in playlist_contents
 		]
 		db.add_all(p_musics)
 		await db.commit()
 	#-- if
-	return r
+	return p_musics
 #--- EoF ---
 
 async def delete_playlist_music(

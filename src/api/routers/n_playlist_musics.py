@@ -54,7 +54,6 @@ async def create_playlist_music(
 @router.post("/n_playlist_musics/",tags=["N_Playlist_Musics"])
 async def create_playlist_musics(
 		playlist_info:p_schema.PlaylistCreate,
-		playlist_original_id:str,
 		db: AsyncSession = Depends(get_db)
 	):
 	headers = {
@@ -64,7 +63,13 @@ async def create_playlist_musics(
 	playlist_id = playlist_info.playlist_original_id
 	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers).json()
 	music_list = res.get("music_id_list")
-	await cruds.create_playlist_musics(db,music_list,playlist_info)
+	try:
+		r = await cruds.create_playlist_musics(db,music_list,playlist_info)
+	except Exception as e:
+		raise HTTPException(
+			status_code=403)
+	# -- except
+	return r
 # --- EoF ---
 
 
