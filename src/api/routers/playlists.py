@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import api.schemas.playlists as schema
 import api.cruds.playlists as playlist_crud
 from api.db import get_db
+from api.lib.library import generate_playlist_id
 
 router = APIRouter()
 
@@ -29,15 +30,23 @@ async def read_playlist_by_original_id(playlist_original_id:str,db: AsyncSession
 # --- EoF ---
 
 @router.post("/playlists/", tags=["Playlists"])
-async def create_playlist(playlist_in:schema.PlaylistCreate, db: AsyncSession = Depends(get_db)):
+async def create_playlist(url:str, db: AsyncSession = Depends(get_db)):
 	headers = {
 		'accept': 'application/json',
 		'content-type': 'application/x-www-form-urlencoded',
 	}
+	playlist_id = generate_playlist_id(url)
+	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers).json()
+	playlist_name = res.get("playlistname")
+	playlist_in =	{
+		"playlist_name": f"{playlist_name}",
+		"playlist_original_id": f"{playlist_id}"
+	}
 	try:
 		r = await playlist_crud.create_playlist(db,playlist_in)
 	except Exception as e:
-		raise HTTPException( status_code=404,detail=f"{playlist_in.playlist_original_id} is duplicated." )
+		i = playlist_in.get("playlist_original_id")
+		raise HTTPException( status_code=404,detail=f"{i} is duplicated." )
 	#-- except
 	return r
 # --- EoF ---

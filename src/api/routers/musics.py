@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import api.schemas.musics as schema
 import api.cruds.musics as music_crud
 from api.db import get_db
+from api.lib.library import generate_playlist_id
 
 router = APIRouter()
 
@@ -104,11 +105,10 @@ async def create_musics(url:str,db: AsyncSession = Depends(get_db)):
 		'accept': 'application/json',
 		'content-type': 'application/x-www-form-urlencoded',
 	}
-	playlist_id = ""
+	playlist_id = generate_playlist_id(url)
 	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers).json()
 	music_list = res.get("music_id_list")
 
-	# r = await music_crud.create_musics(db,music_list)
 	try:
 		r = await music_crud.create_musics(db,music_list)
 	except Exception as e:

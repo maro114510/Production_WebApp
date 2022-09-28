@@ -55,11 +55,11 @@ async def get_playlist_by_original_id(db_session: AsyncSession,playlist_original
 #--- EoF ---
 
 async def create_playlist(
-		db:AsyncSession, playlist_create:schema.PlaylistCreate
+		db:AsyncSession, playlist_create:dict
 	):
 	playlist = model.Playlist(
-		playlist_name=playlist_create.playlist_name,
-		playlist_original_id=playlist_create.playlist_original_id,
+		playlist_name=playlist_create.get("playlist_name"),
+		playlist_original_id=playlist_create.get("playlist_original_id"),
 	)
 	db.add(playlist)
 	await db.commit()
