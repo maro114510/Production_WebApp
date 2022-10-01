@@ -12,6 +12,7 @@ def main(argc, argv):
 		"headers":{
 			'accept': 'application/json',
 		},
+		"params":{}
 	}
 
 	catch_data(params)
@@ -19,17 +20,32 @@ def main(argc, argv):
 	return 0
 #--- EoF ---
 
+
 def catch_data(params):
 	try:
-		headers = {
-			'accept': 'application/json',
-		}
-		response = requests.get('http://192.168.11.2:8000/playlists/', headers=headers).json()
+		# DBに格納されているプレイリスト全件取得
+		response = requests.get('http://192.168.11.2:8000/playlists/', headers=params["headers"]).json()
 		box = [ i.get("playlist_original_id") for i in response ]
+
+
+		# DBプレイリスト内の音楽を全件取得 
+		#############
+		# for文で回す必要あり
+		#############
+		params["params"] = {
+			'playlist_original_id': f'{box[0]}',
+		}
+		response1 = requests.get('http://192.168.11.2:8000/n_playlist_music1/', params=params["params"], headers=params["headers"])
+
+		# APIによる現時点でのプレイリスト内の音楽情報を取得
+		params["headers"]["content-type"] = "application/x-www-form-urlencode"
+		res = requests.post(f'https://2y5u90.deta.dev/{box[0]}', headers=params["headers"]).json()
+		# TODO 増減に応じた処理を切り出すところから（2022年10月1日）
+
+
 		with open("/workspace/cron/log/execute.log", "a") as f:
 			print(f"[{params['date']}] {box}", file=f)
 		#-- with
-		response1 = requests.get()
 	except Exception as e:
 		with open("/workspace/cron/log/error.log", "a") as f:	
 			print( f"[{params['date']}]"+"%s" % ( [e.args, ] ), file=f )
