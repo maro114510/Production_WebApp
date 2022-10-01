@@ -39,26 +39,10 @@ async def create_bulk(
 	)
 	r = await playlist_crud.get_playlists(db)
 	ids = [ i.playlist_original_id for i in r ]
-	# if playlist_original_id in ids:
-	# 	playlist_r = await up_cruds.create_user_playlist(db,user,playlist_in)
-	# 	if type(playlist_r) == str:
-	# 		raise HTTPException(
-	# 			status_code=400,
-	# 			detail=playlist_r
-	# 		)
-	# else:
-	# 	playlist_d = await playlist_crud.create_playlist(db,playlist_in)
-	# 	playlist_r = await up_cruds.create_user_playlist(db,user,playlist_in)
-	# 	if type(playlist_r) == str:
-	# 		raise HTTPException(
-	# 			status_code=400,
-	# 			detail=playlist_r
-	# 		)
 	# プレイリスト内の音楽登録
 	music_list = res.get("music_id_list")
 
 	# npmテーブルの登録
-	# r = await npm_cruds.create_playlist_musics(db,music_list,playlist_in)
 	try:
 		r = await npm_cruds.create_playlist_musics(db,music_list,playlist_in)
 	except Exception as e:
@@ -66,7 +50,7 @@ async def create_bulk(
 			status_code=400,
 			detail=e)
 	# # -- except
-	return music_list
+	return r
 # --- EoF ---
 
 
