@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+from enum import unique
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, ForeignKey
 from sqlalchemy.dialects.mysql import TIMESTAMP as Timestamp
 from sqlalchemy.sql.expression import text
@@ -52,7 +53,8 @@ class NormalPlaylistMusic(Base):
 		ForeignKey(
 			"playlists.playlist_original_id",
 			ondelete="CASCADE"
-		)
+		),
+		unique=False
 	)
 	music_original_id = Column(
 		ForeignKey(

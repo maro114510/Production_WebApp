@@ -72,14 +72,15 @@ async def create_user_playlist(db:AsyncSession,user_info:u_schema.UserCreate ,pl
 			)
 		)
 	)
-	if result:
+
+	if result.first():
 		user_name = user_info.user_name
 		playlist_original_id = playlists.playlist_original_id
 		return f"{user_name}'s {playlist_original_id} is doubled."
 	else:
 		db.add(user_playlist)
 		await db.commit()
-		# await db.refresh(user_playlist)
+		await db.refresh(user_playlist)
 		return user_playlist
 #--- EoF ---
 

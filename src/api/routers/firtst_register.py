@@ -30,15 +30,22 @@ async def create_bulk(
 		'accept': 'application/json',
 		'content-type': 'application/x-www-form-urlencoded',
 	}
-	playlist_id = generate_playlist_id(url)
-	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers).json()
+	res = requests.post(f'https://2y5u90.deta.dev/{playlist_original_id}', headers=headers).json()
 	playlist_name = res.get("playlistname")
+
+	playlist_s = p_schema.PlaylistCreate(
+		playlist_name=playlist_name,
+		playlist_original_id=playlist_original_id
+	)
+
+	await playlist_crud.create_playlist(db,playlist_s)
+	up_create = await up_cruds.create_user_playlist(db,user,playlist_s)
+
 	playlist_in = p_schema.PlaylistCreate(
 		playlist_name=f"{playlist_name}",
 		playlist_original_id=f"{playlist_original_id}"
 	)
 	r = await playlist_crud.get_playlists(db)
-	ids = [ i.playlist_original_id for i in r ]
 	# プレイリスト内の音楽登録
 	music_list = res.get("music_id_list")
 
@@ -49,7 +56,7 @@ async def create_bulk(
 		raise HTTPException(
 			status_code=400,
 			detail=e)
-	# # -- except
+	# -- except
 	return r
 # --- EoF ---
 
