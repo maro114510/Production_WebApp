@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+from genericpath import exists
 import requests
 from fastapi import APIRouter,Depends
 from fastapi.exceptions import HTTPException
@@ -57,7 +58,7 @@ async def create_bulk(
 			status_code=400,
 			detail=e)
 	# -- except
-	return r
+	return exists(r)
 # --- EoF ---
 
 
