@@ -41,11 +41,14 @@ page = st.sidebar.selectbox('Choose your page',page_list)
 
 if page == "HOME":
 	st.subheader('HOME')
+#-- if
+
+elif page == "USER":
 	user_name = st.sidebar.text_input('Input User Name')
 	user_password = st.sidebar.text_input('Input User pauser_password',type="password")
 	if st.sidebar.checkbox('LOGIN'):
 		r = get_user_info(user_name)
-		st.write(r)
+		# st.write(r)
 		user_hashed_pw = r.get('user_pw')
 		# st.write(user_hashed_pw)
 		hashed_pwd = make_hashes(user_password)
@@ -53,5 +56,21 @@ if page == "HOME":
 		if result_:
 			un = r.get('user_name')
 			user_page(un)
+		#-- if
 		else:
-			st.warning('fuck')
+			st.warning('パスワードが違います')
+		#-- else
+	#-- if
+#-- elif
+
+elif page == "PLAYLIST":
+	with st.form(key="URL"):
+		url:str = st.text_input("Playlist URL")
+		submit_button = st.form_submit_button(label="送信")
+	#-- with
+
+elif page == "USER REGISTER":
+	st.markdown("### Create User")
+	with st.form(key="USER"):
+		user_name = st.text_input("User Name",help="ユーザー名の登録")
+	#-- with
