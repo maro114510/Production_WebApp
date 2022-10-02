@@ -9,6 +9,8 @@ services:
       - .:/src
     ports:
       - 8000:8000
+    environment:
+      TZ: 'Asia/Tokyo'
 
   db:
     image: mysql:8.0
@@ -24,6 +26,16 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - 33306:3306
+
+  cron:
+    build:
+      context: ./cron
+    environment:
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./:/workspace
+    stdin_open: true
+    tty: true
 
 volumes:
   mysql_data:

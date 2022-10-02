@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+
 import sys
 from sqlalchemy import select
 from sqlalchemy.engine import Result
@@ -60,10 +61,27 @@ async def create_user_playlist(db:AsyncSession,user_info:u_schema.UserCreate ,pl
 		user_name=user_info.user_name,
 		playlist_original_id=playlists.playlist_original_id
 	)
-	db.add(user_playlist)
-	await db.commit()
-	await db.refresh(user_playlist)
-	return user_playlist
+	result: Result = await (
+		db.execute(
+			select(
+				model.UserPlaylist.id,
+			).filter(
+				model.UserPlaylist.user_name==user_info.user_name
+			).filter(
+				model.UserPlaylist.playlist_original_id==playlists.playlist_original_id
+			)
+		)
+	)
+
+	if result.first():
+		user_name = user_info.user_name
+		playlist_original_id = playlists.playlist_original_id
+		return f"{user_name}'s {playlist_original_id} is doubled."
+	else:
+		db.add(user_playlist)
+		await db.commit()
+		await db.refresh(user_playlist)
+		return user_playlist
 #--- EoF ---
 
 

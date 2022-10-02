@@ -59,7 +59,7 @@ async def create_playlist(
 	):
 	playlist = model.Playlist(
 		playlist_name=playlist_create.playlist_name,
-		playlist_original_id=playlist_create.playlist_original_id,
+		playlist_original_id=playlist_create.playlist_original_id
 	)
 	db.add(playlist)
 	await db.commit()

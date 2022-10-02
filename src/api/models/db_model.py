@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+from enum import unique
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, ForeignKey
 from sqlalchemy.dialects.mysql import TIMESTAMP as Timestamp
 from sqlalchemy.sql.expression import text
@@ -27,7 +28,8 @@ class UserPlaylist(Base):
 		ForeignKey(
 			"playlists.playlist_original_id",
 			ondelete="CASCADE"
-		)
+		),
+		unique=True
 	)
 	created_at=Column(
 		Timestamp,
@@ -51,13 +53,15 @@ class NormalPlaylistMusic(Base):
 		ForeignKey(
 			"playlists.playlist_original_id",
 			ondelete="CASCADE"
-		)
+		),
+		unique=False
 	)
 	music_original_id = Column(
 		ForeignKey(
 			"musics.music_original_id",
 			ondelete="CASCADE"
-		)
+		),
+		# unique=True
 	)
 	created_at=Column(
 		Timestamp,
@@ -82,13 +86,13 @@ class DeletedPlaylistMusic(Base):
 			"playlists.playlist_original_id",
 			ondelete="CASCADE"
 		)
-
 	)
 	music_original_id = Column(
 		ForeignKey(
 			"musics.music_original_id",
 			ondelete="CASCADE"
-		)
+		),
+		# unique=True
 	)
 	created_at=Column(
 		Timestamp,
@@ -105,7 +109,6 @@ class DeletedPlaylistMusic(Base):
 class User(Base):
 	"""ユーザーテーブル"""
 	__tablename__ = 'users'
-	# __abstract__ = True
 	user_id = Column(Integer, primary_key=True, index=True)
 	user_name = Column(String(64), nullable=False, unique=True)
 	user_email = Column(String(128), nullable=False, unique=True)
@@ -130,7 +133,6 @@ class User(Base):
 class Playlist(Base):
 	"""プレイリストテーブル"""
 	__tablename__ = 'playlists'
-	# __abstract__ = True
 	playlist_id = Column(Integer, primary_key=True, index=True)
 	playlist_name = Column(String(126))
 	playlist_original_id = Column(String(126), index=True, unique=True)
@@ -164,7 +166,6 @@ class Playlist(Base):
 class Music(Base):
 	"""音楽テーブル"""
 	__tablename__ = 'musics'
-	# __abstract__ = True
 	music_id = Column(Integer, primary_key=True, index=True)
 	music_name = Column(String(126))
 	music_original_id = Column(String(126), index=True, unique=True)
@@ -188,7 +189,6 @@ class Music(Base):
 class PlaylistNotify(Base):
 	"""通知可否テーブル"""
 	__tablename__ = "playlistnotify"
-	# __abstract__ = True
 	# id = Column(Integer,primary_key=True)
 	playlist_original_id = Column(
 		ForeignKey('playlists.playlist_original_id'),

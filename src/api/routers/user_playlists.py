@@ -45,7 +45,7 @@ async def delete_user_playlist(user_name: str,playlist:p_schema.PlaylistCreate ,
 	else:
 		raise HTTPException(
 			status_code=404)
-	return 0
+	return user
 # --- EoF ---
 
 

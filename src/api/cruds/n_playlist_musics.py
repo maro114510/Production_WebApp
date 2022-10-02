@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-from statistics import mode
 import sys
 
 from sqlalchemy import select
@@ -68,14 +67,27 @@ async def create_playlist_music(
 		playlist_info:p_schema.PlaylistCreate,
 		music:m_schema.MusicCreate
 	):
-	playlist_music = model.NormalPlaylistMusic(
-		playlist_original_id = playlist_info.playlist_original_id,
-		music_original_id = music.music_original_id
-	)
-	db.add(playlist_music)
-	await db.commit()
-	await db.refresh(playlist_music)
-	return playlist_music
+	r = await db.execute(
+		select(
+			model.NormalPlaylistMusic.id,
+		).filter(
+			model.NormalPlaylistMusic.music_original_id==music.music_original_id
+		).filter(
+			model.NormalPlaylistMusic.playlist_original_id==playlist_info.playlist_original_id
+		)
+	).first()
+
+	if r:
+		return 0
+	else:
+		playlist_music = model.NormalPlaylistMusic(
+			playlist_original_id = playlist_info.playlist_original_id,
+			music_original_id = music.music_original_id
+		)
+		db.add(playlist_music)
+		await db.commit()
+		await db.refresh(playlist_music)
+		return playlist_music
 #--- EoF ---
 
 async def create_playlist_musics(
@@ -83,18 +95,49 @@ async def create_playlist_musics(
 		playlist_contents:list,
 		playlist_info:p_schema.PlaylistCreate
 	):
-	r = await music_cruds(db,playlist_contents)
+	await music_cruds.create_musics(db,playlist_contents)
+
+	exist = await db.execute(
+		select(
+			model.NormalPlaylistMusic.id,
+			model.NormalPlaylistMusic.music_original_id,
+		).filter(
+			model.NormalPlaylistMusic.playlist_original_id==playlist_info.playlist_original_id
+		)
+	)
+	r = exist.all()
+	box = [ 
+		i.music_original_id 
+		for i in r
+	]
+	buf = []
 	if r:
+		for i in playlist_contents:
+			if i.get("video_id") not in box:
+				buf.append(i)
 		p_musics = [
 			model.NormalPlaylistMusic(
 				playlist_original_id = playlist_info.playlist_original_id,
 				music_original_id=d["video_id"]
-			) for d in r
+			) for d in buf
 		]
 		db.add_all(p_musics)
 		await db.commit()
 	#-- if
-	return r
+
+	else:
+		if playlist_contents:
+			p_musics = [
+				model.NormalPlaylistMusic(
+					playlist_original_id = playlist_info.playlist_original_id,
+					music_original_id=d["video_id"]
+				) for d in playlist_contents
+			]
+			db.add_all(p_musics)
+			await db.commit()
+		#-- if
+	#-- else
+	return p_musics
 #--- EoF ---
 
 async def delete_playlist_music(
