@@ -37,5 +37,16 @@ services:
     stdin_open: true
     tty: true
 
+  st_server:
+    build: 
+      context: ./st_server
+    command: streamlit run streamlit1/sample_1.py --server.port=8503 
+    ports:
+      - 8503:8503
+    volumes:
+      - ./st_server/public/streamlit1:/usr/share/nginx/html/streamlit1
+    environment:
+      TZ: 'Asia/Tokyo'
+
 volumes:
   mysql_data:
