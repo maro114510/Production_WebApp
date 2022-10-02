@@ -16,6 +16,7 @@ def user_page(un):
 		url = st.text_input("Input playlist url",)
 		submit_button = st.form_submit_button(label="submit")
 	#-- with
+	# TODO ユーザ登録の現況を見るところから（2022年10月2日）
 #--- EoF ---
 
 def get_user_info(user_name):

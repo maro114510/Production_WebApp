@@ -68,9 +68,11 @@ elif page == "PLAYLIST":
 		url:str = st.text_input("Playlist URL")
 		submit_button = st.form_submit_button(label="送信")
 	#-- with
+#-- elif
 
 elif page == "USER REGISTER":
 	st.markdown("### Create User")
 	with st.form(key="USER"):
 		user_name = st.text_input("User Name",help="ユーザー名の登録")
 	#-- with
+#-- elif
