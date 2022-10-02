@@ -47,6 +47,7 @@ async def get_user_by_name(db_session: AsyncSession,user_name:str):
 				model.User.user_id,
 				model.User.user_name,
 				model.User.user_email,
+				model.User.user_pw
 			).filter(
 				model.User.user_name==user_name
 			)
