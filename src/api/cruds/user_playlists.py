@@ -18,6 +18,7 @@ async def get_user_playlists(db_session: AsyncSession):
 				model.UserPlaylist.id,
 				model.UserPlaylist.user_name,
 				model.UserPlaylist.playlist_original_id,
+				model.UserPlaylist.created_at
 			)
 		)
 	)
@@ -31,6 +32,7 @@ async def get_user_playlist_by_user(db_session: AsyncSession,user:str):
 				model.UserPlaylist.id,
 				model.UserPlaylist.user_name,
 				model.UserPlaylist.playlist_original_id,
+				model.UserPlaylist.created_at
 			).filter(
 				model.UserPlaylist.user_name==user
 			)

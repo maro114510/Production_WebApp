@@ -61,10 +61,24 @@ async def create_playlist(
 		playlist_name=playlist_create.playlist_name,
 		playlist_original_id=playlist_create.playlist_original_id
 	)
-	db.add(playlist)
-	await db.commit()
-	await db.refresh(playlist)
-	return playlist
+	result: Result = await (
+		db.execute(
+			select(
+				model.Playlist.playlist_id,
+				model.Playlist.playlist_name,
+				model.Playlist.playlist_original_id
+			).filter(
+				model.Playlist.playlist_original_id==playlist_create.playlist_original_id
+			)
+		)
+	)
+	if result.first():
+		return 
+	else:
+		db.add(playlist)
+		await db.commit()
+		await db.refresh(playlist)
+		return playlist
 #--- EoF ---
 
 async def update_playlist(
