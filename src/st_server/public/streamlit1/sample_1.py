@@ -12,6 +12,7 @@ import hashlib
 from views.user import *
 from views.playlist import *
 from views.user_register import *
+from views.home import home_page
 
 from libs.lib import register_uer
 
@@ -32,6 +33,7 @@ def check_hashes(password,hashed_text):
 st.set_page_config(
 	page_title="Youtube Diff Checker",
 	page_icon="https://ibaraki-kk.com/wp-content/uploads/2020/02/%E8%83%8C%E6%99%AF%E9%80%8F%E6%98%8EYouTube%E3%83%AD%E3%82%B4-1.png",
+	layout="wide",
 	menu_items={
 		"Get help":None,
 		"Report a Bug":None,
@@ -44,6 +46,7 @@ page = st.sidebar.selectbox('Choose your page',page_list)
 
 if page == "HOME":
 	st.subheader('HOME')
+	home_page()
 #-- if
 
 elif page == "USER":
