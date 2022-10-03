@@ -2,6 +2,7 @@
 # -*- coding: utf8 -*-
 
 import sys
+import re
 import requests
 import streamlit as st
 import pandas as pd
@@ -87,5 +88,49 @@ def get_delete_music(un):
 	#-- for
 	del_b = pd.DataFrame(del_box)
 	return del_b
-
 #--- EoF ---
+
+@st.cache
+def register(un,url):
+	headers = {
+		'accept': 'application/json',
+	}
+	params = {
+		'url': f'{url}',
+	}
+	json_data = {
+		'user_name': f'{un}',
+		'user_email': 'user@gmail.com',
+		'user_pw': 'string',
+	}
+	response = requests.post('http://192.168.11.2:8000/register/', params=params, headers=headers, json=json_data)
+	return response
+#--- EoF ---
+
+def generate_playlist_id(url):
+	"""_summary_
+
+	Args:
+		url (str): playlist url
+
+	Returns:
+		str: playlist original id
+	"""
+	pattern = "(.*)list=(.*)"
+	u = re.search(pattern,url)
+	playlist_id = u.group(2)
+	return playlist_id
+# --- EoF ---
+
+def get_row_data(url):
+	headers = {
+		'accept': 'application/json',
+		'content-type': 'application/x-www-form-urlencoded',
+	}
+	playlist_id = generate_playlist_id(url)
+	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers).json()
+	return res
+#--- EoF ---
+
+
+# End of Script

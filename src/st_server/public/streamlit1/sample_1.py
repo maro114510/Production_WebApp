@@ -11,6 +11,7 @@ import requests
 import hashlib
 
 from views.user import *
+from views.playlist import *
 
 def make_hashes(password):
 	return hashlib.md5(str.encode(password)).hexdigest()
@@ -27,8 +28,8 @@ def check_hashes(password,hashed_text):
 
 
 st.set_page_config(
-	page_title="test_page",
-	page_icon="https://licensecounter.jp/devops-hub/docker%20%281%29.png",
+	page_title="Youtube Diff Checker",
+	page_icon="https://ibaraki-kk.com/wp-content/uploads/2020/02/%E8%83%8C%E6%99%AF%E9%80%8F%E6%98%8EYouTube%E3%83%AD%E3%82%B4-1.png",
 	menu_items={
 		"Get help":None,
 		"Report a Bug":None,
@@ -58,15 +59,20 @@ elif page == "USER":
 			user_page(un)
 		#-- if
 		else:
-			st.warning('パスワードが違います')
+			st.warning('Your password is wrong.')
 		#-- else
 	#-- if
 #-- elif
 
 elif page == "PLAYLIST":
+	st.markdown("### Info")
+	st.write("The song contents of the playlist you want to check can be displayed at once.")
 	with st.form(key="URL"):
 		url:str = st.text_input("Playlist URL")
-		submit_button = st.form_submit_button(label="送信")
+		submit_button = st.form_submit_button(label="Submit")
+		if submit_button:
+			playlist_info_page(url)
+		#-- if
 	#-- with
 #-- elif
 

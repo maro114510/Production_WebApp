@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import sys
-from urllib.error import HTTPError
 import streamlit as st
 import requests
 
@@ -21,6 +20,7 @@ def user_page(un):
 		Please try again in a few hours.
 		"""
 		)
+	#-- except
 	st.table(r)
 	st.markdown("### Your registerd diff")
 	try:
@@ -32,14 +32,33 @@ def user_page(un):
 		Please try again in a few hours.
 		"""
 		)
+	#-- except
 	st.dataframe(d_r)
 
 	st.markdown("### Register new playlist")
 	with st.form(key="key"):
 		url = st.text_input("Input playlist url",)
 		submit_button = st.form_submit_button(label="submit")
+		if submit_button:
+			res = register(un,url)
+			if res.status_code == 200:
+				if len(res.json()) == 0:
+					st.info("The playlist with the URL you sent is already registered")
+				#-- if
+				else:
+					st.success("Registration Complete")
+				#-- else
+			#-- if
+			else:
+				st.error(
+					"""
+					Registration failed.
+					Please check if the URL is correct and the communication environment is correct.
+					"""
+				)
+			#-- else
+		#-- if
 	#-- with
-	# TODO ユーザ登録の現況を見るところから（2022年10月2日）
 #--- EoF ---
 
 @st.cache
@@ -55,3 +74,7 @@ def get_user_info(user_name):
 	response = requests.get('http://192.168.11.2:8000/users/name/', params=params, headers=headers).json()
 	return response
 #--- EoF ---
+
+
+
+# End of Script

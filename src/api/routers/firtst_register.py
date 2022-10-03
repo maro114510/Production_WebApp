@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-from genericpath import exists
 import requests
 from fastapi import APIRouter,Depends
 from fastapi.exceptions import HTTPException
@@ -39,14 +38,31 @@ async def create_bulk(
 		playlist_original_id=playlist_original_id
 	)
 
-	await playlist_crud.create_playlist(db,playlist_s)
-	up_create = await up_cruds.create_user_playlist(db,user,playlist_s)
-
+	try:
+		await playlist_crud.create_playlist(db,playlist_s)
+	except Exception as e:
+		raise HTTPException(
+			status_code=400,
+			detail=e)
+	# -- except
+	try:
+		up_create = await up_cruds.create_user_playlist(db,user,playlist_s)
+	except Exception as e:
+		raise HTTPException(
+			status_code=400,
+			detail=e)
+	# -- except
 	playlist_in = p_schema.PlaylistCreate(
 		playlist_name=f"{playlist_name}",
 		playlist_original_id=f"{playlist_original_id}"
 	)
-	r = await playlist_crud.get_playlists(db)
+	try:
+		r = await playlist_crud.get_playlists(db)
+	except Exception as e:
+		raise HTTPException(
+			status_code=400,
+			detail=e)
+	# -- except
 	# プレイリスト内の音楽登録
 	music_list = res.get("music_id_list")
 
@@ -58,7 +74,7 @@ async def create_bulk(
 			status_code=400,
 			detail=e)
 	# -- except
-	return exists(r)
+	return r 
 # --- EoF ---
 
 
