@@ -48,5 +48,18 @@ services:
     environment:
       TZ: 'Asia/Tokyo'
 
+  nginx:
+    build: 
+      context: ./Nginx
+    ports:
+      - 80:80
+    links:
+      - st_server
+    volumes:
+      - ./Nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./Nginx/public/index.html:/usr/share/nginx/html/index.html
+    environment:
+      TZ: 'Asia/Tokyo'
+
 volumes:
   mysql_data:
