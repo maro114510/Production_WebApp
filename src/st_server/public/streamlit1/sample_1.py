@@ -7,11 +7,13 @@ import streamlit as st
 import time
 import numpy as np
 import pandas as pd
-import requests
 import hashlib
 
 from views.user import *
 from views.playlist import *
+from views.user_register import *
+
+from libs.lib import register_uer
 
 def make_hashes(password):
 	return hashlib.md5(str.encode(password)).hexdigest()
@@ -79,6 +81,39 @@ elif page == "PLAYLIST":
 elif page == "USER REGISTER":
 	st.markdown("### Create User")
 	with st.form(key="USER"):
-		user_name = st.text_input("User Name",help="ユーザー名の登録")
+		d = {}
+
+		user_name = st.text_input("User Name",help="Username you wish to register")
+		d["user_name"] = user_name
+		user_email = st.text_input("User Email",help="Email address you would like us to notify you about")
+		d["user_email"] = user_email
+		user_pw = st.text_input('User Password',help="Register password in alphanumeric characters",type="password")
+		d["user_pw"] = user_pw
+
+		submit_button = st.form_submit_button(label="Submit")
+		if submit_button:
+			r = register_uer(d)
+			if r.status_code == 200:
+				st.success(
+					f"""Hello, {user_name}!
+					Registration is complete!
+					"""
+				)
+			#-- if
+			elif r.status_code == 404:
+				st.error(f"You registered {user_name}, or {user_email} is duplicated.Sorry, please change to a different name and email.")
+			#-- elif
+			else:
+				st.error(
+					"""
+					I am sorry.
+					Unexpected error. Please contact the developer.
+					"""
+				)
+			#-- else
+		#-- if
 	#-- with
 #-- elif
+
+
+# End of Script

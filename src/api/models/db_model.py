@@ -29,7 +29,7 @@ class UserPlaylist(Base):
 			"playlists.playlist_original_id",
 			ondelete="CASCADE"
 		),
-		unique=True
+		# unique=True
 	)
 	created_at=Column(
 		Timestamp,

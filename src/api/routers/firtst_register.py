@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+from tkinter import E
 import requests
 from fastapi import APIRouter,Depends
 from fastapi.exceptions import HTTPException
@@ -31,6 +32,14 @@ async def create_bulk(
 		'content-type': 'application/x-www-form-urlencoded',
 	}
 	res = requests.post(f'https://2y5u90.deta.dev/{playlist_original_id}', headers=headers).json()
+	# try:
+	# 	res = requests.post(f'https://2y5u90.deta.dev/{playlist_original_id}', headers=headers).json()
+	# except Exception as e:
+	# 	raise HTTPException(
+	# 		status_code=400,
+	# 		detail=e
+	# 	)
+	# # -- except
 	playlist_name = res.get("playlistname")
 
 	playlist_s = p_schema.PlaylistCreate(
@@ -43,14 +52,17 @@ async def create_bulk(
 	except Exception as e:
 		raise HTTPException(
 			status_code=400,
-			detail=e)
+			detail=e
+		)
 	# -- except
-	try:
-		up_create = await up_cruds.create_user_playlist(db,user,playlist_s)
-	except Exception as e:
-		raise HTTPException(
-			status_code=400,
-			detail=e)
+	await up_cruds.create_user_playlist(db,user,playlist_s)
+	# try:
+	# 	await up_cruds.create_user_playlist(db,user,playlist_s)
+	# except Exception as e:
+	# 	raise HTTPException(
+	# 		status_code=400,
+	# 		detail=e
+	# 	)
 	# -- except
 	playlist_in = p_schema.PlaylistCreate(
 		playlist_name=f"{playlist_name}",

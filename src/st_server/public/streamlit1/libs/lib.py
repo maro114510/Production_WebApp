@@ -7,7 +7,7 @@ import requests
 import streamlit as st
 import pandas as pd
 
-@st.cache
+
 def get_users_playlist(un):
 	headers = {
 		'accept': 'application/json',
@@ -45,7 +45,7 @@ def get_users_playlist(un):
 	return pb
 #--- EoF ---
 
-@st.cache
+
 def get_delete_music(un):
 	headers = {
 		'accept': 'application/json',
@@ -90,7 +90,7 @@ def get_delete_music(un):
 	return del_b
 #--- EoF ---
 
-@st.cache
+
 def register(un,url):
 	headers = {
 		'accept': 'application/json',
@@ -130,6 +130,19 @@ def get_row_data(url):
 	playlist_id = generate_playlist_id(url)
 	res = requests.post(f'https://2y5u90.deta.dev/{playlist_id}', headers=headers).json()
 	return res
+#--- EoF ---
+
+def register_uer(d):
+	headers = {
+		'accept': 'application/json',
+	}
+	json_data = {
+		'user_name': d["user_name"],
+		'user_email': d["user_email"],
+		'user_pw': d["user_pw"],
+	}
+	response = requests.post('http://192.168.11.2:8000/users/', headers=headers, json=json_data)
+	return response
 #--- EoF ---
 
 
