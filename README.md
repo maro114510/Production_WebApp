@@ -20,10 +20,10 @@ Some functions can be used without user registration
 
 | Img | Usage |
 | :---: | :---: |
-| ![img](src/st_server/public/streamlit1/img/sample2.png) | home |
-| ![img](src/st_server/public/streamlit1/img/sample1.png) | User login |
-| ![img](src/st_server/public/streamlit1/img/sample3.png) | User register |
-| ![img](src/st_server/public/streamlit1/img/sample4.png) | Your Playlist Info |
+| <img src="src/st_server/public/streamlit1/img/sample2.png" width="300"> | home |
+|  <img src="src/st_server/public/streamlit1/img/sample1.png" width="300"> | User login |
+|  <img src="src/st_server/public/streamlit1/img/sample3.png" width="300"> | User register |
+|  <img src="src/st_server/public/streamlit1/img/sample4.png" width="300"> | Your Playlist Info |
 
 ### Usage Technology and Library
 
