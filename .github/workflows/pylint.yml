@@ -21,6 +21,10 @@ jobs:
           labels: autopep8, automated pr
           reviewers: maro114510
           branch: autopep8-patches
+
+on:
+  push:
+jobs:
   pytest:
     runs-on: ubuntu-latest
     steps:
