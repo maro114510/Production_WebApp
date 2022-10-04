@@ -18,16 +18,43 @@ router = APIRouter()
 
 @router.get("/n_playlist_musics/",tags=["N_Playlist_Musics"])
 async def read_n_playlist_musics(db:AsyncSession = Depends(get_db)):
+	"""_summary_
+
+	Args:
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Returns:
+		list: PlaylistMusic schema list
+	"""
 	return await cruds.get_playlist_musics(db)
 # --- EoF ---
 
 @router.get("/n_playlist_music1/",tags=["N_Playlist_Musics"])
 async def read_n_playlist_musics_by_p(playlist_original_id:str,db:AsyncSession = Depends(get_db)):
+	"""_summary_
+
+	Args:
+		playlist_original_id (str): playlist original id
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Returns:
+		list: PlaylistMusic schemas list
+	"""
 	return await cruds.get_playlist_musics_by_playlist(db,playlist_original_id)
 # --- EoF ---
 
 @router.get("/n_playlist_music2/",tags=["N_Playlist_Musics"])
 async def read_n_playlist_musics_by_p_m(playlist_original_id:str,music_original_id:str,db:AsyncSession = Depends(get_db)):
+	"""_summary_
+
+	Args:
+		playlist_original_id (str): playlist original id
+		music_original_id (str): music orignal id
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Returns:
+		schema: PlaylistMusic schema
+	"""
 	return await cruds.get_playlist_musics_by_p_m(
 		db,
 		playlist_original_id,
@@ -41,6 +68,16 @@ async def create_playlist_music(
 		music_in:m_schema.MusicCreate,
 		db: AsyncSession = Depends(get_db)
 	):
+	"""_summary_
+
+	Args:
+		playlist_info (p_schema.PlaylistCreate): playlistCreate schema
+		music_in (m_schema.MusicCreate): MusicCreate schema
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Returns:
+		schema: PlaylistMusic schema
+	"""
 	r = await musics.get_musics(db)
 	ids = [ i.music_original_id for i in r ]
 	if music_in.music_original_id in ids:
@@ -56,6 +93,18 @@ async def create_playlist_musics(
 		playlist_info:p_schema.PlaylistCreate,
 		db: AsyncSession = Depends(get_db)
 	):
+	"""_summary_
+
+	Args:
+		playlist_info (p_schema.PlaylistCreate): PlaylistCreate schema
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Raises:
+		HTTPException: 404
+
+	Returns:
+		list: created list
+	"""
 	headers = {
 		'accept': 'application/json',
 		'content-type': 'application/x-www-form-urlencoded',
@@ -75,6 +124,19 @@ async def create_playlist_musics(
 
 @router.delete("/n_playlist_music/",tags=["N_Playlist_Musics"])
 async def delete_playlist_music(playlist_original_id:str,music_original_id:str,db:AsyncSession = Depends(get_db)):
+	"""_summary_
+
+	Args:
+		playlist_original_id (str): playlist orignal id
+		music_original_id (str): music original id
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Raises:
+		HTTPException: 404
+
+	Returns:
+		int: 0
+	"""
 	playlist = await cruds.get_playlist_musics_by_p_m(
 		db,
 		playlist_original_id,

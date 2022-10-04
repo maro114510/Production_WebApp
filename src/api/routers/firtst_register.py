@@ -24,6 +24,23 @@ async def create_bulk(
 		url:str,
 		db:AsyncSession = Depends(get_db)
 	):
+	"""_summary_
+
+	Args:
+		user (u_schema.UserCreate): UserCreate schema
+		url (str): playlist url
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Raises:
+		HTTPException: 400
+		HTTPException: 400
+		HTTPException: 400
+		HTTPException: 400
+		HTTPException: 400
+
+	Returns:
+		list: empty list
+	"""
 
 	# ユーザ・プレイリストテーブルの登録
 	playlist_original_id = generate_playlist_id(url)
@@ -31,15 +48,15 @@ async def create_bulk(
 		'accept': 'application/json',
 		'content-type': 'application/x-www-form-urlencoded',
 	}
-	res = requests.post(f'https://2y5u90.deta.dev/{playlist_original_id}', headers=headers).json()
-	# try:
-	# 	res = requests.post(f'https://2y5u90.deta.dev/{playlist_original_id}', headers=headers).json()
-	# except Exception as e:
-	# 	raise HTTPException(
-	# 		status_code=400,
-	# 		detail=e
-	# 	)
-	# # -- except
+	# res = requests.post(f'https://2y5u90.deta.dev/{playlist_original_id}', headers=headers).json()
+	try:
+		res = requests.post(f'https://2y5u90.deta.dev/{playlist_original_id}', headers=headers).json()
+	except Exception as e:
+		raise HTTPException(
+			status_code=400,
+			detail=e
+		)
+	# -- except
 	playlist_name = res.get("playlistname")
 
 	playlist_s = p_schema.PlaylistCreate(
@@ -55,14 +72,14 @@ async def create_bulk(
 			detail=e
 		)
 	# -- except
-	await up_cruds.create_user_playlist(db,user,playlist_s)
-	# try:
-	# 	await up_cruds.create_user_playlist(db,user,playlist_s)
-	# except Exception as e:
-	# 	raise HTTPException(
-	# 		status_code=400,
-	# 		detail=e
-	# 	)
+	# await up_cruds.create_user_playlist(db,user,playlist_s)
+	try:
+		await up_cruds.create_user_playlist(db,user,playlist_s)
+	except Exception as e:
+		raise HTTPException(
+			status_code=400,
+			detail=e
+		)
 	# -- except
 	playlist_in = p_schema.PlaylistCreate(
 		playlist_name=f"{playlist_name}",

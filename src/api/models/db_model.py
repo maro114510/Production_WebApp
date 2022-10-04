@@ -14,7 +14,10 @@ Base = declarative_base()
 
 
 class UserPlaylist(Base):
-	"""ユーザープレイリストテーブル"""
+	"""_summary_
+	Args:
+		Base (object): SQLAlchemy declarative_base
+	"""
 	__tablename__ = "user_playlists"
 	# __abstract__ = True
 	id = Column(Integer, primary_key=True)
@@ -45,7 +48,10 @@ class UserPlaylist(Base):
 
 
 class NormalPlaylistMusic(Base):
-	"""一般のプレイリスト音楽テーブル"""
+	"""_summary_
+	Args:
+		Base (object): SQLAlchemy declarative_base
+	"""
 	__tablename__ = "n_playlist_music"
 	# __abstract__ = True
 	id = Column(Integer, primary_key=True)
@@ -77,7 +83,10 @@ class NormalPlaylistMusic(Base):
 
 
 class DeletedPlaylistMusic(Base):
-	"""削除されたプレイリスト音楽テーブル"""
+	"""_summary_
+	Args:
+		Base (object): SQLAlchemy declarative_base
+	"""
 	__tablename__ = "d_playlist_music"
 	# __abstract__ = True
 	id = Column(Integer, primary_key=True)
@@ -107,7 +116,10 @@ class DeletedPlaylistMusic(Base):
 
 
 class User(Base):
-	"""ユーザーテーブル"""
+	"""_summary_
+	Args:
+		Base (object): SQLAlchemy declarative_base
+	"""
 	__tablename__ = 'users'
 	user_id = Column(Integer, primary_key=True, index=True)
 	user_name = Column(String(64), nullable=False, unique=True)
@@ -131,7 +143,10 @@ class User(Base):
 
 
 class Playlist(Base):
-	"""プレイリストテーブル"""
+	"""_summary_
+	Args:
+		Base (object): SQLAlchemy declarative_base
+	"""
 	__tablename__ = 'playlists'
 	playlist_id = Column(Integer, primary_key=True, index=True)
 	playlist_name = Column(String(126))
@@ -164,7 +179,10 @@ class Playlist(Base):
 
 
 class Music(Base):
-	"""音楽テーブル"""
+	"""_summary_
+	Args:
+		Base (object): SQLAlchemy declarative_base
+	"""
 	__tablename__ = 'musics'
 	music_id = Column(Integer, primary_key=True, index=True)
 	music_name = Column(String(126))
@@ -187,7 +205,10 @@ class Music(Base):
 
 
 class PlaylistNotify(Base):
-	"""通知可否テーブル"""
+	"""_summary_
+	Args:
+		Base (object): SQLAlchemy declarative_base
+	"""
 	__tablename__ = "playlistnotify"
 	# id = Column(Integer,primary_key=True)
 	playlist_original_id = Column(
