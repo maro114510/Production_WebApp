@@ -14,6 +14,17 @@ Some functions can be used without user registration
 
 * https://
 
+---
+
+### Usage
+
+| Img | Usage |
+| :---: | :---: |
+| ![img](src/st_server/public/streamlit1/img/sample2.png) | home |
+| ![img](src/st_server/public/streamlit1/img/sample1.png) | User login |
+| ![img](src/st_server/public/streamlit1/img/sample3.png) | User register |
+| ![img](src/st_server/public/streamlit1/img/sample4.png) | Your Playlist Info |
+
 ### Usage Technology and Library
 
 * Python 3.9
@@ -39,7 +50,7 @@ Some functions can be used without user registration
 * Playlist registration Function
 * Deleted video display Function
 * Automatic Notification Function
-* Automatic Notification Function
+* Automatic collection Function
 
 #### Test
 
