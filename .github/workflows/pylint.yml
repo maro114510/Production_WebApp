@@ -1,11 +1,11 @@
 name: Format python code
 
 on: push
-  branches:
-    - main
+  push:
+    branches:
+      - main
 jobs:
   autopep8:
-    push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
