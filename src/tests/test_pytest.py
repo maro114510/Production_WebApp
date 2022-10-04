@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 def test_1():
-    a = 1
+    a = 2
     b = 2
     assert a == b
 
