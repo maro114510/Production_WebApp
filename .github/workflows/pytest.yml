@@ -12,7 +12,7 @@ jobs:
       # pytest -> JUnit xml形式で結果を出力
       - name: PyTest
         run: |
-          python -m pytest test --asyncio-mode=auto --junit-xml results/pytest.xml
+          python -m pytest -v -s --asyncio-mode=auto --junit-xml results/pytest.xml
         continue-on-error: true
 
       # テスト結果の表示
