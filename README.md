@@ -1,5 +1,10 @@
 # Youtube Diff Checker
 
+[![LICENSE](https://img.shields.io/github/license/maro114510/Production_WebApp.svg?style=flat-square)](LICENSE)
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/stelzen/youtube.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/stelzen/youtube)
+[![Build Status](https://img.shields.io/github/workflow/status/maro114510/Production_WebApp/Build?logo=github&style=flat-square)](https://github.com/maro114510/Production_WebApp/actions)
+
 ---
 
 It is an application that displays the songs in the playlist registered in Youtube that have disappeared.
