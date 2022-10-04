@@ -22,7 +22,6 @@ jobs:
           reviewers: maro114510
           branch: autopep8-patches
 
-on: push
 jobs:
   pytest:
     runs-on: ubuntu-latest
