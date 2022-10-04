@@ -2,8 +2,7 @@ name: Format python code
 
 on: push
   push:
-    branches:
-      - main
+    branches: [ main ]
 jobs:
   autopep8:
     runs-on: ubuntu-latest
