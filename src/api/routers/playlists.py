@@ -41,10 +41,11 @@ async def create_playlist(url:str, db: AsyncSession = Depends(get_db)):
 		HTTPException(status_code=500)
 	res = res.json()
 	playlist_name = res.get("playlistname")
-	playlist_in =	{
-		"playlist_name": f"{playlist_name}",
-		"playlist_original_id": f"{playlist_id}"
-	}
+	playlist_in = schema.PlaylistCreate(
+		playlist_name=playlist_name,
+		playlist_original_id=playlist_id
+	)
+	# r = await playlist_crud.create_playlist(db,playlist_in)
 	try:
 		r = await playlist_crud.create_playlist(db,playlist_in)
 	except Exception as e:

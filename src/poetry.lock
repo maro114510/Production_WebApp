@@ -390,6 +390,14 @@ pymysql = ["pymysql", "pymysql (<1)"]
 sqlcipher = ["sqlcipher3_binary"]
 
 [[package]]
+name = "sqlite_checkforeignkeys"
+version = "1.0.3"
+description = "A sqlite engine that checks foreign keys"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "starlette"
 version = "0.20.4"
 description = "The little ASGI library that shines."
@@ -490,7 +498,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "950f226a03ad3a03b196981c2b9151892c9c3949d653ce3d63a6a4a34f376da0"
+content-hash = "14866eb59ecce112e0bf455c2ab6dda439879ad5ac9c2da558805e69b99a101a"
 
 [metadata.files]
 aiomysql = [
@@ -814,6 +822,9 @@ SQLAlchemy = [
     {file = "SQLAlchemy-1.4.41-cp39-cp39-win32.whl", hash = "sha256:9c56e19780cd1344fcd362fd6265a15f48aa8d365996a37fab1495cae8fcd97d"},
     {file = "SQLAlchemy-1.4.41-cp39-cp39-win_amd64.whl", hash = "sha256:f5fa526d027d804b1f85cdda1eb091f70bde6fb7d87892f6dd5a48925bc88898"},
     {file = "SQLAlchemy-1.4.41.tar.gz", hash = "sha256:0292f70d1797e3c54e862e6f30ae474014648bc9c723e14a2fda730adb0a9791"},
+]
+sqlite_checkforeignkeys = [
+    {file = "sqlite_checkforeignkeys-1.0.3.tar.gz", hash = "sha256:33c00f8a28289934fc15707a658e561c7891735fd2eaaf79e6a0f3e5e5f5dbb5"},
 ]
 starlette = [
     {file = "starlette-0.20.4-py3-none-any.whl", hash = "sha256:c0414d5a56297d37f3db96a84034d61ce29889b9eaccf65eb98a0b39441fcaa3"},
