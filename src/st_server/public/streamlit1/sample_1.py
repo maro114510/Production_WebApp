@@ -32,7 +32,7 @@ def check_hashes(password,hashed_text):
 
 st.set_page_config(
 	page_title="Youtube Diff Checker",
-	page_icon="https://ibaraki-kk.com/wp-content/uploads/2020/02/%E8%83%8C%E6%99%AF%E9%80%8F%E6%98%8EYouTube%E3%83%AD%E3%82%B4-1.png",
+	page_icon="./img/youtube_profile_image.png",
 	layout="wide",
 	menu_items={
 		"Get help":None,
