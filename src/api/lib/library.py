@@ -6,18 +6,18 @@ import re
 
 
 def generate_playlist_id(url):
-	"""_summary_
+    """_summary_
 
-	Args:
-		url (str): playlist url
+    Args:
+            url (str): playlist url
 
-	Returns:
-		str: playlist original id
-	"""
-	pattern = "(.*)list=(.*)"
-	u = re.search(pattern,url)
-	playlist_id = u.group(2)
-	return playlist_id
+    Returns:
+            str: playlist original id
+    """
+    pattern = "(.*)list=(.*)"
+    u = re.search(pattern, url)
+    playlist_id = u.group(2)
+    return playlist_id
 # --- EoF ---
 
 
