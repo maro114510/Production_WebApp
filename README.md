@@ -21,14 +21,14 @@ Some functions can be used without user registration
 
 ---
 
-### Usage
+<!-- ### Usage
 
 | Img | Usage |
 | :---: | :---: |
 | <img src="src/st_server/public/streamlit1/img/sample2.png" width="500"> | home |
 |  <img src="src/st_server/public/streamlit1/img/sample1.png" width="500"> | User login |
 |  <img src="src/st_server/public/streamlit1/img/sample3.png" width="500"> | User register |
-|  <img src="src/st_server/public/streamlit1/img/sample4.png" width="500"> | Your Playlist Info |
+|  <img src="src/st_server/public/streamlit1/img/sample4.png" width="500"> | Your Playlist Info | -->
 
 ### Usage Technology and Library
 
