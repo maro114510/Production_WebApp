@@ -49,3 +49,8 @@ $ docker-compose exec main poetry run python -m api.create_table
 
 −−−
 
+#### テスト環境用コマンド
+
+```
+$ docker-compose exec main poetry add -D pytest-asyncio aiosqlite httpx
+```

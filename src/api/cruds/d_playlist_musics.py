@@ -12,6 +12,14 @@ import api.schemas.playlists as p_schema
 import api.schemas.musics as m_schema
 
 async def get_playlist_musics(db:AsyncSession):
+	"""_summary_
+
+	Args:
+		db (AsyncSession): asynchronous session
+
+	Returns:
+		list: Retrieved Intermediate Table (Playlist - Music)
+	"""
 	result: Result = await (
 		db.execute(
 			select(
@@ -26,6 +34,15 @@ async def get_playlist_musics(db:AsyncSession):
 #--- EoF ---
 
 async def get_playlist_musics_by_playlist(db:AsyncSession,playlist_original_id:str):
+	"""_summary_
+
+	Args:
+		db (AsyncSession): asynchronous session
+		playlist_original_id (str): playlist original id
+
+	Returns:
+		list: List of music included in the playlist
+	"""
 	result: Result = await (
 		db.execute(
 			select(
@@ -44,6 +61,16 @@ async def get_playlist_musics_by_playlist(db:AsyncSession,playlist_original_id:s
 async def get_playlist_musics_by_p_m(
 		db:AsyncSession,playlist_original_id:str,music_original_id:str
 	):
+	"""_summary_
+
+	Args:
+		db (AsyncSession): asynchronous session
+		playlist_original_id (str): playlist original id
+		music_original_id (str): music original id
+
+	Returns:
+		schema: DeletedPlaylistMusic
+	"""
 	result: Result = await (
 		db.execute(
 			select(
@@ -66,6 +93,16 @@ async def create_playlist_music(
 		playlist_info:p_schema.PlaylistCreate,
 		music:m_schema.MusicCreate
 	):
+	"""_summary_
+
+	Args:
+		db (AsyncSession): asynchronous session
+		playlist_original_id (str): playlist original id
+		music (m_schema.MusicCreate): MusicCreate schema
+
+	Returns:
+		schema: DeletedPlaylistMusic schema
+	"""
 	playlist_music = model.DeletedPlaylistMusic(
 		playlist_original_id = playlist_info.playlist_original_id,
 		music_original_id = music.music_original_id
@@ -81,6 +118,14 @@ async def delete_playlist_music(
 		playlist:str,
 		music:str
 	):
+	"""_summary_
+
+	Args:
+		db (AsyncSession): asynchronous session
+		playlist (str): playlist original id
+		music (str): music original id
+	"""
+
 	sql = """
 	DELETE FROM d_playlist_music
 	WHERE playlist_original_id = '%s'

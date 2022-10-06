@@ -62,19 +62,29 @@ def catch_data(params):
 			for i in api:
 				if i not in db:
 					inc.append(i)
+				#-- if
+			#-- for
 			dl = []
 			for i in db:
 				if i not in api:
 					dl.append(i)
+				#-- if
+			#-- for
 
 			for i in music_list:
 				for j in inc:
 					if i.get("video_id") == j:
 						params["in_list"].append(i)
+					#-- if
+				#-- for
+			#-- for
 			for i in response1:
 				for j in dl:
 					if i.get("music_original_id") == j:
 						params["dl_list"].append(i)
+					#-- if
+				#-- for
+			#-- for
 
 			# print(params["dl_list"])
 
@@ -84,6 +94,7 @@ def catch_data(params):
 			with open("/workspace/cron/log/execute.log", "a") as f:
 				print(f"[{params['date']}] {point}", file=f)
 			#-- with
+		#-- for
 	except Exception as e:
 		with open("/workspace/cron/log/error.log", "a") as f:	
 			print( f"[{params['date']}]"+"%s" % ( [e.args, ] ), file=f )
@@ -139,6 +150,7 @@ def new_data(params):
 
 		response = requests.post('http://192.168.11.2:8000/musics/', headers=params["headers"], json=json_data)
 		sleep(0.5)
+	#-- for
 	return 0
 #--- EoF ---
 

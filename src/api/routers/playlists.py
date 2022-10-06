@@ -16,21 +16,59 @@ router = APIRouter()
 
 @router.get("/playlists/", tags=["Playlists"])
 async def read_playlists(db: AsyncSession = Depends(get_db)):
-    return await playlist_crud.get_playlists(db)
+	"""_summary_
+
+	Args:
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Returns:
+		list: Playlist schemas list
+	"""
+	return await playlist_crud.get_playlists(db)
 # --- EoF ---
 
 @router.get("/playlists/{playlist_id}", tags=["Playlists"])
 async def read_playlist_by_id(playlist_id:int,db: AsyncSession = Depends(get_db)):
-    return await playlist_crud.get_playlist_by_id(db,playlist_id)
+	"""_summary_
+
+	Args:
+		playlist_id (int): playlist serial number
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Returns:
+		schema: Playlist schema
+	"""
+	return await playlist_crud.get_playlist_by_id(db,playlist_id)
 # --- EoF ---
 
 @router.get("/playlist/original", tags=["Playlists"])
 async def read_playlist_by_original_id(playlist_original_id:str,db: AsyncSession = Depends(get_db)):
+	"""_summary_
+
+	Args:
+		playlist_original_id (str): playlist original id
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Returns:
+		schema: playlist schema
+	"""
 	return await playlist_crud.get_playlist_by_original_id(db,playlist_original_id)
 # --- EoF ---
 
 @router.post("/playlists/", tags=["Playlists"])
 async def create_playlist(url:str, db: AsyncSession = Depends(get_db)):
+	"""_summary_
+
+	Args:
+		url (str): playlist url
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Raises:
+		HTTPException: 404
+
+	Returns:
+		schema: Playlist schema
+	"""
 	headers = {
 		'accept': 'application/json',
 		'content-type': 'application/x-www-form-urlencoded',
@@ -41,10 +79,11 @@ async def create_playlist(url:str, db: AsyncSession = Depends(get_db)):
 		HTTPException(status_code=500)
 	res = res.json()
 	playlist_name = res.get("playlistname")
-	playlist_in =	{
-		"playlist_name": f"{playlist_name}",
-		"playlist_original_id": f"{playlist_id}"
-	}
+	playlist_in = schema.PlaylistCreate(
+		playlist_name=playlist_name,
+		playlist_original_id=playlist_id
+	)
+	# r = await playlist_crud.create_playlist(db,playlist_in)
 	try:
 		r = await playlist_crud.create_playlist(db,playlist_in)
 	except Exception as e:
@@ -56,6 +95,19 @@ async def create_playlist(url:str, db: AsyncSession = Depends(get_db)):
 
 @router.put("/playlists/{playlist_original_id}", tags=["Playlists"])
 async def update_playlist(playlist_original_id: str, playlist_body:schema.PlaylistCreate,db: AsyncSession = Depends(get_db)):
+	"""_summary_
+
+	Args:
+		playlist_original_id (str): playlist original id
+		playlist_body (schema.PlaylistCreate): PlaylistCreate schema
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Raises:
+		HTTPException: 404
+
+	Returns:
+		schema: Playlist schema
+	"""
 	playlist = await playlist_crud.get_playlist_by_original_id(db,playlist_original_id=playlist_original_id)
 	if playlist is None:
 		raise HTTPException(status_code=404,detail=f"{playlist_original_id} is not found.")
@@ -66,6 +118,18 @@ async def update_playlist(playlist_original_id: str, playlist_body:schema.Playli
 @router.delete("/playlists/{playlist_id}",
             tags=["Playlists"])
 async def delete_playlist(playlist_original_id:str,db: AsyncSession = Depends(get_db)):
+	"""_summary_
+
+	Args:
+		playlist_original_id (str): playlist original id
+		db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+
+	Raises:
+		HTTPException: 404
+
+	Returns:
+		schema: Playlist Schema
+	"""
 	playlist = await playlist_crud.get_playlist_by_original_id(db,playlist_original_id=playlist_original_id)
 	if playlist is None:
 		raise HTTPException(status_code=404,detail=f"{playlist_original_id} is not found.")

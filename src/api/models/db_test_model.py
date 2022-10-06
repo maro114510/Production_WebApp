@@ -24,19 +24,17 @@ class UserPlaylist(Base):
 	user_name = Column(
 		ForeignKey(
 			"users.user_name",
-			ondelete="CASCADE"
 		)
 	)
 	playlist_original_id = Column(
 		ForeignKey(
 			"playlists.playlist_original_id",
-			ondelete="CASCADE"
 		),
 		# unique=True
 	)
 	created_at=Column(
 		Timestamp,
-		server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+		# server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
 	)
 
 	user = relationship("User", back_populates="playlists")
@@ -57,21 +55,19 @@ class NormalPlaylistMusic(Base):
 	id = Column(Integer, primary_key=True)
 	playlist_original_id = Column(
 		ForeignKey(
-			"playlists.playlist_original_id",
-			ondelete="CASCADE"
+			"playlists.playlist_original_id"
 		),
 		unique=False
 	)
 	music_original_id = Column(
 		ForeignKey(
-			"musics.music_original_id",
-			ondelete="CASCADE"
+			"musics.music_original_id"
 		),
 		# unique=True
 	)
 	created_at=Column(
 		Timestamp,
-		server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+		# server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
 	)
 
 	n_playlist = relationship("Playlist", back_populates="n_musics")
@@ -92,20 +88,18 @@ class DeletedPlaylistMusic(Base):
 	id = Column(Integer, primary_key=True)
 	playlist_original_id = Column(
 		ForeignKey(
-			"playlists.playlist_original_id",
-			ondelete="CASCADE"
+			"playlists.playlist_original_id"
 		)
 	)
 	music_original_id = Column(
 		ForeignKey(
-			"musics.music_original_id",
-			ondelete="CASCADE"
+			"musics.music_original_id"
 		),
 		# unique=True
 	)
 	created_at=Column(
 		Timestamp,
-		server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+		# server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
 	)
 
 	d_music = relationship('Music', back_populates="d_playlists")

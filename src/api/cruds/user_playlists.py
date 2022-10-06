@@ -12,6 +12,14 @@ import api.schemas.users as u_schema
 import api.schemas.playlists as p_schema
 
 async def get_user_playlists(db_session: AsyncSession):
+	"""_summary_
+
+	Args:
+		db_session (AsyncSession): AsyncSession
+
+	Returns:
+		list: UserPlaylist schemas list
+	"""
 	result: Result = await (
 		db_session.execute(
 			select(
@@ -26,6 +34,15 @@ async def get_user_playlists(db_session: AsyncSession):
 #--- EoF ---
 
 async def get_user_playlist_by_user(db_session: AsyncSession,user:str):
+	"""_summary_
+
+	Args:
+		db_session (AsyncSession): AsyncSession
+		user (str): user name
+
+	Returns:
+		schema: UserPlaylist schema
+	"""
 	result: Result = await (
 		db_session.execute(
 			select(
@@ -42,6 +59,16 @@ async def get_user_playlist_by_user(db_session: AsyncSession,user:str):
 #--- EoF ---
 
 async def get_user_playlist_by_user_id(db_session: AsyncSession,user:str,playlist:str):
+	"""_summary_
+
+	Args:
+		db_session (AsyncSession): AsyncSession
+		user (str): user name
+		playlist (str): playlist original id
+
+	Returns:
+		schema: UserPlaylist schema
+	"""
 	result: Result = await (
 		db_session.execute(
 			select(
@@ -59,6 +86,16 @@ async def get_user_playlist_by_user_id(db_session: AsyncSession,user:str,playlis
 #--- EoF ---
 
 async def create_user_playlist(db:AsyncSession,user_info:u_schema.UserCreate ,playlists:p_schema.PlaylistCreate):
+	"""_summary_
+
+	Args:
+		db (AsyncSession): AsyncSession
+		user_info (u_schema.UserCreate): UserCreate schema
+		playlists (p_schema.PlaylistCreate): PlaylistCreate schema
+
+	Returns:
+		schema: UserPlaylist schema
+	"""
 	user_playlist = model.UserPlaylist(
 		user_name=user_info.user_name,
 		playlist_original_id=playlists.playlist_original_id

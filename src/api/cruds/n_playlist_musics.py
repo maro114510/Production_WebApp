@@ -13,6 +13,14 @@ import api.schemas.musics as m_schema
 import api.cruds.musics as music_cruds
 
 async def get_playlist_musics(db:AsyncSession):
+	"""_summary_
+
+	Args:
+		db (AsyncSession): AsyncSession
+
+	Returns:
+		list: PlaylistMusics schema
+	"""
 	result: Result = await (
 		db.execute(
 			select(
@@ -27,6 +35,15 @@ async def get_playlist_musics(db:AsyncSession):
 #--- EoF ---
 
 async def get_playlist_musics_by_playlist(db:AsyncSession,playlist_original_id:str):
+	"""_summary_
+
+	Args:
+		db (AsyncSession): AsyncSession
+		playlist_original_id (str): playlist original id
+
+	Returns:
+		list: List of music included in the playlist
+	"""
 	result: Result = await (
 		db.execute(
 			select(
@@ -45,6 +62,16 @@ async def get_playlist_musics_by_playlist(db:AsyncSession,playlist_original_id:s
 async def get_playlist_musics_by_p_m(
 		db:AsyncSession,playlist_original_id:str,music_original_id:str
 	):
+	"""_summary_
+
+	Args:
+		db (AsyncSession): AsyncSession
+		playlist_original_id (str): playlist original id
+		music_original_id (str): music original id
+
+	Returns:
+		schema: schema
+	"""
 	result: Result = await (
 		db.execute(
 			select(
@@ -67,6 +94,16 @@ async def create_playlist_music(
 		playlist_info:p_schema.PlaylistCreate,
 		music:m_schema.MusicCreate
 	):
+	"""_summary_
+
+	Args:
+		db (AsyncSession): AsyncSession
+		playlist_info (p_schema.PlaylistCreate): schema
+		music (m_schema.MusicCreate): schema
+
+	Returns:
+		schema: NormalPlaylistMusics schema
+	"""
 	r = await db.execute(
 		select(
 			model.NormalPlaylistMusic.id,
@@ -95,6 +132,16 @@ async def create_playlist_musics(
 		playlist_contents:list,
 		playlist_info:p_schema.PlaylistCreate
 	):
+	"""_summary_
+
+	Args:
+		db (AsyncSession): AsyncSession
+		playlist_contents (list): music list from API
+		playlist_info (p_schema.PlaylistCreate): playlist schema
+
+	Returns:
+		list: created list
+	"""
 	await music_cruds.create_musics(db,playlist_contents)
 
 	exist = await db.execute(
@@ -145,6 +192,7 @@ async def delete_playlist_music(
 		playlist:str,
 		music:str
 	):
+	
 	sql = """
 	DELETE FROM n_playlist_music
 	WHERE playlist_original_id = '%s'
