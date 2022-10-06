@@ -44,6 +44,10 @@ Some functions can be used without user registration
 * VPS
 * GithubActions
 
+### System overview
+
+![img](src/st_server/public/streamlit1/img/sample.png)
+
 ### GithubActions
 
 * The lint test is executed when you push to the main branch on Github.
@@ -61,3 +65,5 @@ Some functions can be used without user registration
 
 * Unit test
   * by pytest
+
+---
