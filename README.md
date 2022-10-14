@@ -3,7 +3,13 @@
 [![LICENSE](https://img.shields.io/github/license/maro114510/Production_WebApp.svg?style=flat-square)](LICENSE)
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/stelzen/youtube.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/stelzen/youtube)
-[![Build Status](https://img.shields.io/github/workflow/status/maro114510/Production_WebApp/Build?logo=github&style=flat-square)](https://github.com/maro114510/Production_WebApp/actions)
+<!-- [![Build Status](https://img.shields.io/github/workflow/status/maro114510/Production_WebApp/Build?logo=github&style=flat-square)](https://github.com/maro114510/Production_WebApp/actions) -->
+
+---
+
+### Attention
+
+**⚠See the documentation folder `Document` for detailed specifications.⚠**
 
 ---
 
