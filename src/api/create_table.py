@@ -11,20 +11,20 @@ engine = create_engine(DB_URL, echo=True)
 
 
 def main(argc, argv):
-	"""_summary_
+    """_summary_
 
-	Args:
-		argc (int): Number of command line arguments
-		argv (str): command line argument
+    Args:
+            argc (int): Number of command line arguments
+            argv (str): command line argument
 
-	Returns:
-		int: return
-	"""
+    Returns:
+            int: return
+    """
 
-	Base.metadata.drop_all(bind=engine)
-	Base.metadata.create_all(bind=engine)
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
 
-	return 0
+    return 0
 # --- EoF ---
 
 

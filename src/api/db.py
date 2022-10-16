@@ -15,13 +15,13 @@ Base = declarative_base()
 
 
 async def get_db():
-	"""_summary_
+    """_summary_
 
-	Yields:
-		session: async session create
-	"""
-	async with async_session() as session:
-		yield session
+    Yields:
+            session: async session create
+    """
+    async with async_session() as session:
+        yield session
 # --- EoF ---
 
 
