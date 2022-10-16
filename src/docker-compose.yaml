@@ -14,9 +14,12 @@ services:
 
   db:
     image: mysql:8.0
+    # デプロイ環境注意
     platform: linux/x86_64  
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      # デプロイ環境
+      # MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: 'demo'
       TZ: 'Asia/Tokyo'
     volumes:
@@ -26,6 +29,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - 33306:3306
+    restart: unless-stopped
 
   cron:
     build:
@@ -52,7 +56,7 @@ services:
     build: 
       context: ./Nginx
     ports:
-      - 80:80
+      - 8080:8080
     links:
       - st_server
     volumes:
