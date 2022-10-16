@@ -23,7 +23,8 @@ Some functions can be used without user registration
 
 ---
 
-* https://
+* http://www.youtube-diff-checker.com:8503/
+  * SSL化は後日
 
 ---
 
