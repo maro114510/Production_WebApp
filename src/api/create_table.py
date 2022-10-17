@@ -4,9 +4,10 @@
 import sys
 from sqlalchemy import create_engine
 
-from api.models.db_model import Base
+from api.models.db_test_model import Base
 
-DB_URL = "mysql+pymysql://root@db:3306/demo?charset=utf8"
+# DB_URL = "mysql+pymysql://root@db:3306/demo?charset=utf8"
+DB_URL = "sqlite:///database.db?charset=utf8mb4"
 engine = create_engine(DB_URL, echo=True)
 
 

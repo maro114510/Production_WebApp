@@ -12,24 +12,24 @@ services:
     environment:
       TZ: 'Asia/Tokyo'
 
-  db:
-    image: mysql:8.0
-    # デプロイ環境注意
-    platform: linux/x86_64  
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      # デプロイ環境
-      # MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: 'demo'
-      TZ: 'Asia/Tokyo'
-    volumes:
-      - mysql_data:/var/lib/mysql
-      # confファイルにマウントしてエンコードを変更
-      - ./api/mysql.conf:/etc/mysql/conf.d/my.cnf
-    command: --default-authentication-plugin=mysql_native_password
-    ports:
-      - 33306:3306
-    restart: unless-stopped
+  # db:
+  #   image: mysql:8.0
+  #   # デプロイ環境注意
+  #   platform: linux/x86_64  
+  #   environment:
+  #     MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+  #     # デプロイ環境
+  #     # MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: 'demo'
+  #     TZ: 'Asia/Tokyo'
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #     # confファイルにマウントしてエンコードを変更
+  #     - ./api/mysql.conf:/etc/mysql/conf.d/my.cnf
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   ports:
+  #     - 33306:3306
+  #   restart: unless-stopped
 
   cron:
     build:
