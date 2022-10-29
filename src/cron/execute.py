@@ -4,7 +4,6 @@
 import sys
 import datetime
 import sqlite3
-from pytest import param
 import requests
 
 def main(argc, argv):
@@ -98,6 +97,7 @@ def catch_data(params):
 			#-- for
 
 			print(len(params["in_list"]))
+			# print(len(params["dl_list"]))
 
 			new_data(params)
 			dl_register(params)
@@ -122,16 +122,16 @@ def new_data(params):
 	for i in params["in_list"]:
 		music_name = i.get("video_name")
 		music_original_id = i.get("video_id")
-		cur.execute(f"select * from musics where music_original_id='{music_original_id}'")
+		cur.execute("SELECT * FROM musics WHERE music_original_id='%s'" % music_original_id)
 
-		if cur.fetchone == "None":
-			print("OK")
-		# if c == None:
-		# 	print(c)
+		list1 = cur.fetchone()
+
+		if list1 is None:
+			# print(type(list1))
+			print(music_name)
 			# cur.execute(
 			# 	f"""
-			# 	INSERT INTO musics (music_name, music_original_id) VALUES ( '{music_name}', '{music_original_id}' ) \
-			# 		on conflict (music_original_id) do nothing;
+			# 	INSERT INTO musics (music_name, music_original_id) VALUES ( '{music_name}', '{music_original_id}' );
 			# 	"""
 			# )
 	#-- for
@@ -144,15 +144,11 @@ def dl_register(params):
 
 	if params["dl_list"]:
 		for i in params["dl_list"]:
-			# cur.execute(
-			# 	"""
-			# 		INSERT INTO d_playlist_music (music_original_id,playlist_original_id,created_at) VALUES ( "%s", "%s", "%s" )
-			# 	""" % (i,params["playlist_original_id"],params{"date"}))
 			date = params["date"]
 			pl = params["playlist_original_id"]
 			cur.execute(
 				f"""
-				INSERT INTO d_playlist_music (music_original_id,playlist_original_id,created_at) VALUES ( "{i}", "{pl}", "{date}" )
+				INSERT INTO d_playlist_music (music_original_id,playlist_original_id,created_at) VALUES ( "{i}", "{pl}", "{date}" );
 				""" 
 			)
 			cur.execute(
