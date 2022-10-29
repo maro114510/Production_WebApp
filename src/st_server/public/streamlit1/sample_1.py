@@ -54,17 +54,22 @@ elif page == "USER":
 	user_password = st.sidebar.text_input('Input User pauser_password',type="password")
 	if st.sidebar.checkbox('LOGIN'):
 		r = get_user_info(user_name)
-		# st.write(r)
-		user_hashed_pw = r.get('user_pw')
-		# st.write(user_hashed_pw)
-		hashed_pwd = make_hashes(user_password)
-		result_ = check_hashes(user_password,user_hashed_pw)
-		if result_:
-			un = r.get('user_name')
-			user_page(un)
+		if r == None:
+			st.error(f"{user_name} is not found")
+			st.text("Prease register")
 		#-- if
 		else:
-			st.warning('Your password is wrong.')
+			user_hashed_pw = r.get('user_pw')
+			# st.write(user_hashed_pw)
+			hashed_pwd = make_hashes(user_password)
+			result_ = check_hashes(user_password,user_hashed_pw)
+			if result_:
+				un = r.get('user_name')
+				user_page(un)
+			#-- if
+			else:
+				st.warning('Your password is wrong.')
+			#-- else
 		#-- else
 	#-- if
 #-- elif
