@@ -12,10 +12,12 @@ services:
   db:
     image: postgres:14
     container_name: postgres
+    command: -c "config_file=/etc/postgresql/postgresql.conf"
     ports:
       - 5432:5432
     volumes:
       - db_master:/var/lib/postgresql/data
+      - ./config/postgresql.conf:/etc/postgresql/postgresql.conf 
     environment:
       - POSTGRES_PASSWORD=passw0rd
 volumes:
