@@ -36,7 +36,6 @@ class Connector():
 		cur = self.conn.cursor()
 		sql = self.show()
 		cur.execute( sql )
-		# self.conn.commit()
 		result = cur.fetchone() 
 		print( result )
 	#--- EoF ---
@@ -44,13 +43,6 @@ class Connector():
 	def main( self, argc, argv ):
 		self.execute()
 		return 0
-	#--- EoF ---
-
-	def create_table( self ):
-		sql = """
-			select * from m_manage;
-		"""
-		return sql
 	#--- EoF ---
 
 	def show( self ):
