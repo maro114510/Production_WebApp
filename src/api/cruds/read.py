@@ -22,9 +22,9 @@ class Read():
 	#--- EoF ---
 
 	def execute( self ):
+		cur = self.conn.cursor()
+		sql = self.select_sql()
 		try:
-			cur = self.conn.cursor()
-			sql = self.select_sql()
 			cur.execute( sql )
 			results = cur.fetchall()
 			self.conn.commit()
