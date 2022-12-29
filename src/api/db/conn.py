@@ -3,13 +3,13 @@
 
 import os
 import sys
-import asyncio
-import asyncpg
+# import asyncio
+# import asyncpg
 import psycopg2
 from dotenv import load_dotenv
 
 
-class Main():
+class Connector():
 	def __init__( self ):
 		load_dotenv()
 
@@ -34,10 +34,8 @@ class Main():
 	
 	def execute( self ):
 		cur = self.conn.cursor()
-		sql = self.create_table()
-		cur.execute(
-			sql
-		)
+		sql = self.show()
+		cur.execute( sql )
 		# self.conn.commit()
 		result = cur.fetchone() 
 		print( result )
@@ -54,13 +52,24 @@ class Main():
 		"""
 		return sql
 	#--- EoF ---
-#--- Main ---
+
+	def show( self ):
+		sql = """
+			select * from m_manage;
+		"""
+		return sql
+	#--- EoF ---
+
+	def Connector( self ):
+		return self.conn
+	#--- EoF ---
+#--- Connector ---
 
 
 # Entry Point
 
 if __name__ == "__main__":
-	ins = Main()
+	ins = Connector()
 	sys.exit( ins.main( len( sys.argv ), sys.argv ) )
 #-- if
 
