@@ -2,42 +2,36 @@
 # -*- coding: utf8 -*-
 
 import sys
-
 from conn import Connector
 
 
-class Main():
+class CreateTable():
 	def __init__( self ):
 		ins = Connector()
 		self.conn = ins.Connector()
 	#--- EoF ---
 
 	def execute( self ):
-		cur = self.conn.cursor()
-		sql = self.show()
-		cur.execute( sql )
-		result = cur.fetchone() 
-		print( result )
-	#--- EoF ---
-
-	def show( self ):
-		sql = """
-			SELECT * FROM m_manage;
-		"""
-		return sql
+		print( "OK" )
 	#--- EoF ---
 
 	def main( self, argc, argv ):
 		self.execute()
 		return 0
 	#--- EoF ---
-#--- Main ---
+
+	def create_sql():
+		sql = """
+		"""
+		return 0
+	#--- EoF ---
+#--- CreateTable ---
 
 
 # Entry Point
 
 if __name__ == "__main__":
-	ins = Main()
+	ins = CreateTable()
 	sys.exit( ins.main( len( sys.argv ), sys.argv ) )
 #-- if
 

@@ -47,7 +47,7 @@ class Connector():
 
 	def show( self ):
 		sql = """
-			select * from m_manage;
+			SELECT * FROM m_manage;
 		"""
 		return sql
 	#--- EoF ---
