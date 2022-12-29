@@ -3,7 +3,7 @@
 source .env
 
 # create database
-psql -U postgres <<EOF
+psql -U nohira <<EOF
 CREATE DATABASE maindb;
 
 \c maindb
