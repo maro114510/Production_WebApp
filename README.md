@@ -9,7 +9,8 @@
 
 ### Attention
 
-**⚠See the documentation folder `Document` for detailed specifications.⚠**
+* **⚠See the documentation folder `Document` for detailed specifications.⚠**
+* ** Currently under refactoring..... **
 
 ---
 
@@ -24,7 +25,7 @@ Some functions can be used without user registration
 ---
 
 * http://www.youtube-diff-checker.com:8503/
-  * SSL化は後日
+  * SSL conversion to be done at a later date
 
 ---
 
