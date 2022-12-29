@@ -26,4 +26,4 @@ assignees: ''
 ----
 
 
-Created at: {{ git_page_last_updated }}
+Created at: 
