@@ -34,6 +34,7 @@ poetry.toml
 # *.png
 # *.mp4
 # *.json
+memo
 
 
 ### macOS ###

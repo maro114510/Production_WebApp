@@ -2,6 +2,7 @@ version: '3'
 services:
   ytb:
     container_name: ytb
+    image: ytb:1.2
     build:
       context: ./api
     volumes:
@@ -20,8 +21,12 @@ services:
       - 5432:5432
     volumes:
       - db_master:/var/lib/postgresql/data
+      - ./script:/docker-entrypoint-initdb.d
       - ./config/postgresql.conf:/etc/postgresql/postgresql.conf 
     environment:
+      TZ: "Asia/Tokyo"
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 
 volumes:

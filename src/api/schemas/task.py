@@ -15,7 +15,7 @@ class TaskCreate( TaskBase ):
 	pass
 #--- Class ---
 
-class TaskCreateResponse(TaskCreate):
+class TaskCreateResponse( TaskCreate ):
 	id: int
 
 	class Config:

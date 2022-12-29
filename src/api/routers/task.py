@@ -12,7 +12,8 @@ router = APIRouter()
 @router.get( "/tasks", response_model=List[ ts.Task ] )
 async def list_tasks():
 	return [
-		ts.Task( id=1, title="oneoneone" )
+		ts.Task( id=1, title="oneoneone" ),
+		ts.Task( id=2, title="morimori" ),
 	]
 #--- EoF ---
 
