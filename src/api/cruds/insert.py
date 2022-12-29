@@ -22,16 +22,15 @@ class Insert():
 	#--- EoF ---
 
 	def execute( self, name, email, pw ):
+		cur = self.conn.cursor()
+		sql = self.insert_sql()
 		try:
-			cur = self.conn.cursor()
-			sql = self.insert_sql()
 			cur.execute(
 				sql,
 				(
 					name,
 					email,
 					pw,
-					# hashlib.md5( pw.encode() ).hexdigest(),
 				)
 			)
 			self.conn.commit()
@@ -44,9 +43,9 @@ class Insert():
 
 	def main( self, argc, argv ):
 		self.execute(
-			"nakata",
+			"nohira",
 			"test2@mail",
-			"nakata"
+			"nohira"
 		)
 		return 0
 	#--- EoF ---
