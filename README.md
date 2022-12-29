@@ -10,7 +10,7 @@
 ### Attention
 
 * **⚠See the documentation folder `Document` for detailed specifications.⚠**
-* ** Currently under refactoring..... **
+* **Currently under refactoring.....**
 
 ---
 
