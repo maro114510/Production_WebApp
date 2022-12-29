@@ -2,6 +2,15 @@
 # -*- coding: utf8 -*-
 
 import sys
+from pathlib import Path
+
+sys.path.append(
+	str(
+		Path(
+			__file__
+		).resolve().parent.parent.parent
+	)
+)
 import hashlib
 
 from api.db.conn import Connector
@@ -13,22 +22,27 @@ class Insert():
 		self.conn = ins.Connector()
 	#--- EoF ---
 
-	def execute( self ):
+	def execute( self, name, email, pw ):
 		cur = self.conn.cursor()
 		sql = self.insert_sql()
 		cur.execute(
 			sql,
 			(
-				"nohira",
-				"parcels-dollar.0p@icloud.com",
-				hashlib.md5( "nohira".encode() ).hexdigest(),
+				name,
+				email,
+				hashlib.md5( pw.encode() ).hexdigest(),
 			)
 		)
 		self.conn.commit()
+		print( "INSERT OK" )
 	#--- EoF ---
 
 	def main( self, argc, argv ):
-		self.execute()
+		self.execute(
+			"nakata",
+			"test2@mail",
+			"nakata"
+		)
 		return 0
 	#--- EoF ---
 
