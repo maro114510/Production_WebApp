@@ -26,4 +26,4 @@ assignees: ''
 ----
 
 
-Created at: date: "`r format(Sys.time(), '%x')`"
+Created at: {{ git_page_last_updated }}
