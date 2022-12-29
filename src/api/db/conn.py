@@ -1,26 +1,33 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+import os
 import sys
+import asyncio
+import asyncpg
 import psycopg2
+from dotenv import load_dotenv
 
 
 class Main():
 	def __init__( self ):
+		load_dotenv()
+
 		self.conn = psycopg2.connect(
 			"postgresql://{user}:{password}@{host}:{port}/{database}".format(
-				user="postgres",
-				password="passw0rd",
+				user=os.environ[ "POSTGRES_USER" ],
+				password=os.environ[ "POSTGRES_PASSWORD" ],
 				# ローカルホストにつなぐのはアウト
 				host="postgres",
 				port="5432",
-				database="hogedb"
+				database="maindb"
 			)
 		)
+
 		cur = self.conn.cursor()
 		cur.execute(
 			"""
-			SET search_path = hogeschema;
+			SET search_path = schema1;
 			"""
 		)
 	#--- EoF ---
@@ -31,9 +38,9 @@ class Main():
 		cur.execute(
 			sql
 		)
-		self.conn.commit()
-		# result = cur.fetchone() 
-		print("OK")
+		# self.conn.commit()
+		result = cur.fetchone() 
+		print( result )
 	#--- EoF ---
 	
 	def main( self, argc, argv ):
@@ -43,12 +50,7 @@ class Main():
 
 	def create_table( self ):
 		sql = """
-CREATE TABLE morimori (
-  daruma VARCHAR(10),
-  saitou VARCHAR(10),
-  konishi VARCHAR(10),
-  PRIMARY KEY (daruma)
-);
+			select * from m_manage;
 		"""
 		return sql
 	#--- EoF ---

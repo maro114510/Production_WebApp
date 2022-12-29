@@ -31,3 +31,6 @@ services:
 
 volumes:
   db_master:
+
+
+# end of docker-compose
