@@ -15,27 +15,21 @@ sys.path.append(
 from api.db.conn import Connector
 
 
-class Insert():
+class Read():
 	def __init__( self ):
 		ins = Connector()
 		self.conn = ins.Connector()
 	#--- EoF ---
 
-	def execute( self, name, email, pw ):
+	def execute( self ):
 		try:
 			cur = self.conn.cursor()
-			sql = self.insert_sql()
-			cur.execute(
-				sql,
-				(
-					name,
-					email,
-					pw,
-					# hashlib.md5( pw.encode() ).hexdigest(),
-				)
-			)
+			sql = self.select_sql()
+			cur.execute( sql )
+			results = cur.fetchall()
 			self.conn.commit()
-			print( "INSERT OK" )
+			print( "SELECT OK" )
+			return results
 		except Exception as e:
 			self.conn.rollback()
 			raise e
@@ -43,35 +37,23 @@ class Insert():
 	#--- EoF ---
 
 	def main( self, argc, argv ):
-		self.execute(
-			"nakata",
-			"test2@mail",
-			"nakata"
-		)
+		self.execute()
 		return 0
 	#--- EoF ---
 
-	def insert_sql( self ):
+	def select_sql( self ):
 		sql = """
-		INSERT INTO t_users(
-			user_name,
-			user_email,
-			user_pw
-		) VALUES (
-			%s,
-			%s,
-			%s
-		);
+		SELECT * FROM t_users;
 		"""
 		return sql
 	#--- EoF ---
-#--- Insert ---
+#--- Read ---
 
 
 # Entry Point
 
 if __name__ == "__main__":
-	ins = Insert()
+	ins = Read()
 	sys.exit( ins.main( len( sys.argv ), sys.argv ) )
 #-- if
 
