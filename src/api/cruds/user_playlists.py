@@ -67,7 +67,7 @@ class UserPlaylists():
 					uid,
 				)
 			)
-			results = cur.fetchmany()
+			results = cur.fetchall()
 			self.conn.commit()
 			print( "SELECT OK" )
 			return results

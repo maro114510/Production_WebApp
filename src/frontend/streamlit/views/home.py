@@ -4,29 +4,29 @@
 import sys
 import streamlit as st
 
-from libs.lib import *
+from libs.recommend import Recommend
 
 
 class Home():
 	def __init__( self ):
-		pass
+		self.r_ins = Recommend()
 	#--- EoF ---
 
 	def home_page( self ):
-		st.title("Welcome to Youtube Diff Checker!!")
-		st.caption("This application is currently under development.")
+		st.title( "Welcome to Youtube Diff Checker!!" )
+		st.caption( "This application is currently under development." )
 
-		st.header("Overview of this application😀")
-		st.subheader("Capture the missing songs in your playlist")
+		st.header( "Overview of this application😀" )
+		st.subheader( "Capture the missing songs in your playlist" )
 
-		# TODO ランダムでおすすめ曲の表示をする
-		st.write("#### This is my favorite song.")
-		with st.expander("Open to see"):
-			st.video("https://youtu.be/CH7gf1rg49Y")
+		st.write( "#### This is my favorite song." )
+		with st.expander( "Open to see" ):
+			url = self.r_ins.execute()
+			st.video( url )
 		# -- with
 
-		col1, col2 = st.columns(2)
-		col1.subheader("Content")
+		col1, col2 = st.columns( 2 )
+		col1.subheader( "Content" )
 		col1.write(
 			"""
 			* **This application is a web application that requires user registration.**
@@ -35,7 +35,7 @@ class Home():
 			* We are working on a future feature that will allow users to be notified by registered email.
 			"""
 		)
-		col2.subheader("Background of Production")
+		col2.subheader( "Background of Production" )
 		col2.write(
 			"""
 			* I am a heavy user of Youtube
@@ -48,8 +48,8 @@ class Home():
 			"""
 		)
 
-		tag1, tag2 = st.tabs(["About tech", "About me"])
-		tag1.subheader("About the technologies and frameworks used")
+		tag1, tag2 = st.tabs( [ "About tech", "About me" ] )
+		tag1.subheader( "About the technologies and frameworks used" )
 		tag1.write(
 			"""
 			* Python 3.9
@@ -63,7 +63,7 @@ class Home():
 			* YoutubeAPI
 			"""
 		)
-		tag2.subheader("Contact Developer")
+		tag2.subheader( "Contact Developer" )
 		tag2.write(
 			"""
 			* Email : parcels-dollar.0p@icloud.com
@@ -72,7 +72,7 @@ class Home():
 			"""
 		)
 
-		st.text(" © 2022 Atsuki Nohira ")
+		st.text( " © 2022 Atsuki Nohira " )
 
 		return 0
 	# --- EoF ---

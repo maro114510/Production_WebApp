@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-# -*- coding: utf8 -*-
+#-*- coding: utf8 -*-
 
 import sys
 import re
-from datetime import datetime
 import requests
-import streamlit as st
 import pandas as pd
+from datetime import datetime
 
 
 class Lib():
@@ -66,9 +65,8 @@ class Lib():
 			d[ "Playlist Name" ] = res2.get( "playlist_name" )
 			d[ "Record start date" ] = p_date
 			playlist_box.append( d )
-		# -- for
+		#-- for
 		pb = pd.DataFrame( playlist_box )
-		print( pb.head() )
 		return pb
 	#--- EoF ---
 
@@ -121,8 +119,8 @@ class Lib():
 				d[ "Playlist Name" ] = res3.get( "playlist_name" )
 				d[ "Deleted date" ] = p_date
 				del_box.append( d )
-			# -- for
-		# -- for
+			#-- for
+		#-- for
 		del_b = pd.DataFrame( del_box )
 		return del_b
 	#--- EoF ---
@@ -145,6 +143,45 @@ class Lib():
 	def format_date( self, dt ):
 		buf = datetime.strptime( dt, "%Y-%m-%dT%H:%M:%S.%f" )
 		return buf.strftime( "%Y/%m/%d" )
+	#--- EoF ---
+
+	def get_row_data( self, url ):
+		headers = {
+			"accept": "application/json",
+			"content-type": "application/x-www-form-urlencoded",
+		}
+		playlist_id = self.generate_playlist_id( url )
+		res = requests.post(
+			f"https://2y5u90.deta.dev/{playlist_id}",
+			headers=headers).json()
+		return res
+	#--- EoF ---
+
+	def generate_playlist_id( self, url ):
+		"""_summary_
+		Args:
+				url (str): playlist url
+		Returns:
+				str: playlist original id
+		"""
+		pattern = "(.*)list=(.*)"
+		u = re.search( pattern, url )
+		playlist_id = u.group( 2 )
+		return playlist_id
+	#--- EoF ---
+
+	def register_uer( self, d ):
+		params = {
+			"user_name": d[ "user_name" ],
+			"user_email": d[ "user_email" ],
+			"user_pw": d[ "user_pw" ],
+		}
+		response = requests.post(
+			"http://192.168.11.2:8000/users/",
+			headers=self.headers,
+			params=params
+		)
+		return response
 	#--- EoF ---
 #--- Lib ---
 

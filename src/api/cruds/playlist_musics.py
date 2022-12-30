@@ -47,7 +47,7 @@ class PlaylistMusics():
 					p_org_id,
 				)
 			)
-			results = cur.fetchmany()
+			results = cur.fetchall()
 			self.conn.commit()
 			print( "SELECT OK" )
 			return results
@@ -67,7 +67,7 @@ class PlaylistMusics():
 					p_org_id,
 				)
 			)
-			results = cur.fetchmany()
+			results = cur.fetchall()
 			self.conn.commit()
 			print( "SELECT OK" )
 			return results
