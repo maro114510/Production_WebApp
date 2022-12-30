@@ -6,6 +6,7 @@ import sys
 # import asyncio
 # import asyncpg
 import psycopg2
+from psycopg2.extras import DictCursor
 from dotenv import load_dotenv
 
 
@@ -24,7 +25,7 @@ class Connector():
 			)
 		)
 
-		cur = self.conn.cursor()
+		cur = self.conn.cursor( cursor_factory=DictCursor )
 		cur.execute(
 			"""
 			SET search_path = schema1;
