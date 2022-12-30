@@ -58,7 +58,6 @@ elif page == "USER":
 		)
 		user_hashed_pw = r.get( "user_pw" )
 		hashed_pw = make_hashes( user_password )
-		st.write( hashed_pw )
 		result =  check_hashes( hashed_pw, user_hashed_pw )
 		if result:
 			un = r.get( "user_name" )

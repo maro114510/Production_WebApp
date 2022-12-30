@@ -81,8 +81,6 @@ class Lib():
 			params=params,
 			headers=self.headers,
 		).json()
-		print( "#"*30 )
-		print(res1)
 
 		del_box = []
 
@@ -96,20 +94,31 @@ class Lib():
 				params=params,
 				headers=self.headers
 			).json()
-			print(res2)
-			p_date = self.format_date( res2.get( "created_at" ) )
 
 			for j in res2:
+				p_org_id = j.get( "p_org_id" )
+				params = {
+					"p_org_id": f"{p_org_id}",
+				}
+				res3 = requests.get(
+					"http://192.168.11.2:8000/playlists/playlist",
+					params=params,
+					headers=self.headers
+				).json()
+
+				p_date = self.format_date( j.get( "created_at" ) )
 				d = {}
 				m_org_id = j.get( "m_org_id" )
 				params = {
 					"m_org_id": f"{m_org_id}",
 				}
-				res3 = requests.get(
+				res4 = requests.get(
 					"http://192.168.11.2:8000/musics/music",
+					params=params,
 					headers=self.headers
 				).json()
-				d[ "Music Name" ] = res3.get( "music_name" )
+				d[ "Music Name" ] = res4.get( "music_name" )
+				d[ "Playlist Name" ] = res3.get( "playlist_name" )
 				d[ "Deleted date" ] = p_date
 				del_box.append( d )
 			# -- for

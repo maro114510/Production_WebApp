@@ -32,7 +32,7 @@ class User():
 		d_r = None
 		try:
 			d_r = self.lib_ins.get_delete_music( uid )
-		except Exception as e:
+		except Exception:
 			st.warning(
 			"""
 			Sorry, something is wrong and I can not display it.
