@@ -57,6 +57,28 @@ class Musics():
 		#-- except
 	#--- EoF ---
 
+	def musics_insert( self, musics ):
+		cur = self.conn.cursor()
+		sql = self.insert_one_sql()
+		try:
+			cur.executemany(
+				sql,
+				musics,
+			)
+			self.conn.commit()
+
+			if cur.rowcount != len( musics ):
+				print( "INSERT OK" )
+			#-- if
+			else:
+				print( "SOME OF DUPLICATED" )
+			#-- else
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+	#--- EoF ---
+
 	def music_insert_one( self, music_name, m_org_id ):
 		cur = self.conn.cursor()
 		sql = self.insert_one_sql()

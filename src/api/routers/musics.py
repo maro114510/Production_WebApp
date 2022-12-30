@@ -6,8 +6,10 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 
 from api.cruds.musics import Musics
+from api.libs.plalylist_url_handling import Format
 
 ins = Musics()
+f_ins = Format()
 router = APIRouter()
 
 
@@ -43,14 +45,13 @@ async def create_music(
 
 @router.post( "/musics/bulk", tags=[ "Musics" ] )
 async def create_musics(
-	musics: list
+	url: str
 ):
 	try:
-		# ins.music_insert_one(
-		# 	music_name,
-		# 	m_org_id,
-		# )
-		pass
+		music_list = f_ins.get_row_data( url )
+		ins.musics_insert(
+			music_list
+		)
 	except Exception as e:
 		print( "%s" % ( [e.args, ] ), file=sys.stderr )
 		raise HTTPException(
