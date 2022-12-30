@@ -3,6 +3,7 @@
 
 import sys
 from pathlib import Path
+from psycopg2.extras import RealDictCursor
 
 sys.path.append(
 	str(
@@ -42,7 +43,7 @@ class Users():
 	#--- EoF ---
 
 	def get_all_users_full_info( self ):
-		cur = self.conn.cursor()
+		cur = self.conn.cursor( cursor_factory=RealDictCursor )
 		sql = self.select_all_sql()
 		try:
 			cur.execute( sql )
@@ -87,7 +88,7 @@ class Users():
 	#--- EoF ---
 
 	def get_one_user_info( self, user_name, user_email ):
-		cur = self.conn.cursor()
+		cur = self.conn.cursor( cursor_factory=RealDictCursor )
 		sql = self.select_one_sql()
 		try:
 			cur.execute(
@@ -97,10 +98,10 @@ class Users():
 					user_email,
 				)
 			)
-			results = cur.fetchall()
+			result = cur.fetchone()
 			self.conn.commit()
 			print( "SELECT OK" )
-			return results
+			return result
 		except Exception as e:
 			self.conn.rollback()
 			raise e

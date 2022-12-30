@@ -3,6 +3,7 @@
 
 import sys
 import hashlib
+from typing import List
 from fastapi import APIRouter, HTTPException
 
 from api.cruds.users import Users
@@ -12,7 +13,7 @@ router = APIRouter()
 
 
 @router.get( "/users", tags=[ "Users" ] )
-async def list_users():
+async def list_users() -> List[ dict ]:
 	return ins.get_all_users_full_info()
 #--- EoF ---
 
@@ -21,7 +22,7 @@ async def list_users():
 async def get_user_info(
 	user_name: str,
 	user_email: str
-):
+) -> dict:
 	return ins.get_one_user_info(
 		user_name,
 		user_email
@@ -58,7 +59,7 @@ async def update_task(
 	user_name: str,
 	user_email: str,
 	user_pw: str
-):
+) -> int:
 	try:
 		ins.update_user_info(
 			old_user_name,
@@ -82,7 +83,7 @@ async def update_task(
 async def delete_task(
 	user_name: str,
 	user_email: str
-):
+) -> int:
 	try:
 		ins.delete_user(
 			user_name,
