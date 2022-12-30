@@ -68,7 +68,7 @@ class Lib():
 			playlist_box.append( d )
 		# -- for
 		pb = pd.DataFrame( playlist_box )
-		pb.index = pd.RangeIndex( start=1 )
+		print( pb.head() )
 		return pb
 	#--- EoF ---
 
@@ -125,6 +125,21 @@ class Lib():
 		# -- for
 		del_b = pd.DataFrame( del_box )
 		return del_b
+	#--- EoF ---
+
+	def first_register( self, uid, url ):
+		headers = self.headers
+		headers[ "content-type" ] = "application/x-www-form-urlencoded"
+		params = {
+			"uid": f"{uid}",
+			"url": f"{url}"
+		}
+		res = requests.post(
+			"http://192.168.11.2:8000/register/all",
+			params=params,
+			headers=headers
+		).json()
+		return res
 	#--- EoF ---
 
 	def format_date( self, dt ):

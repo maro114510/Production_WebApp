@@ -37,7 +37,7 @@ class UserPlaylists():
 		#-- except
 	#--- EoF ---
 
-	def get_one_user_playlists_full_info( self, uid ):
+	def get_user_playlists_byUid( self, uid ):
 		cur = self.conn.cursor( cursor_factory=RealDictCursor )
 		sql = self.select_by_uid_sql()
 		try:
@@ -47,7 +47,7 @@ class UserPlaylists():
 					uid,
 				)
 			)
-			results = cur.fetchmany()
+			results = cur.fetchall()
 			self.conn.commit()
 			print( "SELECT OK" )
 			return results
@@ -195,7 +195,7 @@ class UserPlaylists():
 			WHERE
 				uid = %s
 			AND
-				flag = true
+				flag = True
 			;
 		"""
 		return sql

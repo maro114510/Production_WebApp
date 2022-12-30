@@ -19,7 +19,7 @@ async def list_user_playlists() -> List[ dict ]:
 
 @router.get( "/user_playlists/user_playlists", tags=[ "UserPlaylists" ] )
 async def get_user_playlists_info( uid: int ):
-	return ins.get_one_user_playlists_full_info( uid )
+	return ins.get_user_playlists_byUid( uid )
 #--- EoF ---
 
 @router.get( "/user_playlists/d/user_playlists", tags=[ "UserPlaylists" ] )
