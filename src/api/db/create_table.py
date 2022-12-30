@@ -71,7 +71,7 @@ GRANT ALL PRIVILEGES ON t_musics TO ytber;
 DROP TABLE IF EXISTS t_user_playlists;
 CREATE TABLE t_user_playlists (
   id			SERIAL			PRIMARY KEY, -- 通し番号
-  uid			INTEGER			NOT NULL, -- ユーザー名
+  uid			INTEGER			NOT NULL, -- uid
   p_org_id		VARCHAR(100)	NOT NULL,  -- プレイリストID
   flag			BOOLEAN			DEFAULT true, -- ユーザーの持つプレイリストの状態管理
   created_at	TIMESTAMP		DEFAULT CURRENT_TIMESTAMP, -- 作成日付時刻
