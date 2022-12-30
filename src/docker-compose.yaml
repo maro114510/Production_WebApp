@@ -25,6 +25,9 @@ services:
       - ./frontend/streamlit:/usr/share/nginx/html/streamlit/
     environment:
       TZ: 'Asia/Tokyo'
+    depends_on:
+      - db
+      - ytb
 
   db:
     image: postgres:$VERSION
