@@ -28,7 +28,7 @@ class Recommend():
 			"http://192.168.11.2:8000/playlist_musics/playlist_musics",
 			headers=self.headers,
 			params=self.params,
-		)
+		).json()
 		return res
 	#--- EoF ---
 
