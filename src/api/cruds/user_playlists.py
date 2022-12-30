@@ -37,7 +37,7 @@ class UserPlaylists():
 		#-- except
 	#--- EoF ---
 
-	def get_one_user_playlists_full_info( self, uid ):
+	def get_user_playlists_byUid( self, uid ):
 		cur = self.conn.cursor( cursor_factory=RealDictCursor )
 		sql = self.select_by_uid_sql()
 		try:
@@ -47,7 +47,7 @@ class UserPlaylists():
 					uid,
 				)
 			)
-			results = cur.fetchmany()
+			results = cur.fetchall()
 			self.conn.commit()
 			print( "SELECT OK" )
 			return results
@@ -67,7 +67,7 @@ class UserPlaylists():
 					uid,
 				)
 			)
-			results = cur.fetchmany()
+			results = cur.fetchall()
 			self.conn.commit()
 			print( "SELECT OK" )
 			return results
@@ -85,11 +85,21 @@ class UserPlaylists():
 				sql,
 				(
 					uid,
-					p_org_id
+					p_org_id,
+					uid,
+					p_org_id,
 				)
 			)
 			self.conn.commit()
-			print( "INSERT OK" )
+
+			if cur.rowcount != 0:
+				print( "INSERT OK" )
+				return 0
+			#-- if
+			else:
+				print( "DUPRICATED" )
+				return 1
+			#-- else
 		except Exception as e:
 			self.conn.rollback()
 			raise e
@@ -150,10 +160,18 @@ class UserPlaylists():
 		INSERT INTO t_user_playlists (
 			uid,
 			p_org_id
-		) VALUES (
+		)
+		SELECT
 			%s,
 			%s
-		);
+			WHERE NOT EXISTS (
+				SELECT 1 FROM t_user_playlists 
+				WHERE
+					uid = %s
+				AND
+					p_org_id = %s
+			)
+		;
 		"""
 		return sql
 	#--- EoF ---
@@ -177,7 +195,7 @@ class UserPlaylists():
 			WHERE
 				uid = %s
 			AND
-				flag = true
+				flag = True
 			;
 		"""
 		return sql

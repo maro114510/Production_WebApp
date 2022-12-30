@@ -13,6 +13,22 @@ services:
     depends_on:
       - db
 
+  frontend:
+    container_name: frontend
+    image: frontend:1.0
+    build: 
+      context: ./frontend
+    command: streamlit run main.py --server.port=8503 
+    ports:
+      - 8503:8503
+    volumes:
+      - ./frontend/streamlit:/usr/share/nginx/html/streamlit/
+    environment:
+      TZ: 'Asia/Tokyo'
+    depends_on:
+      - db
+      - ytb
+
   db:
     image: postgres:$VERSION
     container_name: postgres
