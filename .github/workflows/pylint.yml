@@ -1,7 +1,7 @@
 name: Format python code
 
 on:
-  push:
+  merge:
     branches: [ main ]
 jobs:
   autopep8:
