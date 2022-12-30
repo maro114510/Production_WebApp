@@ -184,6 +184,88 @@ class Lib():
 		)
 		return response
 	#--- EoF ---
+
+	def exclude( self, uid, playlist_names ):
+		for i in playlist_names:
+			params = {
+				"playlist_name": f"{i}",
+			}
+			res = requests.get(
+				f"{self.domein}/playlists/playlist_name",
+				params=params,
+				headers=self.headers
+			).json()
+			p_org_id  = res.get( "p_org_id" )
+
+			params = {
+				"uid": f"{uid}",
+				"p_org_id": f"{p_org_id}",
+			}
+			requests.delete(
+				f"{self.domein}/user_playlists",
+				params=params,
+				headers=self.headers
+			).json()
+		#-- if
+		return 0
+	#--- EoF ---
+
+	def restore( self, uid, playlist_names ):
+		for i in playlist_names:
+			params = {
+				"playlist_name": f"{i}",
+			}
+			res = requests.get(
+				f"{self.domein}/playlists/playlist_name",
+				params=params,
+				headers=self.headers
+			).json()
+			p_org_id  = res.get( "p_org_id" )
+
+			params = {
+				"uid": f"{uid}",
+				"p_org_id": f"{p_org_id}",
+			}
+			requests.put(
+				f"{self.domein}/user_playlists",
+				params=params,
+				headers=self.headers
+			).json()
+		#-- if
+		return 0
+	#--- EoF ---
+
+	def get_d_users_playlist( self, uid ):
+		params = {
+			"uid": f"{uid}",
+		}
+		res1 = requests.get(
+			f"{self.domein}/user_playlists/d/user_playlists",
+			params=params,
+			headers=self.headers,
+		).json()
+
+		playlist_box = []
+
+		for i in res1:
+			d = {}
+			p_org_id = i.get( "p_org_id" )
+			params = {
+				"p_org_id": f"{p_org_id}",
+			}
+			res2 = requests.get(
+				f"{self.domein}/playlists/playlist",
+				params=params,
+				headers=self.headers
+			).json()
+			p_date = self.format_date( res2.get( "created_at" ) )
+			d[ "Playlist Name" ] = res2.get( "playlist_name" )
+			d[ "Record start date" ] = p_date
+			playlist_box.append( d )
+		#-- for
+		pb = pd.DataFrame( playlist_box )
+		return pb
+	#--- EoF ---
 #--- Lib ---
 
 
