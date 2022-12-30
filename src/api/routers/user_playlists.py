@@ -41,8 +41,8 @@ async def create_user_playlists(
 	except Exception as e:
 		print( "%s" % ( [e.args, ] ), file=sys.stderr )
 		raise HTTPException(
-			status_code=404,
-			detail="Either the user's email address or the user's password is duplicated. Please change it.",
+			status_code=455,
+			detail="Either the uid or the p_org_id is duplicated. Please change it.",
 		)
 	#-- except
 	return 0

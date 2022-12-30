@@ -35,17 +35,31 @@ class Format():
 
 	def get_row_data( self, url ):
 		headers = {
-			'accept': 'application/json',
-			'content-type': 'application/x-www-form-urlencoded',
+			"accept": "application/json",
+			"content-type": "application/x-www-form-urlencoded",
 		}
 		playlist_id = self.generate_playlist_id(url)
 		res = requests.post(
-			f'https://2y5u90.deta.dev/{playlist_id}',
+			f"https://2y5u90.deta.dev/{playlist_id}",
 			headers=headers
 		).json()
 		pos = [ [ i[ "video_name" ], i[ "video_id" ], i[ "video_id" ] ] for i in res[ "music_id_list" ] ]
 		# print( pos )
 		return pos
+	# --- EoF ---
+
+	def to_playlist_musics( self, url ):
+		headers = {
+			"accept": "application/json",
+			"content-type": "application/x-www-form-urlencoded",
+		}
+		playlist_id = self.generate_playlist_id(url)
+		res = requests.post(
+			f"https://2y5u90.deta.dev/{playlist_id}",
+			headers=headers
+		).json()
+
+		return res[ "music_id_list" ]
 	# --- EoF ---
 #--- Format ---
 
