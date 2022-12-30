@@ -66,10 +66,16 @@ class Playlists():
 				(
 					p_name,
 					p_org_id,
+					p_org_id,
 				)
 			)
 			self.conn.commit()
-			print( "INSERT OK" )
+			if cur.rowcount != 0:
+				print( "INSERT OK" )
+			#-- if
+			else:
+				print( "DIPRICATED" )
+			#-- else
 		except Exception as e:
 			self.conn.rollback()
 			raise e
@@ -87,13 +93,17 @@ class Playlists():
 
 	def insert_sql( self ):
 		sql = """
-		INSERT INTO t_playlists(
+		INSERT INTO t_playlists (
 			playlist_name,
 			p_org_id
-		) VALUES (
+		)
+		SELECT
 			%s,
 			%s
-		);
+			WHERE NOT EXISTS (
+				SELECT 1 FROM t_playlists WHERE p_org_id = %s
+			)
+		;
 		"""
 		return sql
 	#--- EoF ---

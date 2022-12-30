@@ -33,6 +33,20 @@ class Format():
 		return playlist_id
 	# --- EoF ---
 
+	def get_plane_data( self, url ):
+		headers = {
+			"accept": "application/json",
+			"content-type": "application/x-www-form-urlencoded",
+		}
+		playlist_id = self.generate_playlist_id(url)
+		res = requests.post(
+			f"https://2y5u90.deta.dev/{playlist_id}",
+			headers=headers
+		).json()
+		return res
+	# --- EoF ---
+
+
 	def get_row_data( self, url ):
 		headers = {
 			"accept": "application/json",

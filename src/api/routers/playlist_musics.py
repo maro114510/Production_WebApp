@@ -63,7 +63,6 @@ async def create_playlist_musics_bulk( url: str ) -> int:
 			for i in music_list
 		]
 		ins.playlist_musics_bulk_insert( f_list )
-		pass
 	except Exception as e:
 		print( "%s" % ( [e.args, ] ), file=sys.stderr )
 		raise HTTPException(

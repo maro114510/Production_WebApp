@@ -23,12 +23,12 @@ async def get_playlist_info( p_org_id: str ):
 
 @router.post( "/playlists/", tags=[ "Playlists" ] )
 async def create_playlist( 
-	playlist: str,
+	playlist_name: str,
 	p_org_id: str
 ) -> int:
 	try:
 		ins.insert_playlist(
-			playlist,
+			playlist_name,
 			p_org_id
 		)
 	except Exception as e:
