@@ -32,7 +32,16 @@ class Cron():
 		api_list = self.api_data( self.checklists )
 		db_list = self.db_data( self.checklists )
 		new, dele = self.diff_check( api_list, db_list )
-
+		# self.renew( new )
+		# self.del_deal( dele )
+		print( "new" )
+		for i in new:
+			print( len( i ) )
+		#-- for
+		print( "delete" )
+		for i in dele:
+			print( len( i ) )
+		#-- for
 		print( "OK" )
 	#--- EoF ---
 
@@ -65,6 +74,19 @@ class Cron():
 	#--- EoF ---
 
 	def del_deal( self, dele ):
+		for i in range( self.check_count ):
+			for j in dele[ i ]:
+				try:
+					self.pm_ins.delete_playlist_musics(
+						self.checklists[ i ],
+						j
+					)
+				except Exception as e:
+					self.conn.rollback()
+					continue
+				#-- except
+			#-- for
+		#-- for
 		return 0
 	#--- EoF ---
 
@@ -102,7 +124,7 @@ class Cron():
 			nb = []
 			deb = []
 			for i in api_list[ j ]:
-				if i.get( "m_org_id" ) not in db_list:
+				if i.get( "m_org_id" ) not in db_list[ j ]:
 					nb.append( i )
 				#-- if
 			#-- for
@@ -221,6 +243,8 @@ class Cron():
 			t_playlist_musics
 		WHERE
 			p_org_id = %s
+		AND
+			status = 0
 		;
 		"""
 		return sql
