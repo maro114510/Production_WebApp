@@ -13,6 +13,7 @@ class Lib():
 		self.headers = {
 			"accept": "application/json",
 		}
+		self.domein = "http://192.168.11.2:8000"
 	#--- EoF ---
 
 	def execute( self ):
@@ -31,7 +32,7 @@ class Lib():
 		}
 
 		response = requests.get(
-			"http://192.168.11.2:8000/users/user",
+			f"{self.domein}/users/user",
 			params=params,
 			headers=self.headers
 		).json()
@@ -43,7 +44,7 @@ class Lib():
 			"uid": f"{uid}",
 		}
 		res1 = requests.get(
-			"http://192.168.11.2:8000/user_playlists/user_playlists",
+			f"{self.domein}/user_playlists/user_playlists",
 			params=params,
 			headers=self.headers,
 		).json()
@@ -57,7 +58,7 @@ class Lib():
 				"p_org_id": f"{p_org_id}",
 			}
 			res2 = requests.get(
-				"http://192.168.11.2:8000/playlists/playlist",
+				f"{self.domein}/playlists/playlist",
 				params=params,
 				headers=self.headers
 			).json()
@@ -75,7 +76,7 @@ class Lib():
 			"uid": f"{uid}",
 		}
 		res1 = requests.get(
-			"http://192.168.11.2:8000/user_playlists/user_playlists",
+			f"{self.domein}/user_playlists/user_playlists",
 			params=params,
 			headers=self.headers,
 		).json()
@@ -88,7 +89,7 @@ class Lib():
 				"p_org_id": f"{p_org_id}",
 			}
 			res2 = requests.get(
-				"http://192.168.11.2:8000/playlist_musics/d/playlist_musics",
+				f"{self.domein}/playlist_musics/d/playlist_musics",
 				params=params,
 				headers=self.headers
 			).json()
@@ -99,7 +100,7 @@ class Lib():
 					"p_org_id": f"{p_org_id}",
 				}
 				res3 = requests.get(
-					"http://192.168.11.2:8000/playlists/playlist",
+					f"{self.domein}/playlists/playlist",
 					params=params,
 					headers=self.headers
 				).json()
@@ -111,7 +112,7 @@ class Lib():
 					"m_org_id": f"{m_org_id}",
 				}
 				res4 = requests.get(
-					"http://192.168.11.2:8000/musics/music",
+					f"{self.domein}/musics/music",
 					params=params,
 					headers=self.headers
 				).json()
@@ -133,7 +134,7 @@ class Lib():
 			"url": f"{url}"
 		}
 		res = requests.post(
-			"http://192.168.11.2:8000/register/all",
+			f"{self.domein}/register/all",
 			params=params,
 			headers=headers
 		).json()
@@ -177,7 +178,7 @@ class Lib():
 			"user_pw": d[ "user_pw" ],
 		}
 		response = requests.post(
-			"http://192.168.11.2:8000/users/",
+			f"{self.domein}/users/",
 			headers=self.headers,
 			params=params
 		)
