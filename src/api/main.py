@@ -3,7 +3,7 @@
 
 from fastapi import FastAPI
 
-from api.routers import users, playlists, musics
+from api.routers import users, playlists, musics, user_playlists
 
 app = FastAPI()
 
@@ -11,6 +11,7 @@ app = FastAPI()
 app.include_router( users.router )
 app.include_router( playlists.router )
 app.include_router( musics.router )
+app.include_router( user_playlists.router )
 
 
 # End of Script
