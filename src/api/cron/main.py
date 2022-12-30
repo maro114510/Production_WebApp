@@ -14,6 +14,7 @@ sys.path.append(
 )
 
 from api.db.conn import Connector
+from api.cruds.playlist_musics import PlaylistMusics
 from api.libs.plalylist_url_handling import Format
 
 
@@ -21,33 +22,46 @@ class Cron():
 	def __init__( self ):
 		ins = Connector()
 		self.f_ins = Format()
+		self.pm_ins = PlaylistMusics()
 		self.conn = ins.Connector()
 	#--- EoF ---
 
 	def execute( self ):
 		d = self.checklist()
-		checklist = [ i.get( "p_org_id" ) for i in d ]
-		api_list = self.api_data( checklist )
-		db_list = self.db_data( checklist )
+		self.checklists = [ i.get( "p_org_id" ) for i in d ]
+		api_list = self.api_data( self.checklists )
+		db_list = self.db_data( self.checklists )
 		new, dele = self.diff_check( api_list, db_list )
 
 		print( "OK" )
 	#--- EoF ---
 
 	def renew( self, new ):
-		musics = [
-			[
-				i[ "music_name" ],
-				i[ "m_org_id" ],
-				i[ "m_org_id" ]
+		for n in range( self.check_count ):
+			musics = [
+				[
+					i[ "music_name" ],
+					i[ "m_org_id" ],
+					i[ "m_org_id" ]
+				]
+				for i in new[ n ]
 			]
-			for i in new
-		]
-		try:
-			self.musics_insert( musics )
-		except Exception as e:
-			print( "%s" % ( [e.args, ] ), file=sys.stderr )
-		#-- except
+			pm_bulk = [
+				[
+					self.checklists[ n ],
+					i[ "m_org_id" ],
+					self.checklists[ n ],
+					i[ "m_org_id" ],
+				]
+				for i in new[ n ]
+			]
+			try:
+				self.musics_insert( musics )
+				self.playlist_musics_insert( pm_bulk )
+			except Exception as e:
+				print( "%s" % ( [e.args, ] ), file=sys.stderr )
+			#-- except
+		#-- for
 	#--- EoF ---
 
 	def del_deal( self, dele ):
@@ -159,6 +173,27 @@ class Cron():
 		#-- except
 	#--- EoF ---
 
+	def playlist_musics_insert( self, pm_list ):
+		cur = self.conn.cursor()
+		sql = self.insert_pm_sql()
+		try:
+			cur.executemany(
+				sql,
+				pm_list,
+			)
+			self.conn.commit()
+			if cur.rowcount != len( pm_list ):
+				print( "INSERT OK" )
+			#-- if
+			else:
+				print( "SOME OF DUPLICATED" )
+			#-- else
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+	#--- EoF ---
+
 
 	def main( self, argc, argv ):
 		self.execute()
@@ -208,17 +243,22 @@ class Cron():
 		return sql
 	#--- EoF ---
 
-	def delete_sql( self ):
+	def insert_pm_sql( self ):
 		sql = """
-		UPDATE
-			t_user_playlists
-		SET
-			flag = false,
-			modified_at = CURRENT_TIMESTAMP
-		WHERE
-			uid = %s
-		AND
-			p_org_id = %s
+		INSERT INTO t_playlist_musics (
+			p_org_id,
+			m_org_id
+		)
+		SELECT
+			%s,
+			%s
+			WHERE NOT EXISTS (
+				SELECT 1 FROM t_playlist_musics
+				WHERE
+					p_org_id = %s
+				AND
+					m_org_id = %s
+			)
 		;
 		"""
 		return sql
