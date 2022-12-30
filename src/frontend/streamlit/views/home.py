@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import sys
 import streamlit as st
 
 from libs.recommend import Recommend
@@ -52,12 +51,11 @@ class Home():
 		tag1.subheader( "About the technologies and frameworks used" )
 		tag1.write(
 			"""
-			* Python 3.9
-			* FastAPI 0.85
+			* Python
+			* FastAPI
 			* uvicorn
-			* SQLAlchemy 1.4
 			* Docker
-			* MySQL
+			* PostgreSQL
 			* Streamlit
 			* Nginx
 			* YoutubeAPI
