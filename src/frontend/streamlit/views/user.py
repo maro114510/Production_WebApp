@@ -66,6 +66,12 @@ class User():
 				#-- else
 			#-- if
 		#-- with
+		st.markdown( "### Exclude playlists from monitoring" )
+
+		p_list = st.multiselect(
+			label="Select playlists not to be monitored",
+			options=[]
+		)
 	#--- EoF ---
 #--- User ---
 
