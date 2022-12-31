@@ -45,6 +45,24 @@ services:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 
+  https-portal:
+    image: steveltn/https-portal:1
+    container_name: https_portal
+    ports:
+      - "80:80"
+      - "443:443"
+    tty: true
+    restart: always
+    volumes:
+      - ./Certs/:/var/lib/https-portal/
+    environment:
+      # DOMAINS: www.youtube-diff-checker.com -> http://frontend:8503
+      DOMAINS: sample-site.com -> http://frontend:8503
+      STAGE: local
+      # FORCE_RENEW: 'true'
+    links:
+      - frontend
+
 volumes:
   db_master:
 
