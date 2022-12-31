@@ -21,7 +21,10 @@ class Home():
 		st.write( "#### This is my favorite song." )
 		with st.expander( "Open to see" ):
 			url = self.r_ins.execute()
-			st.video( url )
+			if url is None:
+				st.video( "https://youtu.be/kQv6TjPypfI" )
+			else:
+				st.video( url )
 		# -- with
 
 		col1, col2 = st.columns( 2 )
