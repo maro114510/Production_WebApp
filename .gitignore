@@ -36,6 +36,7 @@ poetry.toml
 # *.json
 memo
 
+Certs/
 
 ### macOS ###
 # General
