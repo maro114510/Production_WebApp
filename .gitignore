@@ -35,6 +35,8 @@ poetry.toml
 # *.mp4
 # *.json
 
+Certs
+
 
 ### macOS ###
 # General
