@@ -5,7 +5,12 @@ from fastapi import FastAPI
 
 from api.routers import users, playlists, musics, user_playlists, playlist_musics, interface
 
-app = FastAPI()
+app = FastAPI(
+        title="Youtube Diff Checker",
+        description="""
+	バックエンド部分の処理
+	""",
+)
 
 
 app.include_router( users.router )
