@@ -21,6 +21,11 @@ async def get_playlist_info( p_org_id: str ):
 	return ins.get_one_playlist_info( p_org_id )
 #--- EoF ---
 
+@router.get( "/playlists/playlist_name", tags=[ "Playlists" ] )
+async def get_playlist_info_by_id( playlist_name: str ):
+	return ins.get_by_name_playlist_info( playlist_name )
+#--- EoF ---
+
 @router.post( "/playlists/", tags=[ "Playlists" ] )
 async def create_playlist( 
 	playlist_name: str,

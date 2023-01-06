@@ -138,12 +138,16 @@ class UserPlaylists():
 				)
 			)
 			self.conn.commit()
-			print( "DELETE OK" )
+			if cur.rowcount != 0:
+				print( "UPDATE OK" )
+				return 0
+			#-- if
+			else:
+				return 1
 		except Exception as e:
 			self.conn.rollback()
 			raise e
 		#-- except
-		return 0
 	#--- EoF ---
 
 	def execute( self ):
