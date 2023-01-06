@@ -57,6 +57,26 @@ class Playlists():
 		#-- except
 	#--- EoF ---
 
+	def get_by_name_playlist_info( self, playlist_name ):
+		cur = self.conn.cursor( cursor_factory=RealDictCursor )
+		sql = self.select_by_name_sql()
+		try:
+			cur.execute(
+				sql,
+				(
+					playlist_name,
+				)
+			)
+			result = cur.fetchone()
+			self.conn.commit()
+			print( "SELECT OK" )
+			return result
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+	#--- EoF ---
+
 	def insert_playlist( self, p_name, p_org_id ):
 		cur = self.conn.cursor()
 		sql = self.insert_sql()
@@ -126,6 +146,18 @@ class Playlists():
 			t_playlists
 		WHERE
 			p_org_id = %s;
+		"""
+		return sql
+	#--- EoF ---
+
+	def select_by_name_sql( self ):
+		sql = """
+		SELECT DISTINCT
+			*
+		FROM
+			t_playlists
+		WHERE
+			playlist_name = %s;
 		"""
 		return sql
 	#--- EoF ---

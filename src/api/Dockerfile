@@ -5,6 +5,10 @@ WORKDIR /src
 
 RUN pip install poetry
 
+RUN apt-get update && \
+	apt-get install -y cron \
+	vim
+
 COPY pyproject.toml* poetry.lock* ./
 
 RUN poetry config virtualenvs.in-project true

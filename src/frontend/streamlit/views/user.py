@@ -43,7 +43,7 @@ class User():
 		st.markdown( "### Register new playlist" )
 		with st.form( key = "key" ):
 			url = st.text_input( "Input playlist url" )
-			submit_button = st.form_submit_button( label = "submit" )
+			submit_button = st.form_submit_button( label = "Submit" )
 			if submit_button:
 				res = self.lib_ins.first_register( uid, url )
 				if res == 0:
@@ -64,6 +64,31 @@ class User():
 						"""
 					)
 				#-- else
+			#-- if
+		#-- with
+
+		st.markdown( "### Exclude playlists from monitoring" )
+		with st.form( key = "del" ):
+			p_list = st.multiselect(
+				label="Select playlists not to be monitored",
+				options=r.iloc[:][ "Playlist Name" ],
+			)
+			submit_button = st.form_submit_button( label = "Submit" )
+			if submit_button:
+				btn = self.lib_ins.exclude( uid, p_list )
+			#-- if
+		#-- with
+
+		st.markdown( "### Restore excluded playlist " )
+		with st.form( key = "up" ):
+			dd_r = self.lib_ins.get_d_users_playlist( uid )
+			p_list = st.multiselect(
+				label="Select playlists restored",
+				options=dd_r.iloc[:][ "Playlist Name" ],
+			)
+			submit_button = st.form_submit_button( label = "Submit" )
+			if submit_button:
+				btn = self.lib_ins.restore( uid, p_list )
 			#-- if
 		#-- with
 	#--- EoF ---

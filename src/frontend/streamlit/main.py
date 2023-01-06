@@ -19,7 +19,7 @@ p_ins = Playlist()
 
 st.set_page_config(
 	page_title="Youtube Diff Checker",
-	page_icon="./img/youtube_profile_image.png",
+	# page_icon="./img/youtube_profile_image.png",
 	layout="wide",
 	menu_items={
 		"Get help": None,
@@ -27,6 +27,7 @@ st.set_page_config(
 		"About": None
 	}
 )
+
 page_list = [ "HOME", "USER", "USER REGISTER", "PLAYLIST" ]
 page = st.sidebar.selectbox( "Choose your page", page_list )
 

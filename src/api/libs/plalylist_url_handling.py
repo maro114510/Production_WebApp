@@ -46,6 +46,18 @@ class Format():
 		return res
 	# --- EoF ---
 
+	def get_plane_data_by_id( self, id ):
+		headers = {
+			"accept": "application/json",
+			"content-type": "application/x-www-form-urlencoded",
+		}
+		res = requests.post(
+			f"https://2y5u90.deta.dev/{id}",
+			headers=headers
+		).json()
+		return res.get( "music_id_list" )
+	# --- EoF ---
+
 
 	def get_row_data( self, url ):
 		headers = {

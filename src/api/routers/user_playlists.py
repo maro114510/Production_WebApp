@@ -73,10 +73,13 @@ async def update_user_playlists(
 	p_org_id
 ):
 	try:
-		ins.update_user_playlist(
+		judge = ins.update_user_playlist(
 			uid,
 			p_org_id
 		)
+		if judge != 0:
+			print( "NO EFFECT" )
+		#-- if
 	except Exception as e:
 		print( "%s" % ( [e.args, ] ), file=sys.stderr )
 		raise HTTPException(
