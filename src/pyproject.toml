@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "main"
+name = "ytb"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
@@ -7,18 +7,14 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-fastapi = "^0.85.0"
-uvicorn = {extras = ["standard"], version = "^0.18.3"}
-SQLAlchemy = "^1.4.41"
-aiomysql = "^0.1.1"
+fastapi = "^0.88.0"
+uvicorn = {extras = ["standard"], version = "^0.20.0"}
+pydantic = "^1.10.2"
 requests = "^2.28.1"
+python-dotenv = "^0.21.0"
+asyncpg = "^0.27.0"
+psycopg2 = "^2.9.5"
 
-
-[tool.poetry.group.dev.dependencies]
-pytest-asyncio = "^0.19.0"
-aiosqlite = "^0.17.0"
-httpx = "^0.23.0"
-sqlite_checkforeignkeys = "^1.0.3"
 
 [build-system]
 requires = ["poetry-core"]

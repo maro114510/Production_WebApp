@@ -1,148 +1,51 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import requests
-from fastapi import APIRouter, Depends
-from fastapi.exceptions import HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
+import sys
+from fastapi import APIRouter, HTTPException
 
-import api.schemas.playlists as schema
-import api.cruds.playlists as playlist_crud
-from api.db import get_db
-from api.lib.library import generate_playlist_id
+from api.cruds.playlists import Playlists
 
+ins = Playlists()
 router = APIRouter()
 
 
-@router.get("/playlists/", tags=["Playlists"])
-async def read_playlists(db: AsyncSession = Depends(get_db)):
-    """_summary_
-
-    Args:
-            db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
-
-    Returns:
-            list: Playlist schemas list
-    """
-    return await playlist_crud.get_playlists(db)
-# --- EoF ---
+@router.get( "/playlists/", tags=[ "Playlists" ] )
+async def list_playlists():
+	return ins.get_all_playlists_full_info()
+#--- EoF ---
 
 
-@router.get("/playlists/{playlist_id}", tags=["Playlists"])
-async def read_playlist_by_id(playlist_id: int, db: AsyncSession = Depends(get_db)):
-    """_summary_
+@router.get( "/playlists/playlist", tags=[ "Playlists" ] )
+async def get_playlist_info( p_org_id: str ):
+	return ins.get_one_playlist_info( p_org_id )
+#--- EoF ---
 
-    Args:
-            playlist_id (int): playlist serial number
-            db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
+@router.get( "/playlists/playlist_name", tags=[ "Playlists" ] )
+async def get_playlist_info_by_id( playlist_name: str ):
+	return ins.get_by_name_playlist_info( playlist_name )
+#--- EoF ---
 
-    Returns:
-            schema: Playlist schema
-    """
-    return await playlist_crud.get_playlist_by_id(db, playlist_id)
-# --- EoF ---
+@router.post( "/playlists/", tags=[ "Playlists" ] )
+async def create_playlist( 
+	playlist_name: str,
+	p_org_id: str
+) -> int:
+	try:
+		ins.insert_playlist(
+			playlist_name,
+			p_org_id
+		)
+	except Exception as e:
+		print( "%s" % ( [e.args, ] ), file=sys.stderr )
+		raise HTTPException(
+			status_code=404,
+			detail="",
+		)
+	#-- except
+	return 0
+#--- EoF ---
 
-
-@router.get("/playlist/original", tags=["Playlists"])
-async def read_playlist_by_original_id(playlist_original_id: str, db: AsyncSession = Depends(get_db)):
-    """_summary_
-
-    Args:
-            playlist_original_id (str): playlist original id
-            db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
-
-    Returns:
-            schema: playlist schema
-    """
-    return await playlist_crud.get_playlist_by_original_id(db, playlist_original_id)
-# --- EoF ---
-
-
-@router.post("/playlists/", tags=["Playlists"])
-async def create_playlist(url: str, db: AsyncSession = Depends(get_db)):
-    """_summary_
-
-    Args:
-            url (str): playlist url
-            db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
-
-    Raises:
-            HTTPException: 404
-
-    Returns:
-            schema: Playlist schema
-    """
-    headers = {
-        'accept': 'application/json',
-        'content-type': 'application/x-www-form-urlencoded',
-    }
-    playlist_id = generate_playlist_id(url)
-    res = requests.post(
-        f'https://2y5u90.deta.dev/{playlist_id}',
-        headers=headers)
-    if res.status_code != 200:
-        HTTPException(status_code=500)
-    res = res.json()
-    playlist_name = res.get("playlistname")
-    playlist_in = schema.PlaylistCreate(
-        playlist_name=playlist_name,
-        playlist_original_id=playlist_id
-    )
-    # r = await playlist_crud.create_playlist(db,playlist_in)
-    try:
-        r = await playlist_crud.create_playlist(db, playlist_in)
-    except Exception as e:
-        i = playlist_in.get("playlist_original_id")
-        raise HTTPException(status_code=404, detail=f"{i} is duplicated.")
-    # -- except
-    return r
-# --- EoF ---
-
-
-@router.put("/playlists/{playlist_original_id}", tags=["Playlists"])
-async def update_playlist(playlist_original_id: str, playlist_body: schema.PlaylistCreate, db: AsyncSession = Depends(get_db)):
-    """_summary_
-
-    Args:
-            playlist_original_id (str): playlist original id
-            playlist_body (schema.PlaylistCreate): PlaylistCreate schema
-            db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
-
-    Raises:
-            HTTPException: 404
-
-    Returns:
-            schema: Playlist schema
-    """
-    playlist = await playlist_crud.get_playlist_by_original_id(db, playlist_original_id=playlist_original_id)
-    if playlist is None:
-        raise HTTPException(status_code=404,
-                            detail=f"{playlist_original_id} is not found.")
-    return await playlist_crud.update_playlist(db, playlist_original_id, original=playlist_body)
-# --- EoF ---
-
-
-@router.delete("/playlists/{playlist_id}",
-               tags=["Playlists"])
-async def delete_playlist(playlist_original_id: str, db: AsyncSession = Depends(get_db)):
-    """_summary_
-
-    Args:
-            playlist_original_id (str): playlist original id
-            db (AsyncSession, optional): AsyncSession. Defaults to Depends(get_db).
-
-    Raises:
-            HTTPException: 404
-
-    Returns:
-            schema: Playlist Schema
-    """
-    playlist = await playlist_crud.get_playlist_by_original_id(db, playlist_original_id=playlist_original_id)
-    if playlist is None:
-        raise HTTPException(status_code=404,
-                            detail=f"{playlist_original_id} is not found.")
-    return await playlist_crud.delete_playlist(db, original=playlist)
-# --- EoF ---
 
 
 # End of Script

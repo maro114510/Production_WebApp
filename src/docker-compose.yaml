@@ -1,7 +1,8 @@
 version: '3'
-
 services:
-  main:
+  ytb:
+    container_name: ytb
+    image: ytb:1.2
     build:
       context: ./api
     volumes:
@@ -9,61 +10,61 @@ services:
       - .:/src
     ports:
       - 8000:8000
-    environment:
-      TZ: 'Asia/Tokyo'
+    depends_on:
+      - db
 
-  db:
-    image: mysql:8.0
-    # デプロイ環境注意
-    platform: linux/x86_64  
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      # デプロイ環境
-      # MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: 'demo'
-      TZ: 'Asia/Tokyo'
-    volumes:
-      - mysql_data:/var/lib/mysql
-      # confファイルにマウントしてエンコードを変更
-      - ./api/mysql.conf:/etc/mysql/conf.d/my.cnf
-    command: --default-authentication-plugin=mysql_native_password
-    ports:
-      - 33306:3306
-    restart: unless-stopped
-
-  cron:
-    build:
-      context: ./cron
-    environment:
-      TZ: 'Asia/Tokyo'
-    volumes:
-      - ./:/workspace
-    stdin_open: true
-    tty: true
-
-  st_server:
+  frontend:
+    container_name: frontend
+    image: frontend:1.0
     build: 
-      context: ./st_server
-    command: streamlit run streamlit1/sample_1.py --server.port=8503 
+      context: ./frontend
+    command: streamlit run main.py --server.port=8503 
     ports:
       - 8503:8503
     volumes:
-      - ./st_server/public/streamlit1:/usr/share/nginx/html/streamlit1
+      - ./frontend/streamlit:/usr/share/nginx/html/streamlit/
     environment:
       TZ: 'Asia/Tokyo'
+    depends_on:
+      - db
+      - ytb
 
-  nginx:
-    build: 
-      context: ./Nginx
+  db:
+    image: postgres:$VERSION
+    container_name: postgres
+    command: -c "config_file=/etc/postgresql/postgresql.conf"
     ports:
-      - 8080:8080
-    links:
-      - st_server
+      - 5432:5432
     volumes:
-      - ./Nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./Nginx/public/index.html:/usr/share/nginx/html/index.html
+      - db_master:/var/lib/postgresql/data
+      - ./script:/docker-entrypoint-initdb.d
+      - ./config/postgresql.conf:/etc/postgresql/postgresql.conf
     environment:
-      TZ: 'Asia/Tokyo'
+      TZ: "Asia/Tokyo"
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+
+  https-portal:
+    image: steveltn/https-portal:1
+    container_name: https_portal
+    ports:
+      - "80:80"
+      - "443:443"
+    tty: true
+    restart: always
+    volumes:
+      - ./Certs/:/var/lib/https-portal/
+    environment:
+      # DOMAINS: www.youtube-diff-checker.com -> http://frontend:8503
+      DOMAINS: sample-site.com -> http://frontend:8503
+      STAGE: local
+      # FORCE_RENEW: 'true'
+    links:
+      - frontend
 
 volumes:
-  mysql_data:
+  db_master:
+
+
+# end of docker-compose

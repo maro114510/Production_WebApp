@@ -13,17 +13,16 @@ sys.path.append(
 	)
 )
 
-
 from api.db.conn import Connector
 
 
-class UserPlaylists():
+class PlaylistMusics():
 	def __init__( self ):
 		ins = Connector()
 		self.conn = ins.Connector()
 	#--- EoF ---
 
-	def get_all_user_playlists_full_info( self ):
+	def get_all_playlist_musics_full_info( self ):
 		cur = self.conn.cursor( cursor_factory=RealDictCursor )
 		sql = self.select_all_sql()
 		try:
@@ -38,14 +37,14 @@ class UserPlaylists():
 		#-- except
 	#--- EoF ---
 
-	def get_user_playlists_byUid( self, uid ):
+	def get_one_playlist_musics_info( self, p_org_id ):
 		cur = self.conn.cursor( cursor_factory=RealDictCursor )
-		sql = self.select_by_uid_sql()
+		sql = self.select_by_pid_sql()
 		try:
 			cur.execute(
 				sql,
 				(
-					uid,
+					p_org_id,
 				)
 			)
 			results = cur.fetchall()
@@ -58,14 +57,14 @@ class UserPlaylists():
 		#-- except
 	#--- EoF ---
 
-	def get_one_user_playlists_d_info( self, uid ):
+	def get_del_playlist_musics_info( self, p_org_id ):
 		cur = self.conn.cursor( cursor_factory=RealDictCursor )
-		sql = self.select_d_by_uid_sql()
+		sql = self.select_by_pid_d_sql()
 		try:
 			cur.execute(
 				sql,
 				(
-					uid,
+					p_org_id,
 				)
 			)
 			results = cur.fetchall()
@@ -78,28 +77,42 @@ class UserPlaylists():
 		#-- except
 	#--- EoF ---
 
-	def user_playlists_insert( self, uid, p_org_id ):
+	def playlist_musics_insert( self, p_org_id, m_org_id ):
 		cur = self.conn.cursor()
 		sql = self.insert_sql()
 		try:
 			cur.execute(
 				sql,
 				(
-					uid,
 					p_org_id,
-					uid,
+					m_org_id,
 					p_org_id,
+					m_org_id,
 				)
 			)
 			self.conn.commit()
+			print( "INSERT OK" )
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+	#--- EoF ---
 
-			if cur.rowcount != 0:
+	def playlist_musics_bulk_insert( self, bulk ):
+		cur = self.conn.cursor()
+		sql = self.insert_sql()
+		try:
+			cur.executemany(
+				sql,
+				bulk,
+			)
+			self.conn.commit()
+
+			if cur.rowcount != len( bulk ):
 				print( "INSERT OK" )
-				return 0
 			#-- if
 			else:
-				print( "DUPRICATED" )
-				return 1
+				print( "SOME OF DUPLICATED" )
 			#-- else
 		except Exception as e:
 			self.conn.rollback()
@@ -107,15 +120,15 @@ class UserPlaylists():
 		#-- except
 	#--- EoF ---
 
-	def delete_user_playlist( self, uid, p_org_id ):
+	def delete_playlist_musics( self, p_org_id, m_org_id ):
 		cur = self.conn.cursor()
 		sql = self.delete_sql()
 		try:
 			cur.execute(
 				sql,
 				(
-					uid,
 					p_org_id,
+					m_org_id,
 				)
 			)
 			self.conn.commit()
@@ -127,30 +140,6 @@ class UserPlaylists():
 		return 0
 	#--- EoF ---
 
-	def update_user_playlist( self, uid, p_org_id ):
-		cur = self.conn.cursor()
-		sql = self.update_sql()
-		try:
-			cur.execute(
-				sql,
-				(
-					uid,
-					p_org_id,
-				)
-			)
-			self.conn.commit()
-			if cur.rowcount != 0:
-				print( "UPDATE OK" )
-				return 0
-			#-- if
-			else:
-				return 1
-		except Exception as e:
-			self.conn.rollback()
-			raise e
-		#-- except
-	#--- EoF ---
-
 	def execute( self ):
 		print( "OK" )
 	#--- EoF ---
@@ -160,62 +149,64 @@ class UserPlaylists():
 		return 0
 	#--- EoF ---
 
+	def select_all_sql( self ):
+		sql = """
+		SELECT
+			*
+		FROM
+			t_playlist_musics
+		WHERE
+			status = 0;
+		"""
+		return sql
+	#--- EoF ---
+
 	def insert_sql( self ):
 		sql = """
-		INSERT INTO t_user_playlists (
-			uid,
-			p_org_id
+		INSERT INTO t_playlist_musics (
+			p_org_id,
+			m_org_id
 		)
 		SELECT
 			%s,
 			%s
 			WHERE NOT EXISTS (
-				SELECT 1 FROM t_user_playlists 
+				SELECT 1 FROM t_playlist_musics
 				WHERE
-					uid = %s
-				AND
 					p_org_id = %s
+				AND
+					m_org_id = %s
 			)
 		;
 		"""
 		return sql
 	#--- EoF ---
 
-	def select_all_sql( self ):
-		sql = """
-		SELECT
-			*
-		FROM
-			t_user_playlists;
-		"""
-		return sql
-	#--- EoF ---
-
-	def select_by_uid_sql( self ):
+	def select_by_pid_sql( self ):
 		sql = """
 			SELECT
 				*
 			FROM
-				t_user_playlists
+				t_playlist_musics
 			WHERE
-				uid = %s
+				p_org_id = %s
 			AND
-				flag = True
+				status = 0
 			;
 		"""
 		return sql
 	#--- EoF ---
 
-	def select_d_by_uid_sql( self ):
+	def select_by_pid_d_sql( self ):
 		sql = """
 			SELECT
 				*
 			FROM
-				t_user_playlists
+				t_playlist_musics
 			WHERE
-				uid = %s
+				p_org_id = %s
 			AND
-				flag = false
+				status = 1
 			;
 		"""
 		return sql
@@ -224,41 +215,25 @@ class UserPlaylists():
 	def delete_sql( self ):
 		sql = """
 		UPDATE
-			t_user_playlists
+			t_playlist_musics
 		SET
-			flag = false,
+			status = 1,
 			modified_at = CURRENT_TIMESTAMP
 		WHERE
-			uid = %s
-		AND
 			p_org_id = %s
+		AND
+			m_org_id = %s
 		;
 		"""
 		return sql
 	#--- EoF ---
-
-	def update_sql( self ):
-		sql = """
-		UPDATE
-			t_user_playlists
-		SET
-			flag = true,
-			modified_at = CURRENT_TIMESTAMP
-		WHERE
-			uid = %s
-		AND
-			p_org_id = %s
-		;
-		"""
-		return sql
-	#--- EoF ---
-#--- UserPlaylists ---
+#--- PlaylistMusics ---
 
 
 # Entry Point
 
 if __name__ == "__main__":
-	ins = UserPlaylists()
+	ins = PlaylistMusics()
 	sys.exit( ins.main( len( sys.argv ), sys.argv ) )
 #-- if
 
