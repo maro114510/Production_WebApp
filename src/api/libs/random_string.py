@@ -12,6 +12,14 @@ class RandomString():
 	#--- EoF ---
 
 	def execute( self, num: int ) -> str:
+		"""_summary_
+
+		Args:
+			num (int): random choice
+
+		Returns:
+			url: url string
+		"""
 		rand_list = [ random.choice( string.ascii_letters ) for _ in range( num ) ]
 		return "".join( rand_list )
 	#--- EoF ---
