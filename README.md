@@ -46,9 +46,7 @@ Some functions can be used without user registration
 * Python 3.9
 * FastAPI 0.85
 * uvicorn
-* SQLAlchemy 1.4
 * Docker
-* MySQL
 * Streamlit
 * Nginx
 * YoutubeAPI
