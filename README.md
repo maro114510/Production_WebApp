@@ -17,8 +17,6 @@ It is an application that displays the songs in the playlist registered in Youtu
 In principle, this is an application to be used by registered users
 Some functions can be used without user registration
 
-![img](src/st_server/public/streamlit1/img/linkedin_banner_image_1.png)
-
 ## URL
 
 ---
@@ -53,7 +51,7 @@ Some functions can be used without user registration
 
 ### System overview
 
-![img](src/st_server/public/streamlit1/img/sample.png)
+!![](https://storage.googleapis.com/zenn-user-upload/84bf99affa2c-20230114.png)
 
 ### GithubActions
 

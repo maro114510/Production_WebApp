@@ -40,5 +40,7 @@ poetry.toml
 # General
 .DS_Store
 
+memo
+
 
 # End Of Ignore
