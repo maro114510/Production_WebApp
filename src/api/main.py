@@ -3,7 +3,7 @@
 
 from fastapi import FastAPI
 
-from api.routers import musics, playlists, users, user_playlists, n_playlist_musics, d_playlist_musics, firtst_register
+from api.routers import users, playlists, musics, user_playlists, playlist_musics, interface
 
 app = FastAPI(
         title="Youtube Diff Checker",
@@ -12,14 +12,13 @@ app = FastAPI(
 	""",
 )
 
-# routers
-app.include_router(users.router)
-app.include_router(playlists.router)
-app.include_router(musics.router)
-app.include_router(user_playlists.router)
-app.include_router(n_playlist_musics.router)
-app.include_router(d_playlist_musics.router)
-app.include_router(firtst_register.router)
+
+app.include_router( users.router )
+app.include_router( playlists.router )
+app.include_router( musics.router )
+app.include_router( user_playlists.router )
+app.include_router( playlist_musics.router )
+app.include_router( interface.router )
 
 
 # End of Script

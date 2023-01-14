@@ -1,8 +1,11 @@
 name: Format python code
 
 on:
-  push:
-    branches: [ main ]
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
 jobs:
   autopep8:
     runs-on: ubuntu-latest

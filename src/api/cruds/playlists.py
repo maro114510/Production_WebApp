@@ -2,167 +2,176 @@
 # -*- coding: utf8 -*-
 
 import sys
-from typing import Optional, Tuple
-from unittest import result
-from sqlalchemy import select
-from sqlalchemy.engine import Result
-from sqlalchemy.ext.asyncio import AsyncSession
+from pathlib import Path
+from psycopg2.extras import RealDictCursor
 
-import api.models.db_model as model
-import api.schemas.playlists as schema
-
-
-async def get_playlists(db_session: AsyncSession):
-    """_summary_
-
-    Args:
-            db_session (AsyncSession): AsyncSession
-
-    Returns:
-            list: schema list
-    """
-    result: Result = await (
-        db_session.execute(
-            select(
-                model.Playlist.playlist_id,
-                model.Playlist.playlist_name,
-                model.Playlist.playlist_original_id
-            )
-        )
-    )
-    return result.all()
-# --- EoF ---
+sys.path.append(
+	str(
+		Path(
+			__file__
+		).resolve().parent.parent.parent
+	)
+)
 
 
-async def get_playlist_by_id(db_session: AsyncSession, playlist_id: int):
-    """_summary_
-
-    Args:
-            db_session (AsyncSession): AsyncSession
-            playlist_id (int): playlist serial id
-
-    Returns:
-            schema: Playlist schema
-    """
-    result: Result = await (
-        db_session.execute(
-            select(
-                model.Playlist.playlist_id,
-                model.Playlist.playlist_name,
-                model.Playlist.playlist_original_id,
-            ).filter(
-                model.Playlist.playlist_id == playlist_id
-            )
-        )
-    )
-    return result.first()
-# --- EoF ---
+from api.db.conn import Connector
 
 
-async def get_playlist_by_original_id(db_session: AsyncSession, playlist_original_id: str):
-    """_summary_
+class Playlists():
+	def __init__( self ):
+		ins = Connector()
+		self.conn = ins.Connector()
+	#--- EoF ---
 
-    Args:
-            db_session (AsyncSession): AsyncSession
-            playlist_original_id (str): playlist original oid
+	def get_all_playlists_full_info( self ):
+		cur = self.conn.cursor( cursor_factory=RealDictCursor )
+		sql = self.select_all_sql()
+		try:
+			cur.execute( sql )
+			results = cur.fetchall()
+			self.conn.commit()
+			print( "SELECT OK" )
+			return results
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+	#--- EoF ---
 
-    Returns:
-            schema: Playlist schema
-    """
-    result: Result = await (
-        db_session.execute(
-            select(
-                model.Playlist.playlist_id,
-                model.Playlist.playlist_name,
-                model.Playlist.playlist_original_id
-            ).filter(
-                model.Playlist.playlist_original_id == playlist_original_id
-            )
-        )
-    )
-    return result.first()
-# --- EoF ---
+	def get_one_playlist_info( self, p_org_id ):
+		cur = self.conn.cursor( cursor_factory=RealDictCursor )
+		sql = self.select_one_sql()
+		try:
+			cur.execute(
+				sql,
+				(
+					p_org_id,
+				)
+			)
+			result = cur.fetchone()
+			self.conn.commit()
+			print( "SELECT OK" )
+			return result
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+	#--- EoF ---
+
+	def get_by_name_playlist_info( self, playlist_name ):
+		cur = self.conn.cursor( cursor_factory=RealDictCursor )
+		sql = self.select_by_name_sql()
+		try:
+			cur.execute(
+				sql,
+				(
+					playlist_name,
+				)
+			)
+			result = cur.fetchone()
+			self.conn.commit()
+			print( "SELECT OK" )
+			return result
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+	#--- EoF ---
+
+	def insert_playlist( self, p_name, p_org_id ):
+		cur = self.conn.cursor()
+		sql = self.insert_sql()
+		try:
+			cur.execute(
+				sql,
+				(
+					p_name,
+					p_org_id,
+					p_org_id,
+				)
+			)
+			self.conn.commit()
+			if cur.rowcount != 0:
+				print( "INSERT OK" )
+			#-- if
+			else:
+				print( "DIPRICATED" )
+			#-- else
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+	#--- EoF ---
+
+	def execute( self ):
+		print( "OK" )
+	#--- EoF ---
+
+	def main( self, argc, argv ):
+		self.execute()
+		return 0
+	#--- EoF ---
+
+	def insert_sql( self ):
+		sql = """
+		INSERT INTO t_playlists (
+			playlist_name,
+			p_org_id
+		)
+		SELECT
+			%s,
+			%s
+			WHERE NOT EXISTS (
+				SELECT 1 FROM t_playlists WHERE p_org_id = %s
+			)
+		;
+		"""
+		return sql
+	#--- EoF ---
+
+	def select_all_sql( self ):
+		sql = """
+		SELECT
+			*
+		FROM
+			t_playlists;
+		"""
+		return sql
+	#--- EoF ---
+
+	def select_one_sql( self ):
+		sql = """
+		SELECT
+			*
+		FROM
+			t_playlists
+		WHERE
+			p_org_id = %s;
+		"""
+		return sql
+	#--- EoF ---
+
+	def select_by_name_sql( self ):
+		sql = """
+		SELECT DISTINCT
+			*
+		FROM
+			t_playlists
+		WHERE
+			playlist_name = %s;
+		"""
+		return sql
+	#--- EoF ---
+#--- Playlists ---
 
 
-async def create_playlist(
-    db: AsyncSession, playlist_create: schema.PlaylistCreate
-):
-    """_summary_
+# Entry Point
 
-    Args:
-            db (AsyncSession): AsyncSession
-            playlist_create (schema.PlaylistCreate): schema
+if __name__ == "__main__":
+	ins = Playlists()
+	sys.exit( ins.main( len( sys.argv ), sys.argv ) )
+#-- if
 
-    Returns:
-            schema: Playlist schema
-    """
-    playlist = model.Playlist(
-        playlist_name=playlist_create.playlist_name,
-        playlist_original_id=playlist_create.playlist_original_id
-    )
-    result: Result = await (
-        db.execute(
-            select(
-                model.Playlist.playlist_id,
-                model.Playlist.playlist_name,
-                model.Playlist.playlist_original_id
-            ).filter(
-                model.Playlist.playlist_original_id == playlist_create.playlist_original_id
-            )
-        )
-    )
-    if result.first():
-        return
-    else:
-        db.add(playlist)
-        await db.commit()
-        await db.refresh(playlist)
-        return playlist
-# --- EoF ---
-
-
-async def update_playlist(
-    db: AsyncSession, playlist: str, original: schema.PlaylistCreate
-):
-    """_summary_
-
-    Args:
-            db (AsyncSession): AsyncSession
-            playlist (str): playlist original id
-            original (schema.PlaylistCreate): PlaylistCreate schema
-
-    Returns:
-            schema: PlaylistCreateResponse schema
-    """
-    result = await db.execute(
-        select(
-            model.Playlist
-        ).filter(
-            model.Playlist.playlist_original_id == playlist
-        )
-    )
-    buf = result.first()
-    buf[0].playlist_name = original.playlist_name
-    db.add(buf[0])
-    await db.commit()
-    await db.refresh(buf[0])
-    return buf[0]
-# --- EoF ---
-
-
-async def delete_playlist(
-    db_session: AsyncSession, original: model.Playlist
-):
-    """_summary_
-
-    Args:
-            db_session (AsyncSession): AsyncSession
-            original (model.Playlist): Playlist schema
-    """
-    sql = "DELETE FROM playlists WHERE playlist_id = %s ;" % original.playlist_id
-    await db_session.execute(sql)
-    await db_session.commit()
-# --- EoF ---
 
 
 # End of Script

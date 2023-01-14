@@ -1,0 +1,86 @@
+#!/usr/bin/env python
+# -*- coding: utf8 -*-
+
+import streamlit as st
+
+from libs.recommend import Recommend
+
+
+class Home():
+	def __init__( self ):
+		self.r_ins = Recommend()
+	#--- EoF ---
+
+	def home_page( self ):
+		st.title( "Welcome to Youtube Diff Checker!!" )
+		st.caption( "This application is currently under development." )
+
+		st.header( "Overview of this application😀" )
+		st.subheader( "Capture the missing songs in your playlist" )
+
+		st.write( "#### This is my favorite song." )
+		with st.expander( "Open to see" ):
+			url = self.r_ins.execute()
+			if url is None:
+				st.video( "https://youtu.be/kQv6TjPypfI" )
+			else:
+				st.video( url )
+		# -- with
+
+		col1, col2 = st.columns( 2 )
+		col1.subheader( "Content" )
+		col1.write(
+			"""
+			* **This application is a web application that requires user registration.**
+			* Register a playlist URL and we will monitor the playlist daily.
+			* You can also view the songs and song IDs included in the playlist without having to register as a user!
+			* We are working on a future feature that will allow users to be notified by registered email.
+			"""
+		)
+		col2.subheader( "Background of Production" )
+		col2.write(
+			"""
+			* I am a heavy user of Youtube
+			* There are about 10 hours of viewing time per day
+			* The playlists alone exceed 100 and I can no longer manage my music and videos!
+			* I'm sure you've felt uncomfortable listening to music on your playlist too
+			* That is because the music is private or deleted.
+			* If the number of songs in a playlist you normally listen to is small, you can quickly see what has disappeared, but this is not the case.
+			* So we decided to create this web application.
+			"""
+		)
+
+		tag1, tag2 = st.tabs( [ "About tech", "About me" ] )
+		tag1.subheader( "About the technologies and frameworks used" )
+		tag1.write(
+			"""
+			* Python
+			* FastAPI
+			* uvicorn
+			* Docker
+			* PostgreSQL
+			* Streamlit
+			* Nginx
+			* YoutubeAPI
+			"""
+		)
+		tag2.subheader( "Contact Developer" )
+		tag2.write(
+			"""
+			* Email : parcels-dollar.0p@icloud.com
+			* Facebook : https://www.facebook.com/profile.php?id=100074151648343
+			* github : https://github.com/maro114510
+			"""
+		)
+
+		st.text( " © 2022 Atsuki Nohira " )
+
+		return 0
+	# --- EoF ---
+#--- Home ---
+
+
+
+
+
+# End of Script

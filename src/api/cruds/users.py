@@ -2,151 +2,233 @@
 # -*- coding: utf8 -*-
 
 import sys
-from typing import Optional, Tuple
-from sqlalchemy import select
-from sqlalchemy.engine import Result
-from sqlalchemy.ext.asyncio import AsyncSession
+from pathlib import Path
+from psycopg2.extras import RealDictCursor
 
-import api.models.db_model as model
-import api.schemas.users as schema
-
-
-async def get_users(db_session: AsyncSession):
-    """_summary_
-
-    Args:
-            db_session (AsyncSession): AsyncSession
-
-    Returns:
-            list: User schema list
-    """
-    result: Result = await (
-        db_session.execute(
-            select(
-                model.User.user_id,
-                model.User.user_name,
-                model.User.user_email,
-                model.User.user_pw,
-            )
-        )
-    )
-    return result.all()
-# --- EoF ---
+sys.path.append(
+	str(
+		Path(
+			__file__
+		).resolve().parent.parent.parent
+	)
+)
 
 
-async def get_user_by_id(db_session: AsyncSession, user_id: int):
-    """_summary_
-
-    Args:
-            db_session (AsyncSession): AsyncSession
-            user_id (int): user serial number
-
-    Returns:
-            schema: User schema
-    """
-    result: Result = await (
-        db_session.execute(
-            select(
-                model.User.user_id,
-                model.User.user_name,
-                model.User.user_email,
-                model.User.user_pw,
-            ).filter(
-                model.User.user_id == user_id
-            )
-        )
-    )
-    return result.first()
-# --- EoF ---
+from api.db.conn import Connector
 
 
-async def get_user_by_name(db_session: AsyncSession, user_name: str):
-    """_summary_
+class Users():
+	def __init__( self ):
+		ins = Connector()
+		self.conn = ins.Connector()
+	#--- EoF ---
 
-    Args:
-            db_session (AsyncSession): AsyncSession
-            user_name (str): user original name
+	def user_insert( self, name, email, pw ):
+		cur = self.conn.cursor()
+		sql = self.insert_sql()
+		try:
+			cur.execute(
+				sql,
+				(
+					name,
+					email,
+					pw,
+				)
+			)
+			self.conn.commit()
+			print( "INSERT OK" )
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+	#--- EoF ---
 
-    Returns:
-            schema: User schema
-    """
-    result: Result = await (
-        db_session.execute(
-            select(
-                model.User.user_id,
-                model.User.user_name,
-                model.User.user_email,
-                model.User.user_pw
-            ).filter(
-                model.User.user_name == user_name
-            )
-        )
-    )
-    return result.first()
-# --- EoF ---
+	def get_all_users_full_info( self ):
+		cur = self.conn.cursor( cursor_factory=RealDictCursor )
+		sql = self.select_all_sql()
+		try:
+			cur.execute( sql )
+			results = cur.fetchall()
+			self.conn.commit()
+			print( "SELECT OK" )
+			return results
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+	#--- EoF ---
+
+	def update_user_info(
+		self,
+		user_name,
+		user_email,
+		user_pw,
+		old_user_name,
+		old_user_email,
+	):
+		cur = self.conn.cursor()
+		sql = self.update_sql()
+		try:
+			cur.execute(
+				sql,
+				(
+					user_name,
+					user_email,
+					user_pw,
+					old_user_name,
+					old_user_email
+				)
+			)
+			self.conn.commit()
+			print( "UPDATE OK" )
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+		return 0
+	#--- EoF ---
+
+	def get_one_user_info( self, user_name, user_email ):
+		cur = self.conn.cursor( cursor_factory=RealDictCursor )
+		sql = self.select_one_sql()
+		try:
+			cur.execute(
+				sql,
+				(
+					user_name,
+					user_email,
+				)
+			)
+			result = cur.fetchone()
+			self.conn.commit()
+			print( "SELECT OK" )
+			return result
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+	#--- EoF ---
+
+	def delete_user( self, user_name, user_email ):
+		cur = self.conn.cursor()
+		sql = self.delete_sql()
+		try:
+			cur.execute(
+				sql,
+				(
+					user_name,
+					user_email,
+				)
+			)
+			self.conn.commit()
+			print( "DELETE OK" )
+		except Exception as e:
+			self.conn.rollback()
+			raise e
+		#-- except
+		return 0
+	#--- EoF ---
+
+	def execute():
+		return 0
+	#--- EoF ---
+
+	def main( self, argc, argv ):
+		self.execute()
+		return 0
+	#--- EoF ---
+
+	def select_all_sql( self ):
+		sql = """
+		SELECT
+			*
+		FROM
+			t_users
+		WHERE
+			status = 0;
+		"""
+		return sql
+	#--- EoF ---
+
+	def insert_sql( self ):
+		sql = """
+		INSERT INTO t_users (
+			user_name,
+			user_email,
+			user_pw
+		) VALUES (
+			%s,
+			%s,
+			%s
+		);
+		"""
+		return sql
+	#--- EoF ---
+
+	def select_one_sql( self ):
+		sql = """
+		SELECT
+			uid,
+			user_name,
+			user_email,
+			user_pw
+		FROM
+			t_users
+		WHERE
+			user_name = %s
+		AND
+			user_email = %s
+		AND
+			status = 0;
+		"""
+		return sql
+	#--- EoF ---
+
+	def update_sql( self ):
+		sql = """
+		UPDATE
+			t_users
+		SET
+			user_name = %s,
+			user_email = %s,
+			user_pw = %s,
+			modified_at = CURRENT_TIMESTAMP
+		WHERE
+			user_name = %s
+		AND
+			user_email = %s
+		AND
+			status = 0
+		;
+		"""
+		return sql
+	#--- EoF ---
+
+	def delete_sql( self ):
+		sql = """
+		UPDATE
+			t_users
+		SET
+			status = 1,
+			modified_at = CURRENT_TIMESTAMP
+		WHERE
+			user_name = %s
+		AND
+			user_email = %s
+		;
+		"""
+		return sql
+	#--- EoF ---
+#--- Users ---
 
 
-async def create_user(
-    db: AsyncSession, user_create: schema.UserCreate
-):
-    user = model.User(
-        user_name=user_create.user_name,
-        user_email=user_create.user_email,
-        user_pw=user_create.user_pw
-    )
-    db.add(user)
-    await db.commit()
-    await db.refresh(user)
-    return user
-# --- EoF ---
+# Entry Point
+
+if __name__ == "__main__":
+	ins = Users()
+	sys.exit( ins.main( len( sys.argv ), sys.argv ) )
+#-- if
 
 
-async def update_user(
-    db: AsyncSession, user: schema.UserCreate, original: model.User
-):
-    """_summary_
 
-    Args:
-            db (AsyncSession): AsyncSession
-            user (schema.UserCreate): UserCreate schema
-            original (model.User): User schema
-
-    Returns:
-            schema: User schema
-    """
-    result = await db.execute(
-        select(
-            model.User
-        ).filter(
-            model.User.user_name == original.user_name
-        )
-    )
-    buf = result.first()
-    buf[0].user_name = user.user_name
-    buf[0].user_email = user.user_email
-    # original.user_name = user.user_name
-    # original.user_email = user.user_email
-    db.add(buf[0])
-    await db.commit()
-    await db.refresh(buf[0])
-    return buf[0]
-# --- EoF ---
-
-
-async def delete_user(
-    db_session: AsyncSession, original: model.User
-):
-    """_summary_
-
-    Args:
-            db_session (AsyncSession): AsyncSession
-            original (model.User): User schema
-    """
-    sql = "delete from users where user_id = %s ;" % original.user_id
-    await db_session.execute(sql)
-    # await db_session.delete(original)
-    await db_session.commit()
-# --- EoF ---
-
-
-# End of Script……………
+# End of Script
