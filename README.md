@@ -3,6 +3,11 @@
 <!-- [![LICENSE](https://img.shields.io/github/license/maro114510/Production_WebApp.svg?style=flat-square)](https://github.com/maro114510/Production_WebApp/blob/main/LICENSE)-->
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/stelzen/youtube.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/stelzen/youtube)
+![](https://img.shields.io/github/issues/maro114510/Production_Webapp)
+![](https://img.shields.io/github/issues-pr/maro114510/Production_Webapp)
+![](https://img.shields.io/github/languages/code-size/maro114510/Production_Webapp)
+![](https://img.shields.io/docker/image-size/stelzen/youtube)
+![](https://img.shields.io/github/directory-file-count/maro114510/Production_Webapp)
 <!-- [![Build Status](https://img.shields.io/github/workflow/status/maro114510/Production_WebApp/Build?logo=github&style=flat-square)](https://github.com/maro114510/Production_WebApp/actions) -->
 
 ---
