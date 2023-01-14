@@ -7,7 +7,9 @@ RUN pip install poetry
 
 RUN apt-get update && \
 	apt-get install -y cron \
-	vim
+	vim \
+	which \
+	git
 
 COPY pyproject.toml* poetry.lock* ./
 
