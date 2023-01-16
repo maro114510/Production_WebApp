@@ -27,8 +27,7 @@ Some functions can be used without user registration
 
 ---
 
-* http://www.youtube-diff-checker.com:8503/
-  * SSL conversion to be done at a later date
+* The site closed on January 16, 2023.
 
 ---
 
