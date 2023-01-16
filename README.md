@@ -10,12 +10,6 @@
 ![](https://img.shields.io/github/directory-file-count/maro114510/Production_Webapp)
 <!-- [![Build Status](https://img.shields.io/github/workflow/status/maro114510/Production_WebApp/Build?logo=github&style=flat-square)](https://github.com/maro114510/Production_WebApp/actions) -->
 
----
-
-### Attention
-
-* **⚠See the documentation folder `Document` for detailed specifications.⚠**
-* **Currently under refactoring.....**
 
 ---
 
@@ -54,7 +48,7 @@ Some functions can be used without user registration
 
 ### System overview
 
-!![](https://storage.googleapis.com/zenn-user-upload/84bf99affa2c-20230114.png)
+![](https://storage.googleapis.com/zenn-user-upload/84bf99affa2c-20230114.png)
 
 ### GithubActions
 
