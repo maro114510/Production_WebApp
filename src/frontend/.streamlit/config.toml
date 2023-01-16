@@ -1,0 +1,10 @@
+[server]
+port = 8503
+
+runOnSave = true 
+
+enableWebsocketCompression=false
+enableCORS = true
+
+[browser]
+gatherUsageStats = false
