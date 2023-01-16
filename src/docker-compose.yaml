@@ -56,9 +56,10 @@ services:
     volumes:
       - ./Certs/:/var/lib/https-portal/
     environment:
-      # DOMAINS: www.youtube-diff-checker.com -> http://frontend:8503
+      # DOMAINS: "www.youtube-diff-checker.com -> http://frontend:8503"
       DOMAINS: sample-site.com -> http://frontend:8503
       STAGE: local
+      # STAGE: staging, production
       # FORCE_RENEW: 'true'
     links:
       - frontend

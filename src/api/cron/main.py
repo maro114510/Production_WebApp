@@ -32,8 +32,8 @@ class Cron():
 		api_list = self.api_data( self.checklists )
 		db_list = self.db_data( self.checklists )
 		new, dele = self.diff_check( api_list, db_list )
-		# self.renew( new )
-		# self.del_deal( dele )
+		self.renew( new )
+		self.del_deal( dele )
 		print( "new" )
 		for i in new:
 			print( len( i ) )
@@ -73,9 +73,9 @@ class Cron():
 		#-- for
 	#--- EoF ---
 
-	def del_deal( self, dele ):
+	def del_deal( self, deta ):
 		for i in range( self.check_count ):
-			for j in dele[ i ]:
+			for j in deta[ i ]:
 				try:
 					self.pm_ins.delete_playlist_musics(
 						self.checklists[ i ],
