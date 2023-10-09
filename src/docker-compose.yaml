@@ -40,8 +40,7 @@ services:
       - ./script:/docker-entrypoint-initdb.d
       - ./config/postgresql.conf:/etc/postgresql/postgresql.conf
     environment:
-      TZ: "Asia/Tokyo"
-    environment:
+      - time_zone=Asia/Tokyo
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 
