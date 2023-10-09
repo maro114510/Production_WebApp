@@ -20,11 +20,12 @@ class Home():
 
 		st.write( "#### This is my favorite song." )
 		with st.expander( "Open to see" ):
-			url = self.r_ins.execute()
-			if url is None:
-				st.video( "https://youtu.be/kQv6TjPypfI" )
-			else:
+			try:
+				url = self.r_ins.execute()
 				st.video( url )
+			except Exception as e:
+				st.video( "https://youtu.be/kQv6TjPypfI" )
+			#-- except
 		# -- with
 
 		col1, col2 = st.columns( 2 )
@@ -73,7 +74,7 @@ class Home():
 			"""
 		)
 
-		st.text( " © 2022 Atsuki Nohira " )
+		st.text( " © 2022-2023 Atsuki Nohira " )
 
 		return 0
 	# --- EoF ---

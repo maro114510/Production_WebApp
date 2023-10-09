@@ -52,24 +52,30 @@ if page == "HOME":
 elif page == "USER":
 	user_name = st.sidebar.text_input("Input User Name")
 	user_email = st.sidebar.text_input("Input User Email")
-	user_password = st.sidebar.text_input(
-		"Input User pauser_password", type="password")
+	user_password = st.sidebar.text_input("Input User pauser_password", type="password")
+	if user_password == "" or user_name == "" or user_email == "":
+		st.warning( "Please fill in all the fields." )
+	#-- if
 	if st.sidebar.checkbox("LOGIN"):
-		r = lib_ins.get_user_info(
-			user_name,
-			user_email
-		)
-		user_hashed_pw = r.get( "user_pw" )
-		hashed_pw = make_hashes( user_password )
-		result =  check_hashes( hashed_pw, user_hashed_pw )
-		if result:
-			un = r.get( "user_name" )
-			uid = r.get( "uid" )
-			user_ins.user_page( un, uid )
-		#-- if
-		else:
-			st.warning( "Your password is wrong." )
-		#-- else
+		try:
+			r = lib_ins.get_user_info(
+				user_name,
+				user_email
+			)
+			user_hashed_pw = r.get( "user_pw" )
+			hashed_pw = make_hashes( user_password )
+			result =  check_hashes( hashed_pw, user_hashed_pw )
+			if result:
+				un = r.get( "user_name" )
+				uid = r.get( "uid" )
+				user_ins.user_page( un, uid )
+			#-- if
+			else:
+				st.warning( "Your password is wrong." )
+			#-- else
+		except Exception as e:
+			st.error( e )
+		#-- except
 	#-- if
 #-- elif
 
@@ -110,20 +116,21 @@ elif page == "USER REGISTER":
 
 		submit_button = st.form_submit_button( label = "Submit" )
 		if submit_button:
-			r = lib_ins.register_uer( d )
-			if r.status_code == 200:
-				st.success(
-					f"""Hello, {user_name}!
-					Registration is complete!
-					"""
-				)
-			#-- if
-			elif r.status_code == 404:
-				st.error(
-					f"You registered {user_name}, or {user_email} is duplicated.Sorry, please change to a different name and email."
-				)
-			#-- elif
-			else:
+			try:
+				r = lib_ins.register_uer( d )
+				if r.status_code == 200:
+					st.success(
+						f"""Hello, {user_name}!
+						Registration is complete!
+						"""
+					)
+				#-- if
+				elif r.status_code == 404:
+					st.error(
+						f"You registered {user_name}, or {user_email} is duplicated.Sorry, please change to a different name and email."
+					)
+				#-- elif
+			except Exception as e:
 				st.error(
 					"""
 					I am sorry.
@@ -132,6 +139,9 @@ elif page == "USER REGISTER":
 				)
 			#-- else
 		#-- if
+		else:
+			st.warning( "Please fill in all the fields." )
+		#-- else
 	#-- with
 #-- elif
 

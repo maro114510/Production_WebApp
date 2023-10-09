@@ -33,8 +33,12 @@ class Recommend():
 	#--- EoF ---
 
 	def main( self, argc, argv ):
-		i = self.execute()
-		print( i )
+		try:
+			i = self.execute()
+			print( i )
+		except Exception as e:
+			print( e )
+		#-- except
 		return 0
 	#--- EoF ---
 #--- Recommend ---
