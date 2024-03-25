@@ -13,12 +13,12 @@ app = FastAPI(
 )
 
 
-app.include_router( users.router )
-app.include_router( playlists.router )
-app.include_router( musics.router )
-app.include_router( user_playlists.router )
-app.include_router( playlist_musics.router )
-app.include_router( interface.router )
+app.include_router(users.router)
+app.include_router(playlists.router)
+app.include_router(musics.router)
+app.include_router(user_playlists.router)
+app.include_router(playlist_musics.router)
+app.include_router(interface.router)
 
 
 # End of Script
