@@ -1,167 +1,165 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+from api.db.conn import Connector
 import sys
 from pathlib import Path
 from psycopg2.extras import RealDictCursor
 
 sys.path.append(
-	str(
-		Path(
-			__file__
-		).resolve().parent.parent.parent
-	)
+    str(
+        Path(
+            __file__
+        ).resolve().parent.parent.parent
+    )
 )
 
 
-from api.db.conn import Connector
-
-
 class UserPlaylists():
-	def __init__( self ):
-		ins = Connector()
-		self.conn = ins.Connector()
-	#--- EoF ---
+    def __init__(self):
+        ins = Connector()
+        self.conn = ins.Connector()
+    # --- EoF ---
 
-	def get_all_user_playlists_full_info( self ):
-		cur = self.conn.cursor( cursor_factory=RealDictCursor )
-		sql = self.select_all_sql()
-		try:
-			cur.execute( sql )
-			results = cur.fetchall()
-			self.conn.commit()
-			print( "SELECT OK" )
-			return results
-		except Exception as e:
-			self.conn.rollback()
-			raise e
-		#-- except
-	#--- EoF ---
+    def get_all_user_playlists_full_info(self):
+        cur = self.conn.cursor(cursor_factory=RealDictCursor)
+        sql = self.select_all_sql()
+        try:
+            cur.execute(sql)
+            results = cur.fetchall()
+            self.conn.commit()
+            print("SELECT OK")
+            return results
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+        # -- except
+    # --- EoF ---
 
-	def get_user_playlists_byUid( self, uid ):
-		cur = self.conn.cursor( cursor_factory=RealDictCursor )
-		sql = self.select_by_uid_sql()
-		try:
-			cur.execute(
-				sql,
-				(
-					uid,
-				)
-			)
-			results = cur.fetchall()
-			self.conn.commit()
-			print( "SELECT OK" )
-			return results
-		except Exception as e:
-			self.conn.rollback()
-			raise e
-		#-- except
-	#--- EoF ---
+    def get_user_playlists_byUid(self, uid):
+        cur = self.conn.cursor(cursor_factory=RealDictCursor)
+        sql = self.select_by_uid_sql()
+        try:
+            cur.execute(
+                sql,
+                (
+                    uid,
+                )
+            )
+            results = cur.fetchall()
+            self.conn.commit()
+            print("SELECT OK")
+            return results
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+        # -- except
+    # --- EoF ---
 
-	def get_one_user_playlists_d_info( self, uid ):
-		cur = self.conn.cursor( cursor_factory=RealDictCursor )
-		sql = self.select_d_by_uid_sql()
-		try:
-			cur.execute(
-				sql,
-				(
-					uid,
-				)
-			)
-			results = cur.fetchall()
-			self.conn.commit()
-			print( "SELECT OK" )
-			return results
-		except Exception as e:
-			self.conn.rollback()
-			raise e
-		#-- except
-	#--- EoF ---
+    def get_one_user_playlists_d_info(self, uid):
+        cur = self.conn.cursor(cursor_factory=RealDictCursor)
+        sql = self.select_d_by_uid_sql()
+        try:
+            cur.execute(
+                sql,
+                (
+                    uid,
+                )
+            )
+            results = cur.fetchall()
+            self.conn.commit()
+            print("SELECT OK")
+            return results
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+        # -- except
+    # --- EoF ---
 
-	def user_playlists_insert( self, uid, p_org_id ):
-		cur = self.conn.cursor()
-		sql = self.insert_sql()
-		try:
-			cur.execute(
-				sql,
-				(
-					uid,
-					p_org_id,
-					uid,
-					p_org_id,
-				)
-			)
-			self.conn.commit()
+    def user_playlists_insert(self, uid, p_org_id):
+        cur = self.conn.cursor()
+        sql = self.insert_sql()
+        try:
+            cur.execute(
+                sql,
+                (
+                    uid,
+                    p_org_id,
+                    uid,
+                    p_org_id,
+                )
+            )
+            self.conn.commit()
 
-			if cur.rowcount != 0:
-				print( "INSERT OK" )
-				return 0
-			#-- if
-			else:
-				print( "DUPRICATED" )
-				return 1
-			#-- else
-		except Exception as e:
-			self.conn.rollback()
-			raise e
-		#-- except
-	#--- EoF ---
+            if cur.rowcount != 0:
+                print("INSERT OK")
+                return 0
+            # -- if
+            else:
+                print("DUPRICATED")
+                return 1
+            # -- else
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+        # -- except
+    # --- EoF ---
 
-	def delete_user_playlist( self, uid, p_org_id ):
-		cur = self.conn.cursor()
-		sql = self.delete_sql()
-		try:
-			cur.execute(
-				sql,
-				(
-					uid,
-					p_org_id,
-				)
-			)
-			self.conn.commit()
-			print( "DELETE OK" )
-		except Exception as e:
-			self.conn.rollback()
-			raise e
-		#-- except
-		return 0
-	#--- EoF ---
+    def delete_user_playlist(self, uid, p_org_id):
+        cur = self.conn.cursor()
+        sql = self.delete_sql()
+        try:
+            cur.execute(
+                sql,
+                (
+                    uid,
+                    p_org_id,
+                )
+            )
+            self.conn.commit()
+            print("DELETE OK")
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+        # -- except
+        return 0
+    # --- EoF ---
 
-	def update_user_playlist( self, uid, p_org_id ):
-		cur = self.conn.cursor()
-		sql = self.update_sql()
-		try:
-			cur.execute(
-				sql,
-				(
-					uid,
-					p_org_id,
-				)
-			)
-			self.conn.commit()
-			if cur.rowcount != 0:
-				print( "UPDATE OK" )
-				return 0
-			#-- if
-			else:
-				return 1
-		except Exception as e:
-			self.conn.rollback()
-			raise e
-		#-- except
-	#--- EoF ---
+    def update_user_playlist(self, uid, p_org_id):
+        cur = self.conn.cursor()
+        sql = self.update_sql()
+        try:
+            cur.execute(
+                sql,
+                (
+                    uid,
+                    p_org_id,
+                )
+            )
+            self.conn.commit()
+            if cur.rowcount != 0:
+                print("UPDATE OK")
+                return 0
+            # -- if
+            else:
+                return 1
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+        # -- except
+    # --- EoF ---
 
-	def execute( self ):
-		print( "OK" )
-	#--- EoF ---
+    def execute(self):
+        print("OK")
+    # --- EoF ---
 
-	def main( self, argc, argv ):
-		self.execute()
-		return 0
-	#--- EoF ---
+    def main(self, argc, argv):
+        self.execute()
+        return 0
+    # --- EoF ---
 
-	def insert_sql( self ):
-		sql = """
+    def insert_sql(self):
+        sql = """
 		INSERT INTO t_user_playlists (
 			uid,
 			p_org_id
@@ -170,7 +168,7 @@ class UserPlaylists():
 			%s,
 			%s
 			WHERE NOT EXISTS (
-				SELECT 1 FROM t_user_playlists 
+				SELECT 1 FROM t_user_playlists
 				WHERE
 					uid = %s
 				AND
@@ -178,21 +176,21 @@ class UserPlaylists():
 			)
 		;
 		"""
-		return sql
-	#--- EoF ---
+        return sql
+    # --- EoF ---
 
-	def select_all_sql( self ):
-		sql = """
+    def select_all_sql(self):
+        sql = """
 		SELECT
 			*
 		FROM
 			t_user_playlists;
 		"""
-		return sql
-	#--- EoF ---
+        return sql
+    # --- EoF ---
 
-	def select_by_uid_sql( self ):
-		sql = """
+    def select_by_uid_sql(self):
+        sql = """
 			SELECT
 				*
 			FROM
@@ -203,11 +201,11 @@ class UserPlaylists():
 				flag = True
 			;
 		"""
-		return sql
-	#--- EoF ---
+        return sql
+    # --- EoF ---
 
-	def select_d_by_uid_sql( self ):
-		sql = """
+    def select_d_by_uid_sql(self):
+        sql = """
 			SELECT
 				*
 			FROM
@@ -218,11 +216,11 @@ class UserPlaylists():
 				flag = false
 			;
 		"""
-		return sql
-	#--- EoF ---
+        return sql
+    # --- EoF ---
 
-	def delete_sql( self ):
-		sql = """
+    def delete_sql(self):
+        sql = """
 		UPDATE
 			t_user_playlists
 		SET
@@ -234,11 +232,11 @@ class UserPlaylists():
 			p_org_id = %s
 		;
 		"""
-		return sql
-	#--- EoF ---
+        return sql
+    # --- EoF ---
 
-	def update_sql( self ):
-		sql = """
+    def update_sql(self):
+        sql = """
 		UPDATE
 			t_user_playlists
 		SET
@@ -250,18 +248,17 @@ class UserPlaylists():
 			p_org_id = %s
 		;
 		"""
-		return sql
-	#--- EoF ---
-#--- UserPlaylists ---
+        return sql
+    # --- EoF ---
+# --- UserPlaylists ---
 
 
 # Entry Point
 
 if __name__ == "__main__":
-	ins = UserPlaylists()
-	sys.exit( ins.main( len( sys.argv ), sys.argv ) )
-#-- if
-
+    ins = UserPlaylists()
+    sys.exit(ins.main(len(sys.argv), sys.argv))
+# -- if
 
 
 # End of Script

@@ -6,26 +6,26 @@ from conn import Connector
 
 
 class CreateTable():
-	def __init__( self ):
-		ins = Connector()
-		self.conn = ins.Connector()
-	#--- EoF ---
+    def __init__(self):
+        ins = Connector()
+        self.conn = ins.Connector()
+    # --- EoF ---
 
-	def execute( self ):
-		cur = self.conn.cursor()
-		sql = self.create_sql()
-		cur.execute( sql )
-		self.conn.commit()
-		print( "OK" )
-	#--- EoF ---
+    def execute(self):
+        cur = self.conn.cursor()
+        sql = self.create_sql()
+        cur.execute(sql)
+        self.conn.commit()
+        print("OK")
+    # --- EoF ---
 
-	def main( self, argc, argv ):
-		self.execute()
-		return 0
-	#--- EoF ---
+    def main(self, argc, argv):
+        self.execute()
+        return 0
+    # --- EoF ---
 
-	def create_sql( self ):
-		sql = """
+    def create_sql(self):
+        sql = """
 DROP TABLE IF EXISTS t_users;
 CREATE TABLE t_users (
   uid			SERIAL			PRIMARY KEY, -- 通し番号
@@ -106,19 +106,18 @@ CREATE TABLE t_playlist_musics (
 );
 GRANT ALL PRIVILEGES ON t_playlist_musics TO ytber;
 		"""
-		return sql
-	#--- EoF ---
-#--- CreateTable ---
+        return sql
+    # --- EoF ---
+# --- CreateTable ---
 
 
 # Entry Point
 
 if __name__ == "__main__":
-	ins = CreateTable()
-	sys.exit( 1 )
-	sys.exit( ins.main( len( sys.argv ), sys.argv ) )
-#-- if
-
+    ins = CreateTable()
+    sys.exit(1)
+    sys.exit(ins.main(len(sys.argv), sys.argv))
+# -- if
 
 
 # End of Script
